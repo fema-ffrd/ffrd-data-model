@@ -2,8 +2,14 @@ erDiagram
     events ||--|{ seeds : "random"
     events }o--|| storms : "random"
     events }o--|| fishnet_points : "random"
-    models }o--o{ por_events : "POR simulations"
-    por_events ||--o{ por_output_ts : output
+    por_events ||--o{ por_output_ts : "POR output"
+    por_events ||--o{ por_obs_ts : "POR observations"
+    por_obs_ts ||--o{ gages : "POR obs gages"
+    calibration_events ||--o{ calibration_output_ts : "calibration simulations"
+    calibration_events }o--|| storms : "specific storms for calibration"
+    calibration_output_ts ||--o{ model_elements : "calibration output"
+    calibration_events ||--o{ calibration_obs_ts : "calibration observations"
+    calibration_obs_ts ||--o{ gages : "calibration obs gages"
     models ||--o{ model_elements : "model elements"
     model_elements ||--o{ output_ts : "model element output"
     model_elements ||--o{ por_output_ts : "model element output"
@@ -12,6 +18,7 @@ erDiagram
     gages |o--o{ model_elements : "calibration"
     events ||--o{ output_ts : "event output"
     structures ||--o{ structure_response : "struct response"
+    structures ||--|{ models : "model elements"
     events ||--o{ structure_failure_elev : "failure elevs"
     structure_failure_elev ||--o{ structure_response : "failure elev"
 
@@ -47,7 +54,7 @@ erDiagram
         event_seed int
     }
     gages {
-        gage_id int PK
+        gage_id str PK
         gage_name str
         gage_owner str
         ams array
@@ -63,7 +70,7 @@ erDiagram
     model_elements {
         element_id int PK
         model_id int FK
-        gage_id int FK
+        gage_id str FK
         element str
         geom geom
     }
@@ -84,12 +91,40 @@ erDiagram
         units str
     }
 
+    calibration_events {
+        calibration_event_id int PK
+        storm_id int FK
+    }
+    calibration_output_ts {
+        calibration_event_id int FK
+        element_id int FK
+        timestamp datetime
+        metric str
+        value float
+        units str
+    }
+    calibration_obs_ts {
+        calibration_event_id int FK
+        gage_id str FK
+        timestamp datetime
+        metric str
+        value float
+        units str
+    }
     por_events {
         por_event_id int PK
     }
     por_output_ts {
         por_event_id int FK
         element_id int FK
+        timestamp datetime
+        metric str
+        value float
+        units str
+    }
+    por_obs_ts {
+        por_event_id int FK
+        gage_id str FK
         timestamp datetime
         metric str
         value float
