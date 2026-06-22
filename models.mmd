@@ -1,0 +1,74 @@
+---
+title: Models
+---
+
+erDiagram
+
+    obs_ts ||--o{ gages : ""
+    models ||--o{ model_elements : ""
+    model_elements ||--o{ output_ts : ""
+    model_elements ||--o{ output_grids : ""
+    model_event_files }o--|| models : ""
+    model_event_files }o--|| events : ""
+    gages |o--o{ model_elements : ""
+    events ||--o{ output_ts : ""
+    events ||--o{ output_grids : ""
+    structures ||--|{ model_elements : ""
+    structures }o--|| events : ""
+
+    events {
+       }
+    gages {
+        gage_id str PK
+        gage_name str
+        gage_owner str
+        ams array
+        geom geom
+    }
+    models {
+        model_id int PK
+        model_type str
+        model_name str
+        geom geom
+    }
+    model_elements {
+        model_id int PK
+        element_id int PK
+        structure_id int FK
+        gage_id str FK
+        element str
+        geom geom
+    }
+    model_event_files {
+        model_event_file_id int PK
+        model_id int FK
+        event_id int FK
+        filename str
+        data blob
+        metadata blob
+    }
+    output_ts {
+        event_id int FK
+        element_id int FK
+        timestamp datetime
+        metric str
+        value float
+        units str
+    }
+    output_grids {
+        event_id int FK
+        element_id int FK
+        timestamp datetime
+        metric str
+        value float
+        units str
+    }
+    obs_ts {
+        gage_id str FK
+        timestamp datetime
+        metric str
+        value float
+        units str
+    }
+    structures {
+    }
