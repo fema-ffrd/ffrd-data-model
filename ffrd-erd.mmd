@@ -58,7 +58,7 @@ erDiagram
         gage_name str
         gage_owner str
         ams array
-        geom geom 
+        geom geom
     }
 
     models {
@@ -86,7 +86,7 @@ erDiagram
         event_id int FK
         element_id int FK
         timestamp datetime
-        metric str
+        variable str
         value float
         units str
     }
@@ -99,7 +99,7 @@ erDiagram
         calibration_event_id int FK
         element_id int FK
         timestamp datetime
-        metric str
+        variable str
         value float
         units str
     }
@@ -107,7 +107,7 @@ erDiagram
         calibration_event_id int FK
         gage_id str FK
         timestamp datetime
-        metric str
+        variable str
         value float
         units str
     }
@@ -118,7 +118,7 @@ erDiagram
         por_event_id int FK
         element_id int FK
         timestamp datetime
-        metric str
+        variable str
         value float
         units str
     }
@@ -126,7 +126,7 @@ erDiagram
         por_event_id int FK
         gage_id str FK
         timestamp datetime
-        metric str
+        variable str
         value float
         units str
     }

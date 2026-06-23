@@ -1,0 +1,14 @@
+---
+title: FFRD Data Model — Unified View
+---
+graph TB
+    EVENTS["<b>Events</b><br/>storms, events<br/>seeds, fishnet_points"]
+    STRUCT["<b>Structures</b><br/>structures<br/>structure_response<br/>structure_failure_elev"]
+    MODELS["<b>Models</b><br/>models, model_elements<br/>model_event_files<br/>output_ts, output_grids"]
+
+    EVENTS -->|events, storms| MODELS
+    STRUCT -->|structures, fragility| MODELS
+
+    click EVENTS "https://github.com/fema-ffrd/ffrd-data-model/blob/initial-erd/rdms/events.mmd" "View Events domain detail"
+    click STRUCT "https://github.com/fema-ffrd/ffrd-data-model/blob/initial-erd/rdms/structures.mmd" "View Structures domain detail"
+    click MODELS "https://github.com/fema-ffrd/ffrd-data-model/blob/initial-erd/rdms/models.mmd" "View Models domain detail"

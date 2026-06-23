@@ -1,5 +1,5 @@
 ---
-title: Structures
+title: Structures (Iceberg Lakehouse)
 ---
 
 erDiagram
@@ -22,8 +22,10 @@ erDiagram
     }
 
     levees {
-        structure_id int PK
-        model_id int FK
+        structure_id int "Business Key"
+        effective_date date PK
+        end_date date PK
+        model_id int "JK: models"
         system_type str
         name str
         nld_name str
@@ -31,25 +33,66 @@ erDiagram
         top_elev float
         toe_elev float
         source str
+        geom_source str
+        source_quality_rating float
+        crs str
+        is_current bool
+        snapshot_id int
+        created_at timestamp
+        updated_at timestamp
+        last_validated timestamp
+        _is_deleted bool
     }
     dams {
-        structure_id int PK
-        model_id int FK
+        structure_id int "Business Key"
+        effective_date date PK
+        end_date date PK
+        model_id int "JK: models"
         system_type str
         name str
         nid_name str
         source str
+        geom_source str
+        source_quality_rating float
+        crs str
+        is_current bool
+        snapshot_id int
+        created_at timestamp
+        updated_at timestamp
+        last_validated timestamp
+        _is_deleted bool
     }
     structure_response {
-        structure_response_id int PK
-        structure_id int FK
+        structure_response_id int "Business Key"
+        structure_id int "JK: levees/dams"
+        fragility_version int PK
+        analysis_date date PK
         failure_mode str
         source str
         prob_x float
         prob_y float
+        confidence_level float
+        source_quality_rating float
+        is_current bool
+        snapshot_id int
+        created_at timestamp
+        updated_at timestamp
+        _data_quality_status str
+        _is_deleted bool
     }
     structure_failure_elev {
-        structure_response_id int PK
-        event_id int FK
+        structure_response_id int "Business Key"
+        event_id int "Business Key"
+        valid_from datetime PK
+        end_date datetime PK
         failure_elev float
-    }
+        confidence_interval_lower float
+        confidence_interval_upper float
+        confidence_level float
+        source_quality_rating float
+        data_provenance str
+        is_current bool
+        snapshot_id int
+        created_at timestamp
+        _data_quality_status str
+        _is_deleted bool

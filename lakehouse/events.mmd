@@ -1,0 +1,55 @@
+---
+title: Lakehouse Events
+---
+
+erDiagram
+    %% Logical identifiers (not enforced by Iceberg):
+    %% storms.storm_id, fishnet_points.fishnet_point_id, events.event_id
+    %% Join intent: events.storm_id -> storms.storm_id, events.fishnet_point_id -> fishnet_points.fishnet_point_id
+
+    storms ||--o{ events : "storm for event"
+    fishnet_points ||--o{ events : "sample location"
+    events ||--o{ event_seeds : "stochastic seeds"
+
+    storms {
+        string storm_id
+        int storm_rank
+        string storm_type
+        timestamp storm_datetime
+        int duration_hrs
+        string centroid_wkt
+        float mean_precip
+        timestamp ingest_ts
+        string source_system
+    }
+
+    fishnet_points {
+        string fishnet_point_id
+        float weight
+        string geom_wkt
+        timestamp ingest_ts
+        string source_system
+    }
+
+    events {
+        string event_id
+        string storm_id
+        string fishnet_point_id
+        string event_type
+        int block_id
+        int realization_id
+        string centroid_trnsp_wkt
+        date event_date
+        timestamp ingest_ts
+        string source_system
+    }
+
+    event_seeds {
+        string event_id
+        int process_id
+        int realization_seed
+        int block_seed
+        int event_seed
+        timestamp ingest_ts
+        string source_system
+    }

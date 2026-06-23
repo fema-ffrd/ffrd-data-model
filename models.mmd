@@ -1,74 +1,159 @@
 ---
-title: Models
+title: Models (Iceberg Lakehouse)
 ---
 
 erDiagram
 
-    obs_ts ||--o{ gages : ""
+    obs_ts_bronze ||--o{ gages : ""
+    obs_ts_silver ||--o{ gages : ""
     models ||--o{ model_elements : ""
-    model_elements ||--o{ output_ts : ""
-    model_elements ||--o{ output_grids : ""
+    model_elements ||--o{ output_ts_bronze : ""
+    model_elements ||--o{ output_ts_silver : ""
+    model_elements ||--o{ output_grids_bronze : ""
+    model_elements ||--o{ output_grids_silver : ""
     model_event_files }o--|| models : ""
     model_event_files }o--|| events : ""
     gages |o--o{ model_elements : ""
-    events ||--o{ output_ts : ""
-    events ||--o{ output_grids : ""
+    events ||--o{ output_ts_bronze : ""
+    events ||--o{ output_grids_bronze : ""
     structures ||--|{ model_elements : ""
     structures }o--|| events : ""
 
     events {
-       }
+    }
     gages {
-        gage_id str PK
+        gage_id str "Business Key"
+        effective_date date PK
         gage_name str
         gage_owner str
         ams array
         geom geom
+        is_current bool
+        snapshot_id int
+        created_at timestamp
+        _is_deleted bool
     }
     models {
-        model_id int PK
+        model_id int "Business Key"
+        model_version int PK
         model_type str
         model_name str
         geom geom
+        is_current bool
+        snapshot_id int
+        created_at timestamp
+        updated_at timestamp
+        source_system str
+        _is_deleted bool
     }
     model_elements {
-        model_id int PK
-        element_id int PK
-        structure_id int FK
-        gage_id str FK
+        model_id int "Business Key"
+        element_id int "Business Key"
+        valid_from datetime PK
+        structure_id int "JK: structures"
+        gage_id str "JK: gages"
         element str
         geom geom
+        is_current bool
+        snapshot_id int
+        created_at timestamp
+        _is_deleted bool
     }
     model_event_files {
-        model_event_file_id int PK
-        model_id int FK
-        event_id int FK
+        model_event_file_id int "Business Key"
+        model_id int "JK: models"
+        event_id int "JK: events"
         filename str
-        data blob
-        metadata blob
+        file_location str
+        file_format str
+        file_size_bytes bigint
+        metadata_json string
+        snapshot_id int
+        created_at timestamp
+        ingestion_id str
     }
-    output_ts {
-        event_id int FK
-        element_id int FK
+    output_ts_bronze {
+        event_id int "JK: events"
+        element_id int "JK: model_elements"
         timestamp datetime
         metric str
         value float
         units str
+        model_execution_id str
+        snapshot_id int
+        created_at timestamp
+        ingestion_batch_id str
     }
-    output_grids {
-        event_id int FK
-        element_id int FK
+    output_ts_silver {
+        event_id int "JK: events"
+        element_id int "JK: model_elements"
         timestamp datetime
         metric str
         value float
         units str
+        model_execution_id str
+        valid_from datetime PK
+        is_current bool
+        quality_score float
+        validation_status str
+        data_completeness float
+        snapshot_id int
+        created_at timestamp
+        _is_deleted bool
     }
-    obs_ts {
-        gage_id str FK
+    output_grids_bronze {
+        event_id int "JK: events"
+        element_id int "JK: model_elements"
+        timestamp datetime
+        metric str
+        grid_data binary
+        grid_format str
+        units str
+        model_execution_id str
+        snapshot_id int
+        created_at timestamp
+        ingestion_batch_id str
+    }
+    output_grids_silver {
+        event_id int "JK: events"
+        element_id int "JK: model_elements"
+        timestamp datetime
+        metric str
+        grid_data binary
+        grid_format str
+        units str
+        model_execution_id str
+        valid_from datetime PK
+        is_current bool
+        quality_score float
+        validation_status str
+        snapshot_id int
+        created_at timestamp
+        _is_deleted bool
+    }
+    obs_ts_bronze {
+        gage_id str "JK: gages"
         timestamp datetime
         metric str
         value float
         units str
+        snapshot_id int
+        created_at timestamp
+        ingestion_batch_id str
+    }
+    obs_ts_silver {
+        gage_id str "JK: gages"
+        timestamp datetime
+        metric str
+        value float
+        units str
+        valid_from datetime PK
+        is_current bool
+        quality_score float
+        validation_status str
+        snapshot_id int
+        created_at timestamp
+        _is_deleted bool
     }
     structures {
     }
