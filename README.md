@@ -4,7 +4,9 @@ FFRD Data Model
 ## Entity Relationship Diagram(s)
 [FFRD Data Model - ERD](./ffrd-erd.mmd)
 
-[Alt FFRD Data Model - ERD](./ffrd-erd-alt.mmd)
+[Alt FFRD Data Model - ERD](./rdms/ffrd-erd-alt.mmd)
+
+[FFRD Lakehouse Data Model - ERD](./lakehouse/ffrd-lakehouse.mmd)
 
 ## ETL Needs:
 * code to load `storms` table from StormHub STAC (already part of StormHub itself, just needs to be uncommented manually)
