@@ -44,3 +44,8 @@ Enum enforcement note:
 ## Notes
  - seasonal distributions needed
  - other?
+ - runtime / errors / metadata / etc.
+ - run_type vs event_type
+ - model_event_files: str vs blob
+ - https://github.com/sozip/sozip-spec
+ - filter out hms vars?

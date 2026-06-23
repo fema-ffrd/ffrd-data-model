@@ -35,11 +35,13 @@ erDiagram
     %%  - obs_ts: one row per gage_id, variable, ts
 
     gages |o--o{ model_elements : "gage mapping"
+    structures |o--o{ model_elements : "dam / levee mapping"
     models ||--o{ model_elements : "contains element"
     events ||--o{ output_ts : "event output"
     model_elements ||--o{ output_ts : "element output"
     models ||--o{ output_ts : "denormalized model id"
     events ||--o{ output_grids_repo : "event output grids"
+    events ||--o{ run_catalog : "run catalog lineage"
     model_elements ||--o{ output_grids_repo : "element output grids"
     models ||--o{ output_grids_repo : "denormalized model id"
     gages ||--o{ obs_ts : "gage observations"
