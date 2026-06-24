@@ -4,17 +4,18 @@ title: Models
 
 erDiagram
 
-    obs_ts ||--o{ gages : ""
+    obs_ts }o--|| gages : ""
     models ||--o{ model_elements : ""
     model_elements ||--o{ output_ts : ""
-    model_elements ||--o{ output_grids : ""
     model_event_files }o--|| models : ""
     model_event_files }o--|| events : ""
     gages |o--o{ model_elements : ""
-    events ||--o{ output_ts : ""
-    events ||--o{ output_grids : ""
+    runs ||--o{ output_ts : ""
+    runs ||--o| output_grids : ""
     structures ||--|{ model_elements : ""
     structures }o--|| events : ""
+    runs }o--|| models : ""
+    runs }o--|| events : ""
 
     events {
        }
@@ -48,7 +49,7 @@ erDiagram
         metadata blob
     }
     output_ts {
-        event_id int FK
+        run_id int FK
         element_id int FK
         timestamp datetime
         variable str
@@ -56,12 +57,10 @@ erDiagram
         units str
     }
     output_grids {
-        event_id int FK
-        element_id int FK
-        timestamp datetime
+        output_grid_id int PK
+        run_id int FK
         variable str
-        value float
-        units str
+        uri str
     }
     obs_ts {
         gage_id str FK
@@ -71,4 +70,13 @@ erDiagram
         units str
     }
     structures {
+    }
+    runs {
+        run_id int PK
+        event_id int FK
+        model_id int FK
+        run_type enum
+        timestamp datetime
+        success bool
+        metadata uri
     }

@@ -8,7 +8,10 @@ erDiagram
     events }o--|| fishnet_points : ""
     events ||--o{ calibration_events : ""
     events ||--o{ por_events : ""
-    structures }o--|| events : ""
+    structures }o--o{ events : ""
+    models }|--o{ events : ""
+    runs }o--|| models : ""
+    runs }o--|| events : ""
 
 
     storms {
@@ -51,4 +54,8 @@ erDiagram
         storm_id int FK
     }
     structures {
+    }
+    events {
+    }
+    runs {
     }
