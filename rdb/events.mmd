@@ -6,8 +6,6 @@ erDiagram
     events ||--|{ seeds : ""
     events }o--|| storms : ""
     events }o--|| fishnet_points : ""
-    events ||--o{ calibration_events : ""
-    events ||--o{ por_events : ""
     structures }o--o{ events : ""
     models }|--o{ events : ""
     runs }o--|| models : ""
@@ -35,7 +33,6 @@ erDiagram
         event_type enum
         block_id int
         realization_id int
-        centroid_trnsp geom
     }
     seeds {
         seed_id int PK
@@ -44,14 +41,6 @@ erDiagram
         realization_seed int
         block_seed int
         event_seed int
-    }
-    calibration_events {
-        event_id int FK
-        storm_id int FK
-    }
-    por_events {
-        event_id int FK
-        storm_id int FK
     }
     structures {
     }

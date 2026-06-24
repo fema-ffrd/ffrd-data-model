@@ -7,13 +7,14 @@ erDiagram
     obs_ts }o--|| gages : ""
     models ||--o{ model_elements : ""
     model_elements ||--o{ output_ts : ""
-    model_event_files }o--|| models : ""
-    model_event_files }o--|| events : ""
+    run_files }o--|| models : ""
+    run_files }o--|| runs : ""
     gages |o--o{ model_elements : ""
     runs ||--o{ output_ts : ""
     runs ||--o| output_grids : ""
     structures ||--|{ model_elements : ""
-    structures }o--|| events : ""
+    structures ||--o{ structure_failure_elev : ""
+    events ||--o{ structure_failure_elev : ""
     runs }o--|| models : ""
     runs }o--|| events : ""
 
@@ -30,20 +31,20 @@ erDiagram
         model_id int PK
         model_type str
         model_name str
+        model_version str
         geom geom
     }
     model_elements {
-        model_id int PK
         element_id int PK
+        model_id int FK
         structure_id int FK
         gage_id str FK
         element str
         geom geom
     }
-    model_event_files {
-        model_event_file_id int PK
-        model_id int FK
-        event_id int FK
+    run_files {
+        run_file_id int PK
+        run_id int FK
         filename str
         data blob
         metadata blob
@@ -79,4 +80,9 @@ erDiagram
         timestamp datetime
         success bool
         metadata uri
+    }
+    structure_failure_elev {
+        structure_id int FK
+        event_id int FK
+        failure_elev float
     }

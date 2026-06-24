@@ -9,6 +9,7 @@ FFRD Data Model
 * code to load `storms` table from StormHub STAC (already part of StormHub itself, just needs to be uncommented manually)
 
 ## Notes / Questions
+* MODEL LINKAGES
 * gages: ams == annual maxmium series?
 * fishnet: what is `weight`? importance sampling?
 * reservoir, levee, and system response tables -- how is this supposed to work?
