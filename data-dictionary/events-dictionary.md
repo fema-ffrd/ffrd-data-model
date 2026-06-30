@@ -1,0 +1,96 @@
+# Data Dictionary — Events
+
+Covers the four Iceberg tables modeled in `events.mmd`. Keys are **logical** (not enforced by Iceberg).
+
+---
+
+## Table: `storms`
+
+Catalog of historic storms used as forcing inputs.
+
+| Column | Type | CC Plugin Source | Description |
+|---|---|---|---|
+| `storm_id` | string | TODO | Logical primary key. Unique identifier for a storm, typically composed of rank and type (e.g. TODO) |
+| `storm_rank` | int | TODO | TODO |
+| `storm_type` | string | TODO | TODO |
+| `storm_datetime` | timestamp | TODO | UTC timestamp of the storm's reference time (e.g. start of event or time of peak? TODO). |
+| `duration_hrs` | int | TODO | Total storm duration in hours. |
+| `centroid_wkt` | string | TODO | WKT point geometry representing the storm centroid in its original (pre-transposition) location. CRS assumed WGS 84 (TODO). |
+| `mean_precip` | float | TODO | Spatial mean precipitation over the study domain for this storm (units: TODO). |
+| `ingest_ts` | timestamp | TODO | TODO |
+| `source_system` | string | TODO | Identifier of the data generating process for this storm (TODO) |
+
+---
+
+## Table: `fishnet_points`
+
+Regular-grid sample locations used to define transposition target points across the study domain. Each row is a unique spatial sample location.
+
+| Column | Type | CC Plugin Source | Description |
+|---|---|---|---|
+| `fishnet_point_id` | string | TODO | Logical primary key. Unique identifier for a fishnet grid point |
+| `weight` | float | TODO | ? (TODO) |
+| `geom_wkt` | string | TODO | WKT point geometry for this grid location. CRS assumed WGS 84 unless documented otherwise. (TODO) |
+| `ingest_ts` | timestamp | TODO | TODO |
+| `source_system` | string | TODO | Identifier of the upstream system or pipeline that produced this record (TODO). |
+
+---
+
+## Table: `events`
+
+Transposed storm events Each row is one stochastic event instance.
+
+| Column | Type | CC Plugin Source | Description |
+|---|---|---|---|
+| `event_id` | string | TODO | Logical primary key. Unique identifier for this transposed event instance. |
+| `storm_id` | string | TODO | Identifies the source storm. |
+| `fishnet_point_id` | string | TODO | Identifies the transposition target location. |
+| `event_type` | string | TODO | Types? (TODO) |
+| `block_id` | int | TODO | Block index  |
+| `realization_id` | int | TODO | Realization index  |
+| `centroid_trnsp_wkt` | string | TODO | WKT point geometry of the storm centroid **after** transposition to the fishnet target location. CRS assumed WGS 84 unless documented otherwise. (TODO) |
+| `event_date` | date | TODO | Calendar date associated with the event (e.g. synthetic date assigned for model forcing). |
+| `ingest_ts` | timestamp | TODO | TODO |
+| `source_system` | string | TODO | Identifier of the upstream system or pipeline that produced this record |
+
+---
+
+## Table: `event_seeds`
+
+Stochastic seed values used to reproduce individual event realizations.
+
+| Column | Type | CC Plugin Source | Description |
+|---|---|---|---|
+| `event_id` | string | TODO | Identifies the parent event. |
+| `process_id` | int | TODO | Is this CC Plugin ID? (TODO)|
+| `realization_seed` | int | TODO | TODO. |
+| `block_seed` | int | TODO | TODO |
+| `event_seed` | int | TODO | TODO |
+| `ingest_ts` | timestamp | TODO | TODO |
+| `source_system` | string | TODO | Identifier of the upstream system or pipeline that produced this record. |
+
+---
+
+## Join Intent
+
+| Child Column | Joins To |
+|---|---|
+| `events.storm_id` | `storms.storm_id` |
+| `events.fishnet_point_id` | `fishnet_points.fishnet_point_id` |
+| `event_seeds.event_id` | `events.event_id` |
+
+> Keys are logical only — Iceberg does not enforce 
+
+---
+
+## Relationships
+
+- Each **storm** may be associated with zero or many **events** (one per transposition target location and realization).
+- Each **fishnet point** may serve as the target location for zero or many **events**.
+- Each **event** may have zero or many **event_seeds** rows, one per sub-process involved in generating that event.
+
+## Notes
+
+- **No enforced constraints.** These are Iceberg tables; PKs and FKs are logical conventions only.
+- **CRS.** All WKT geometry columns are assumed WGS 84 (EPSG:4326) unless the `source_system` pipeline documents otherwise. (TODO)
+- **Seed hierarchy.** Needs investigation into realization_seed, block_seed, and event_seed definitions (TODO)
