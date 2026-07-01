@@ -3,7 +3,8 @@
 Covers the four Iceberg tables modeled in `events.mmd`. Keys are **logical** (not enforced by Iceberg).
 
 
-## Table: `storms`
+## Tables and Fields
+### Table: `storms`
 
 Catalog of historic storms used as forcing inputs.
 
@@ -18,7 +19,7 @@ Catalog of historic storms used as forcing inputs.
 | `mean_precip` | float | TODO | Spatial mean precipitation over the study domain for this storm (units: TODO). |
 
 
-## Table: `fishnet_points`
+### Table: `fishnet_points`
 
 Regular-grid sample locations used to define transposition target points across the study domain. Each row is a unique spatial sample location.
 
@@ -31,7 +32,7 @@ Regular-grid sample locations used to define transposition target points across 
 | `source_system` | string | TODO | Identifier of the upstream system or pipeline that produced this record (TODO). |
 
 
-## Table: `events`
+### Table: `events`
 
 Transposed storm events Each row is one stochastic event instance.
 
@@ -47,7 +48,7 @@ Transposed storm events Each row is one stochastic event instance.
 | `event_date` | date | TODO | Calendar date associated with the event (e.g. synthetic date assigned for model forcing). |
 
 
-## Table: `event_seeds`
+### Table: `event_seeds`
 
 Stochastic seed values used to reproduce individual event realizations.
 
@@ -59,9 +60,7 @@ Stochastic seed values used to reproduce individual event realizations.
 | `block_seed` | int | TODO | Block seed value for the Event. |
 | `event_seed` | int | TODO | Event seed value. |
 
----
-
-## Common Metadata Fields
+### Common Metadata Fields
 
 These fields are present on all tables.
 
@@ -70,7 +69,12 @@ These fields are present on all tables.
 | `ingest_ts` | timestamp | Datetime when the record was updated in the database |
 | `source_system` | string | Identifier of the upstream system or pipeline that produced this record |
 
----
+
+## Relationships
+
+- Each **storm** may be associated with zero or many **events** (one per transposition target location and realization).
+- Each **fishnet point** may serve as the target location for zero or many **events**.
+- Each **event** may have zero or many **event_seeds** rows, one per sub-process involved in generating that event.
 
 ## Join Intent
 
@@ -79,16 +83,6 @@ These fields are present on all tables.
 | `events.storm_id` | `storms.storm_id` |
 | `events.fishnet_point_id` | `fishnet_points.fishnet_point_id` |
 | `event_seeds.event_id` | `events.event_id` |
-
-> Keys are logical only — Iceberg does not enforce 
-
----
-
-## Relationships
-
-- Each **storm** may be associated with zero or many **events** (one per transposition target location and realization).
-- Each **fishnet point** may serve as the target location for zero or many **events**.
-- Each **event** may have zero or many **event_seeds** rows, one per sub-process involved in generating that event.
 
 ## Notes
 
