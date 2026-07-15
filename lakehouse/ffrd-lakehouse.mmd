@@ -1,0 +1,54 @@
+---
+title: FFRD Lakehouse Model
+---
+flowchart LR
+    %% Executive summary view: high-level domains and data products.
+    %% Iceberg constraints are logical.
+    %% Derived tables are materialized from source tables.
+    %% Companion detailed view: unified.mmd
+
+    classDef domain fill:#e9f4ff,stroke:#2f6ea3,stroke-width:1px,color:#102a43;
+    classDef product fill:#ffffff,stroke:#5f6c7b,stroke-width:1px,color:#102a43;
+    classDef derived fill:#eef8ef,stroke:#2d7d46,stroke-width:1px,color:#173a24;
+    classDef note fill:#fff8e6,stroke:#b8860b,stroke-dasharray: 3 3,color:#5c3b00;
+
+    EV["Events\n(storms, fishnet_points, events, event_seeds)"]
+    ST["Structures\n(dams, levees, response curves, failure elev)"]
+    MD["Models\n(models, model_elements, model_event_files, run_catalog)"]
+
+    TS["Time Series Outputs\noutput_ts"]
+    GR["Gridded Outputs\noutput_grids_repo (Icechunk)"]
+    OBS["Historic Observations\nobs_ts"]
+
+    DR["Derived\nvariable summaries, peaks, rollups, run catalog"]
+
+    P_TS["partition: bucket(512,event_id), run_type\nsort: event_id, element_id, variable, ts"]
+    P_GR["partition: bucket(512,event_id), run_type\nsort: event_id, element_id, variable, ts"]
+    P_OBS["partition: bucket(256,gage_id), months(ts)\nsort: gage_id, variable, ts"]
+    P_DR["derived summaries: bucket(512,event_id), variable\nrun tables: partition by run_type\nsort: event-centric by variable/run_version"]
+
+    EV -->|event_id, model_id| TS
+    EV -->|event_id, model_id| GR
+    MD -->|gage_id, ts| OBS
+    MD --> TS
+    MD --> GR
+    ST -->|structure_id context| MD
+
+    TS -->|materialized derivations| DR
+    GR -->|potential enrichment| DR
+
+    TS -.-> P_TS
+    GR -.-> P_GR
+    OBS -.-> P_OBS
+    DR -.-> P_DR
+
+
+    click EV "https://github.com/fema-ffrd/ffrd-data-model/blob/initial-erd/lakehouse/events.mmd" "Open events domain diagram"
+    click MD "https://github.com/fema-ffrd/ffrd-data-model/blob/initial-erd/lakehouse/models.mmd" "Open models domain diagram"
+    click ST "https://github.com/fema-ffrd/ffrd-data-model/blob/initial-erd/lakehouse/structures.mmd" "Open structures domain diagram"
+    click DR "https://github.com/fema-ffrd/ffrd-data-model/blob/initial-erd/lakehouse/derived.mmd" "Open derived tables diagram"
+
+    class EV,ST,MD domain;
+    class TS,GR,OBS product;
+    class DR,DETAIL derived;
+    class P_TS,P_GR,P_OBS,P_DR note;

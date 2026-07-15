@@ -1,0 +1,55 @@
+---
+title: Structures
+---
+
+erDiagram
+
+    models ||--o{ model_elements : ""
+    events ||--o{ output_ts : ""
+    levees ||--o{ structure_response :""
+    levees ||--|{ model_elements : ""
+    dams ||--o{ structure_response : ""
+    dams ||--|{ model_elements : ""
+    model_elements ||--o{ output_ts : ""
+    events ||--o{ structure_failure_elev : ""
+    structure_failure_elev ||--o{ structure_response : ""
+
+    events {
+    }
+    models{
+    }
+    model_elements {
+    }
+
+    levees {
+        structure_id int PK
+        model_id int FK
+        system_type str
+        name str
+        nld_name str
+        nld_segment_id str
+        top_elev float
+        toe_elev float
+        source str
+    }
+    dams {
+        structure_id int PK
+        model_id int FK
+        system_type str
+        name str
+        nid_name str
+        source str
+    }
+    structure_response {
+        structure_response_id int PK
+        structure_id int FK
+        failure_mode str
+        source str
+        prob_x float
+        prob_y float
+    }
+    structure_failure_elev {
+        structure_response_id int PK
+        event_id int FK
+        failure_elev float
+    }

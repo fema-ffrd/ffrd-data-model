@@ -1,0 +1,154 @@
+---
+title: Lakehouse Derived Tables
+---
+
+erDiagram
+    %% This diagram contains only derived/materialized tables.
+    %% These are regenerated from source-of-truth tables and are not authoritative raw records.
+    %% Source lineage:
+    %%  - output_ts is the primary source for all variable summaries.
+    %%  - output_grids_repo can contribute to derived grid-level summaries.
+    %%  - run_catalog is the authoritative source for run metadata.
+    %% Physical design:
+    %%  - derived_event_variable_summary: partition bucket(512, event_id), variable; sort event_id, variable, run_type, run_version
+    %%  - derived_event_element_variable_summary: partition bucket(512, event_id), variable; sort event_id, element_id, variable, run_type, run_version
+    %%  - derived_event_peak_by_variable: partition bucket(512, event_id), variable; sort event_id, variable, run_type, run_version
+    %%  - derived_event_element_peak: partition bucket(512, event_id), variable; sort event_id, element_id, variable, run_type, run_version
+    %%  - derived_event_model_rollup: partition bucket(512, event_id), variable; sort event_id, model_id, variable, run_type, run_version
+    %%  - derived_event_window_rollup: partition bucket(512, event_id), variable; sort event_id, element_id, variable, window_start
+    %%  - derived_run_catalog: partition run_type; sort run_type, model_id, started_at
+    %%  - derived_latest_run_pointer: partition run_type; sort event_id, model_id, run_type
+    %% Freshness and rebuild guidance:
+    %%  - Rebuild cadence: per completed run (incremental by run_id) or by run batch...TBD.
+    %%  - Late data handling: overwrite/merge by run_id + run_version.
+    %%  - Derived tables are safe to fully regenerate when logic changes.
+
+    output_ts ||--o{ derived_event_variable_summary : "materialized aggregation"
+    output_ts ||--o{ derived_event_element_variable_summary : "materialized aggregation"
+    output_ts ||--o{ derived_event_peak_by_variable : "materialized peak extraction"
+    output_ts ||--o{ derived_event_element_peak : "materialized peak extraction"
+    output_ts ||--o{ derived_event_model_rollup : "materialized model rollup"
+    output_ts ||--o{ derived_event_window_rollup : "materialized window rollup"
+    run_catalog ||--o{ derived_run_catalog : "authoritative run metadata rollup"
+    derived_run_catalog ||--o{ derived_latest_run_pointer : "latest run selector"
+    output_grids_repo ||--o{ derived_event_model_rollup : "grid-informed rollup"
+
+    output_ts {
+    }
+
+    output_grids_repo {
+    }
+
+    run_catalog {
+    }
+
+    derived_event_variable_summary {
+        string event_id
+        string variable
+        string run_id
+        int run_version
+        string run_type
+        float max_value
+        timestamp max_value_ts
+        float mean_value
+        float p95_value
+        timestamp summary_ts
+        string source_system
+    }
+
+    derived_event_element_variable_summary {
+        string event_id
+        string element_id
+        string variable
+        string run_id
+        int run_version
+        string run_type
+        float max_value
+        timestamp max_value_ts
+        float mean_value
+        float p95_value
+        timestamp summary_ts
+        string source_system
+    }
+
+    derived_event_peak_by_variable {
+        string event_id
+        string variable
+        string run_id
+        int run_version
+        string run_type
+        float peak_value
+        timestamp peak_ts
+        string element_id_at_peak
+        timestamp summary_ts
+        string source_system
+    }
+
+    derived_event_element_peak {
+        string event_id
+        string element_id
+        string variable
+        string run_id
+        int run_version
+        string run_type
+        float peak_value
+        timestamp peak_ts
+        float duration_above_threshold
+        timestamp summary_ts
+        string source_system
+    }
+
+    derived_event_model_rollup {
+        string event_id
+        int model_id
+        string variable
+        string run_id
+        int run_version
+        string run_type
+        float max_value
+        float mean_value
+        float p95_value
+        int count_elements
+        timestamp summary_ts
+        string source_system
+    }
+
+    derived_event_window_rollup {
+        string event_id
+        string element_id
+        string variable
+        string run_id
+        int run_version
+        string run_type
+        timestamp window_start
+        timestamp window_end
+        float window_max
+        float window_mean
+        float window_sum
+        timestamp summary_ts
+        string source_system
+    }
+
+    derived_run_catalog {
+        string run_id
+        int run_version
+        string run_type
+        int model_id
+        int event_count
+        timestamp started_at
+        timestamp ended_at
+        string status
+        string code_ref
+        timestamp summary_ts
+        string source_system
+    }
+
+    derived_latest_run_pointer {
+        string event_id
+        int model_id
+        string run_type
+        string latest_run_id
+        int latest_run_version
+        timestamp updated_ts
+        string source_system
+    }

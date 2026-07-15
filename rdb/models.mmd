@@ -1,0 +1,88 @@
+---
+title: Models
+---
+
+erDiagram
+
+    obs_ts }o--|| gages : ""
+    models ||--o{ model_elements : ""
+    model_elements ||--o{ output_ts : ""
+    run_files }o--|| models : ""
+    run_files }o--|| runs : ""
+    gages |o--o{ model_elements : ""
+    runs ||--o{ output_ts : ""
+    runs ||--o| output_grids : ""
+    structures ||--|{ model_elements : ""
+    structures ||--o{ structure_failure_elev : ""
+    events ||--o{ structure_failure_elev : ""
+    runs }o--|| models : ""
+    runs }o--|| events : ""
+
+    events {
+       }
+    gages {
+        gage_id str PK
+        gage_name str
+        gage_owner str
+        ams array
+        geom geom
+    }
+    models {
+        model_id int PK
+        model_type str
+        model_name str
+        model_version str
+        geom geom
+    }
+    model_elements {
+        element_id int PK
+        model_id int FK
+        structure_id int FK
+        gage_id str FK
+        element str
+        geom geom
+    }
+    run_files {
+        run_file_id int PK
+        run_id int FK
+        filename str
+        data blob
+        metadata blob
+    }
+    output_ts {
+        run_id int FK
+        element_id int FK
+        timestamp datetime
+        variable str
+        value float
+        units str
+    }
+    output_grids {
+        output_grid_id int PK
+        run_id int FK
+        variable str
+        uri str
+    }
+    obs_ts {
+        gage_id str FK
+        timestamp datetime
+        variable str
+        value float
+        units str
+    }
+    structures {
+    }
+    runs {
+        run_id int PK
+        event_id int FK
+        model_id int FK
+        run_type enum
+        timestamp datetime
+        success bool
+        metadata uri
+    }
+    structure_failure_elev {
+        structure_id int FK
+        event_id int FK
+        failure_elev float
+    }
