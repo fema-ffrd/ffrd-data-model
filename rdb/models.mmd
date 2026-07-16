@@ -7,8 +7,6 @@ erDiagram
     obs_ts }o--|| gages : ""
     models ||--o{ model_elements : ""
     model_elements ||--o{ output_ts : ""
-    run_files }o--|| models : ""
-    run_files }o--|| runs : ""
     gages |o--o{ model_elements : ""
     runs ||--o{ output_ts : ""
     runs ||--o| output_grids : ""
@@ -17,6 +15,8 @@ erDiagram
     events ||--o{ structure_failure_elev : ""
     runs }o--|| models : ""
     runs }o--|| events : ""
+    models ||--o{ model_linkages : "donor"
+    models ||--o{ model_linkages : "receiver"
 
     events {
        }
@@ -33,6 +33,7 @@ erDiagram
         model_name str
         model_version str
         geom geom
+        metadata uri
     }
     model_elements {
         element_id int PK
@@ -42,13 +43,6 @@ erDiagram
         gage_id str FK
         element str
         geom geom
-    }
-    run_files {
-        run_file_id int PK
-        run_id int FK
-        filename str
-        data blob
-        metadata blob
     }
     output_ts {
         run_id int FK
@@ -70,6 +64,17 @@ erDiagram
         variable str
         value float
         units str
+    }
+    model_linkages {
+        linkage_id int PK
+        donor_model_id int FK
+        donor_model_type str
+        donor_site_type str
+        donor_site_id str FK
+        receiver_model_id int FK
+        receiver_model_type str
+        receiver_site_type str
+        receiver_site_id str FK
     }
     structures {
     }
