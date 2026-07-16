@@ -5,10 +5,13 @@ title: Lakehouse Structures
 erDiagram
     %% Logical identifiers (not enforced by Iceberg):
     %% dams.dam_id, levees.levee_id, structure_response_curves.structure_response_id, events.event_id
+    %% buildings.building_id
     %% Join intent:
     %% - structure_response_curves rows are point-level probability-stage records
     %% - xvalues -> probability; ydistributions -> distribution_type/distribution_params_json/stage_value
     %% - structure_failure_elev(structure_response_id, event_id)
+    %% - buildings.building_id is referenced by model_elements.structure_id (see models.mmd)
+    %% - model_elements.structure_type = 'building' disambiguates the polymorphic FK
 
     dams ||--o{ structure_response_curves : "response curve"
     levees ||--o{ structure_response_curves : "response curve"
@@ -63,6 +66,44 @@ erDiagram
         string structure_response_id
         string event_id
         float failure_elev
+        timestamp ingest_ts
+        string source_system
+    }
+
+    buildings {
+        string building_id
+        string source_building_id
+        string inventory_source
+        string inventory_version
+        double latitude
+        double longitude
+        string geom_wkt
+        string state_fips
+        string county_fips
+        string census_block_fips
+        string occupancy_type
+        string general_building_type
+        int number_stories
+        double area_sqft
+        string foundation_type
+        double first_floor_height_ft
+        int basement_type
+        double building_cost
+        double content_cost
+        double inventory_cost
+        double bldg_insurance_deductible
+        double bldg_insurance_limit
+        double content_insurance_deductible
+        double content_insurance_limit
+        double ground_elevation_ft
+        int pop_2am
+        int pop_2pm
+        int pop_2am_under65
+        int pop_2am_over65
+        int pop_2pm_under65
+        int pop_2pm_over65
+        string raw_attributes_json
+        string source
         timestamp ingest_ts
         string source_system
     }
