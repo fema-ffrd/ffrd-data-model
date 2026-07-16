@@ -355,12 +355,18 @@ tables:
       system_type:
         type: str
         description: Structural system classification (e.g. earthen, concrete, arch).
-      name:
+      nid_id:
         type: str
-        description: Local or project name of the dam.
-      nid_name:
+        description: Authoritative National Inventory of Dams (NID) identifier for this dam.
+      nid_dam_name:
         type: str
         description: Authoritative dam name from the National Inventory of Dams (NID).
+      top_elev:
+        type: float
+        description: Top-of-dam (crest) elevation in feet (NAVD88).
+      toe_elev:
+        type: float
+        description: Toe-of-dam elevation in feet (NAVD88).
       source:
         type: str
         description: Data source for this dam record (e.g. NID, state agency, field survey).
@@ -381,15 +387,18 @@ tables:
       system_type:
         type: str
         description: Levee system classification (e.g. earthen, floodwall, composite).
-      name:
+      nld_system_id:
         type: str
-        description: Local or project name of the levee segment.
-      nld_name:
+        description: Authoritative system identifier from the National Levee Database (NLD).
+      nld_system_name:
         type: str
-        description: Authoritative levee name from the National Levee Database (NLD).
+        description: Authoritative levee system name from the National Levee Database (NLD).
       nld_segment_id:
         type: str
         description: Authoritative segment identifier from the NLD.
+      breach_fid:
+        type: str
+        description: Feature identifier of the associated breach location element within the model (references model_elements.element).
       top_elev:
         type: float
         description: Top-of-levee elevation in feet (NAVD88).
@@ -689,7 +698,10 @@ tables:
 
   run_files:
     domain: management
-    description: Raw model file artifacts associated with a run, stored as blobs with structured metadata.
+    description: >
+      Raw model file artifacts associated with a run, stored as blobs with structured metadata.
+      RDB implementation: data stored as blob with metadata blob.
+      Lakehouse implementation: data stored externally; object_uri + file_format + metadata_json replace data/metadata blob.
     columns:
       run_file_id:
         type: int
@@ -699,17 +711,325 @@ tables:
         type: int
         constraints: [FK]
         references: runs.run_id
-        description: Run this file belongs to.
+        description: Run (rdb) or run_catalog (lakehouse) this file belongs to.
       filename:
         type: str
         description: Original filename of the artifact.
       data:
         type: blob
-        description: Raw binary content of the file.
+        description: "[rdb only] Raw binary content of the file."
+      object_uri:
+        type: str
+        description: "[lakehouse only] Cloud storage URI to the file object (replaces data blob)."
+      file_format:
+        type: str
+        description: "[lakehouse only] File format classification (e.g. hms_project, ras_project, ressim_project, geotiff)."
       metadata:
         type: blob
         description: >
-          Structured metadata blob for this file. Required keys:
+          [rdb only] Structured metadata blob for this file. Required keys:
           file_type (e.g. hms_project, ras_project, ressim_project),
           model_version (str), export_uri (str),
           expected_filename (str), actual_filename (str), complete (bool), sop_reference (str).
+      metadata_json:
+        type: str
+        description: >
+          [lakehouse only] JSON string equivalent of metadata blob. Required keys:
+          file_type, model_version, export_uri, expected_filename, actual_filename, complete, sop_reference.
+
+  # ---------------------------------------------------------------------------
+  # Domain: Derived (Materialized Views)
+  # ---------------------------------------------------------------------------
+
+  mv_peak_output_by_element:
+    domain: derived
+    description: >
+      Peak value per element per variable per run. Materialized from output_ts after each run_catalog batch commit.
+      Partition: bucket(512, event_id), variable. Sort: event_id, element_id, variable.
+      Stories: 15 (obs vs modeled), 24 (HMS vs RAS flows), 28 (trace hazard contributors).
+    columns:
+      event_id:
+        type: str
+        description: Event this peak was produced for.
+      element_id:
+        type: str
+        description: Model element at which the peak was recorded.
+      model_id:
+        type: int
+        description: Denormalized model identifier for direct filtering.
+      run_id:
+        type: str
+        description: Run that produced this peak.
+      run_version:
+        type: int
+        description: Monotonic rerun version number.
+      run_type:
+        type: str
+        description: Run classification (e.g. calibration, conformance).
+      variable:
+        type: str
+        description: Output variable (e.g. flow, stage, storage).
+      peak_value:
+        type: float
+        description: Maximum value of the variable over the simulation window.
+      units:
+        type: str
+        description: Units of peak_value.
+      peak_ts:
+        type: timestamp
+        description: Timestamp at which the peak occurred.
+      derived_at:
+        type: timestamp
+        description: UTC timestamp when this materialized record was written.
+
+  mv_event_variable_stats:
+    domain: derived
+    description: >
+      Summary statistics (mean, max, min, std) across all elements for a variable per event per run.
+      Materialized from output_ts after each run batch commit.
+      Partition: bucket(512, event_id), variable. Sort: event_id, variable, run_type, run_version.
+      Stories: 6 (event filtering), 32 (basin risk summary).
+    columns:
+      event_id:
+        type: str
+        description: Event summarized.
+      model_id:
+        type: int
+        description: Denormalized model identifier.
+      run_id:
+        type: str
+        description: Run that produced the outputs.
+      run_version:
+        type: int
+        description: Monotonic rerun version number.
+      run_type:
+        type: str
+        description: Run classification.
+      variable:
+        type: str
+        description: Output variable summarized.
+      mean_value:
+        type: float
+        description: Mean value across all elements for this event/variable/run.
+      max_value:
+        type: float
+        description: Maximum value across all elements.
+      min_value:
+        type: float
+        description: Minimum value across all elements.
+      std_value:
+        type: float
+        description: Standard deviation across all elements.
+      element_count:
+        type: int
+        description: Number of elements contributing to the summary.
+      units:
+        type: str
+        description: Units of the summarized values.
+      derived_at:
+        type: timestamp
+        description: UTC timestamp when this materialized record was written.
+
+  mv_aep_frequency_stats:
+    domain: derived
+    description: >
+      Frequency statistics (mean, std, percentiles) of peak values per element per AEP band.
+      Materialized from output_ts joined to events.realization_id after full ensemble commit.
+      Partition: variable, aep_label. Sort: element_id, variable, aep_label.
+      Stories: 28 (trace hazard), 31 (uncertainty bounds), 32 (standard frequency risk).
+    columns:
+      element_id:
+        type: str
+        description: Model element at which frequency stats are computed.
+      model_id:
+        type: int
+        description: Denormalized model identifier.
+      run_type:
+        type: str
+        description: Run classification used to scope the ensemble.
+      variable:
+        type: str
+        description: Output variable (e.g. peak flow, peak stage).
+      aep_label:
+        type: str
+        description: Human-readable AEP label (e.g. 0.01, 0.002, 100-yr, 500-yr).
+      aep_value:
+        type: float
+        description: Numeric annual exceedance probability (0.0–1.0).
+      mean_peak:
+        type: float
+        description: Mean peak value across realizations at this AEP.
+      std_peak:
+        type: float
+        description: Standard deviation of peak values across realizations.
+      pct_10_peak:
+        type: float
+        description: 10th percentile peak value across realizations.
+      pct_50_peak:
+        type: float
+        description: Median peak value across realizations.
+      pct_90_peak:
+        type: float
+        description: 90th percentile peak value across realizations.
+      units:
+        type: str
+        description: Units of peak values.
+      realization_count:
+        type: int
+        description: Number of realizations contributing to the statistics.
+      derived_at:
+        type: timestamp
+        description: UTC timestamp when this materialized record was written.
+
+  mv_gage_model_comparison:
+    domain: derived
+    description: >
+      Co-located observed vs. modeled peak comparison per gage per event.
+      Materialized from output_ts joined to obs_ts via model_elements.gage_id.
+      Partition: bucket(256, gage_id), variable. Sort: gage_id, variable, event_id.
+      Stories: 15 (observed vs computed data).
+    columns:
+      gage_id:
+        type: str
+        description: Gage at which the comparison is made.
+      event_id:
+        type: str
+        description: Event for which observed and modeled values are compared.
+      element_id:
+        type: str
+        description: Model element co-located with the gage.
+      model_id:
+        type: int
+        description: Denormalized model identifier.
+      run_id:
+        type: str
+        description: Run that produced the modeled output.
+      variable:
+        type: str
+        description: Variable being compared (e.g. flow, stage).
+      observed_peak:
+        type: float
+        description: Peak observed value at the gage for the event period.
+      modeled_peak:
+        type: float
+        description: Peak modeled value at the co-located element.
+      bias:
+        type: float
+        description: Absolute difference (modeled_peak - observed_peak).
+      percent_error:
+        type: float
+        description: Relative error as a percentage ((modeled - observed) / observed * 100).
+      units:
+        type: str
+        description: Units of observed and modeled values.
+      derived_at:
+        type: timestamp
+        description: UTC timestamp when this materialized record was written.
+
+  mv_run_performance:
+    domain: derived
+    description: >
+      Per-run performance and cost summary. Materialized from run_catalog joined to run_resources.
+      Partition: run_type, status. Sort: model_id, started_at.
+      Stories: 2 (reliability and performance), 3 (hotfix identification).
+    columns:
+      run_id:
+        type: str
+        description: Run identifier.
+      model_id:
+        type: int
+        description: Denormalized model identifier.
+      run_type:
+        type: str
+        description: Run classification.
+      status:
+        type: str
+        description: Terminal run status (e.g. success, failed, hotfix).
+      duration_sec:
+        type: float
+        description: Elapsed wall-clock time in seconds (ended_at - started_at).
+      cpu_hours:
+        type: float
+        description: Total CPU core-hours consumed.
+      compute_cost:
+        type: float
+        description: Estimated compute cost in USD.
+      element_count:
+        type: int
+        description: Number of model elements active in the run.
+      output_ts_rows:
+        type: int
+        description: Total number of output_ts rows written by this run.
+      started_at:
+        type: timestamp
+        description: UTC run start timestamp.
+      derived_at:
+        type: timestamp
+        description: UTC timestamp when this materialized record was written.
+
+  mv_basin_cost_rollup:
+    domain: derived
+    description: >
+      Monthly cost and utilization rollup per basin (model_id). Materialized from run_resources joined to run_catalog.
+      Partition: billing_month. Sort: model_id, billing_month.
+      Stories: 4 (basin cost, MTD spend, projected completion cost).
+    columns:
+      model_id:
+        type: int
+        description: Basin model this rollup belongs to.
+      billing_month:
+        type: str
+        description: Billing period in YYYY-MM format.
+      total_compute_cost:
+        type: float
+        description: Sum of compute_cost for all runs in the period for this model.
+      total_cpu_hours:
+        type: float
+        description: Sum of CPU core-hours for all runs in the period.
+      total_storage_gb:
+        type: float
+        description: Sum of storage consumed by all runs in the period in GB.
+      run_count:
+        type: int
+        description: Total number of runs in the period for this model.
+      failed_run_count:
+        type: int
+        description: Number of failed runs in the period for this model.
+      derived_at:
+        type: timestamp
+        description: UTC timestamp when this materialized record was written.
+
+  mv_conformance_summary:
+    domain: derived
+    description: >
+      Per-check conformance pass/fail results per model version. Materialized by parsing models.metadata_json joined to run_catalog.
+      Partition: model_id. Sort: model_id, model_version, check_name.
+      Stories: 5 (conformance metrics, pass/fail decisions per basin and check).
+    columns:
+      model_id:
+        type: int
+        description: Model evaluated for conformance.
+      model_version:
+        type: str
+        description: Model version under review.
+      check_name:
+        type: str
+        description: Name of the conformance check (e.g. volume_error, frequency_bias).
+      threshold:
+        type: float
+        description: Acceptable threshold value for this check.
+      result_value:
+        type: float
+        description: Actual computed result for this check.
+      pass:
+        type: str
+        description: Whether the check passed (true/false as string to accommodate null/unknown states).
+      run_id:
+        type: str
+        description: Run against which this conformance check was evaluated.
+      checked_at:
+        type: timestamp
+        description: Timestamp when the conformance check was performed.
+      derived_at:
+        type: timestamp
+        description: UTC timestamp when this materialized record was written.

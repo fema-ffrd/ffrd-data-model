@@ -1,154 +1,179 @@
 ---
-title: Lakehouse Derived Tables
+title: Lakehouse Derived (Materialized Views)
 ---
 
 erDiagram
-    %% This diagram contains only derived/materialized tables.
-    %% These are regenerated from source-of-truth tables and are not authoritative raw records.
-    %% Source lineage:
-    %%  - output_ts is the primary source for all variable summaries.
-    %%  - output_grids_repo can contribute to derived grid-level summaries.
-    %%  - run_catalog is the authoritative source for run metadata.
-    %% Physical design:
-    %%  - derived_event_variable_summary: partition bucket(512, event_id), variable; sort event_id, variable, run_type, run_version
-    %%  - derived_event_element_variable_summary: partition bucket(512, event_id), variable; sort event_id, element_id, variable, run_type, run_version
-    %%  - derived_event_peak_by_variable: partition bucket(512, event_id), variable; sort event_id, variable, run_type, run_version
-    %%  - derived_event_element_peak: partition bucket(512, event_id), variable; sort event_id, element_id, variable, run_type, run_version
-    %%  - derived_event_model_rollup: partition bucket(512, event_id), variable; sort event_id, model_id, variable, run_type, run_version
-    %%  - derived_event_window_rollup: partition bucket(512, event_id), variable; sort event_id, element_id, variable, window_start
-    %%  - derived_run_catalog: partition run_type; sort run_type, model_id, started_at
-    %%  - derived_latest_run_pointer: partition run_type; sort event_id, model_id, run_type
-    %% Freshness and rebuild guidance:
-    %%  - Rebuild cadence: per completed run (incremental by run_id) or by run batch...TBD.
-    %%  - Late data handling: overwrite/merge by run_id + run_version.
-    %%  - Derived tables are safe to fully regenerate when logic changes.
+    %% Derived tables are materialized from source Iceberg tables.
+    %% They are NOT source-of-truth — they are read-optimized aggregations regenerated on demand.
+    %% Each table notes: source tables, refresh trigger, partition/sort strategy, and user stories served.
+    %% mv_peak_output_by_element
+    %%   Source: output_ts
+    %%   Grain: one row per (event_id, element_id, variable, run_id, run_version)
+    %%   Refresh: after each run_catalog batch commit
+    %%   Partition: bucket(512, event_id), variable
+    %%   Sort: event_id, element_id, variable
+    %%   Stories: 15 (obs vs modeled), 24 (HMS vs RAS flows), 28 (trace hazard contributors)
+    %% mv_event_variable_stats
+    %%   Source: output_ts
+    %%   Grain: one row per (event_id, variable, run_type, run_version)
+    %%   Refresh: after each run batch commit
+    %%   Partition: bucket(512, event_id), variable
+    %%   Sort: event_id, variable, run_type, run_version
+    %%   Stories: 6 (event filtering stats), 32 (basin-level risk summary)
+    %% mv_aep_frequency_stats
+    %%   Source: output_ts joined to events (realization_id)
+    %%   Grain: one row per (element_id, variable, aep_label, run_type)
+    %%   Refresh: after full realization ensemble is committed
+    %%   Partition: variable, aep_label
+    %%   Sort: element_id, variable, aep_label
+    %%   Stories: 28 (trace hazard result), 31 (uncertainty bounds), 32 (standard frequency risk)
+    %% mv_gage_model_comparison
+    %%   Source: output_ts joined to obs_ts via model_elements.gage_id
+    %%   Grain: one row per (gage_id, event_id, variable, run_id)
+    %%   Refresh: when obs_ts or output_ts are updated for co-located gages
+    %%   Partition: bucket(256, gage_id), variable
+    %%   Sort: gage_id, variable, event_id
+    %%   Stories: 15 (observed vs computed comparison)
+    %% mv_run_performance
+    %%   Source: run_catalog joined to run_resources
+    %%   Grain: one row per (run_id, model_id)
+    %%   Refresh: after each run_catalog + run_resources write
+    %%   Partition: run_type, status
+    %%   Sort: model_id, started_at
+    %%   Stories: 2 (reliability and performance), 3 (hotfix identification)
+    %% mv_basin_cost_rollup
+    %%   Source: run_resources joined to run_catalog and models
+    %%   Grain: one row per (model_id, billing_month)
+    %%   Refresh: daily or on-demand
+    %%   Partition: billing_month
+    %%   Sort: model_id, billing_month
+    %%   Stories: 4 (basin cost, MTD spend, projected cost)
+    %% mv_conformance_summary
+    %%   Source: models.metadata_json (parsed) joined to run_catalog
+    %%   Grain: one row per (model_id, model_version, check_name)
+    %%   Refresh: when model metadata is updated after conformance gate review
+    %%   Partition: model_id
+    %%   Sort: model_id, model_version, check_name
+    %%   Stories: 5 (conformance pass/fail per basin and check)
 
-    output_ts ||--o{ derived_event_variable_summary : "materialized aggregation"
-    output_ts ||--o{ derived_event_element_variable_summary : "materialized aggregation"
-    output_ts ||--o{ derived_event_peak_by_variable : "materialized peak extraction"
-    output_ts ||--o{ derived_event_element_peak : "materialized peak extraction"
-    output_ts ||--o{ derived_event_model_rollup : "materialized model rollup"
-    output_ts ||--o{ derived_event_window_rollup : "materialized window rollup"
-    run_catalog ||--o{ derived_run_catalog : "authoritative run metadata rollup"
-    derived_run_catalog ||--o{ derived_latest_run_pointer : "latest run selector"
-    output_grids_repo ||--o{ derived_event_model_rollup : "grid-informed rollup"
+    output_ts ||--o{ mv_peak_output_by_element : "aggregated from"
+    output_ts ||--o{ mv_event_variable_stats : "aggregated from"
+    output_ts ||--o{ mv_aep_frequency_stats : "aggregated from"
+    output_ts ||--o{ mv_gage_model_comparison : "modeled side"
+    obs_ts ||--o{ mv_gage_model_comparison : "observed side"
+    output_ts ||--o{ mv_run_performance : "via run_catalog"
+    run_catalog ||--o{ mv_run_performance : "aggregated from"
+    run_resources ||--o{ mv_run_performance : "cost + timing"
+    run_resources ||--o{ mv_basin_cost_rollup : "aggregated from"
+    run_catalog ||--o{ mv_basin_cost_rollup : "via model_id"
+    models ||--o{ mv_conformance_summary : "metadata parsed from"
 
     output_ts {
     }
-
-    output_grids_repo {
+    obs_ts {
     }
-
     run_catalog {
     }
-
-    derived_event_variable_summary {
-        string event_id
-        string variable
-        string run_id
-        int run_version
-        string run_type
-        float max_value
-        timestamp max_value_ts
-        float mean_value
-        float p95_value
-        timestamp summary_ts
-        string source_system
+    run_resources {
+    }
+    models {
     }
 
-    derived_event_element_variable_summary {
+    mv_peak_output_by_element {
         string event_id
         string element_id
-        string variable
+        int model_id
         string run_id
         int run_version
         string run_type
-        float max_value
-        timestamp max_value_ts
-        float mean_value
-        float p95_value
-        timestamp summary_ts
-        string source_system
-    }
-
-    derived_event_peak_by_variable {
-        string event_id
         string variable
-        string run_id
-        int run_version
-        string run_type
         float peak_value
+        string units
         timestamp peak_ts
-        string element_id_at_peak
-        timestamp summary_ts
-        string source_system
+        timestamp derived_at
     }
 
-    derived_event_element_peak {
-        string event_id
-        string element_id
-        string variable
-        string run_id
-        int run_version
-        string run_type
-        float peak_value
-        timestamp peak_ts
-        float duration_above_threshold
-        timestamp summary_ts
-        string source_system
-    }
-
-    derived_event_model_rollup {
+    mv_event_variable_stats {
         string event_id
         int model_id
-        string variable
         string run_id
         int run_version
         string run_type
-        float max_value
+        string variable
         float mean_value
-        float p95_value
-        int count_elements
-        timestamp summary_ts
-        string source_system
+        float max_value
+        float min_value
+        float std_value
+        int element_count
+        string units
+        timestamp derived_at
     }
 
-    derived_event_window_rollup {
+    mv_aep_frequency_stats {
+        string element_id
+        int model_id
+        string run_type
+        string variable
+        string aep_label
+        float aep_value
+        float mean_peak
+        float std_peak
+        float pct_10_peak
+        float pct_50_peak
+        float pct_90_peak
+        string units
+        int realization_count
+        timestamp derived_at
+    }
+
+    mv_gage_model_comparison {
+        string gage_id
         string event_id
         string element_id
-        string variable
+        int model_id
         string run_id
-        int run_version
-        string run_type
-        timestamp window_start
-        timestamp window_end
-        float window_max
-        float window_mean
-        float window_sum
-        timestamp summary_ts
-        string source_system
+        string variable
+        float observed_peak
+        float modeled_peak
+        float bias
+        float percent_error
+        string units
+        timestamp derived_at
     }
 
-    derived_run_catalog {
+    mv_run_performance {
         string run_id
-        int run_version
-        string run_type
         int model_id
-        int event_count
-        timestamp started_at
-        timestamp ended_at
+        string run_type
         string status
-        string code_ref
-        timestamp summary_ts
-        string source_system
+        float duration_sec
+        float cpu_hours
+        float compute_cost
+        int element_count
+        int output_ts_rows
+        timestamp started_at
+        timestamp derived_at
     }
 
-    derived_latest_run_pointer {
-        string event_id
+    mv_basin_cost_rollup {
         int model_id
-        string run_type
-        string latest_run_id
-        int latest_run_version
-        timestamp updated_ts
-        string source_system
+        string billing_month
+        float total_compute_cost
+        float total_cpu_hours
+        float total_storage_gb
+        int run_count
+        int failed_run_count
+        timestamp derived_at
+    }
+
+    mv_conformance_summary {
+        int model_id
+        string model_version
+        string check_name
+        float threshold
+        float result_value
+        string pass
+        string run_id
+        timestamp checked_at
+        timestamp derived_at
     }

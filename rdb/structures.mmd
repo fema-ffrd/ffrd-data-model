@@ -26,9 +26,10 @@ erDiagram
         structure_id int PK
         model_id int FK
         system_type str
-        name str
-        nld_name str
+        nld_system_id str
+        nld_system_name str
         nld_segment_id str
+        breach_fid str
         top_elev float
         toe_elev float
         source str
@@ -37,8 +38,10 @@ erDiagram
         structure_id int PK
         model_id int FK
         system_type str
-        name str
-        nid_name str
+        nid_id str
+        nid_dam_name str
+        top_elev float
+        toe_elev float
         source str
     }
     structure_response {

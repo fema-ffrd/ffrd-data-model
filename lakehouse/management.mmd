@@ -1,0 +1,128 @@
+---
+title: Lakehouse Management (CC Admin)
+---
+
+erDiagram
+    %% Iceberg design notes:
+    %% - All IDs are strings (UUIDs or compound keys) to avoid global integer sequences.
+    %% - ingest_ts + source_system on every table support incremental ingestion and audit.
+    %% - manifests / plugins are small dimension tables; no partitioning required.
+    %% - run_manifest: partition by run_type to co-locate lookup with run_catalog access patterns.
+    %% - hotfixes: partition by status to support open-hotfix dashboards efficiently.
+    %% - run_resources: partition by bucket(512, run_id) to match run_catalog access patterns.
+    %% - run_files: partition by file_format, bucket(512, run_id); sort by run_id, filename.
+    %% - run_logs: partition by bucket(512, run_id); sort by run_id, ingest_ts.
+
+    %% Story 1 - All Versions
+    run_catalog ||--o{ run_manifest : "governed by"
+    manifests ||--o{ run_manifest : ""
+    manifests ||--o{ manifest_plugins : ""
+    plugins ||--o{ manifest_plugins : ""
+
+    %% Story 2 - Reliability and Performance
+    run_catalog ||--o{ run_logs : "execution log"
+
+    %% Story 3 - Re-runs and Hotfixes
+    run_catalog ||--o{ hotfixes : "original run"
+    run_catalog ||--o{ hotfixes : "rerun"
+    models ||--o{ hotfixes : "resolution model"
+
+    %% Story 4 - Resources and Cost Estimates
+    run_catalog ||--o| run_resources : "resource usage"
+
+    %% Run artifact files
+    run_catalog ||--o{ run_files : "artifacts"
+
+    run_catalog {
+        string run_id
+        int run_version
+        string run_type
+        int model_id
+        string event_id
+        timestamp started_at
+        timestamp ended_at
+        string status
+        string trigger
+        string code_ref
+        string metadata_uri
+        timestamp ingest_ts
+        string source_system
+    }
+
+    models {
+        int model_id
+        string model_name
+    }
+
+    manifests {
+        string manifest_id
+        string manifest_version
+        string linkage_version
+        string uri
+        timestamp created_at
+        timestamp ingest_ts
+        string source_system
+    }
+
+    plugins {
+        string plugin_id
+        string plugin_name
+        string plugin_version
+        timestamp ingest_ts
+        string source_system
+    }
+
+    manifest_plugins {
+        string manifest_id
+        string plugin_id
+        timestamp ingest_ts
+        string source_system
+    }
+
+    run_manifest {
+        string run_id
+        string manifest_id
+        timestamp ingest_ts
+        string source_system
+    }
+
+    run_logs {
+        string log_id
+        string run_id
+        string uri
+        timestamp ingest_ts
+        string source_system
+    }
+
+    hotfixes {
+        string hotfix_id
+        string original_run_id
+        string rerun_id
+        string issue_description
+        int resolution_model_id
+        string status
+        timestamp resolved_at
+        timestamp ingest_ts
+        string source_system
+    }
+
+    run_resources {
+        string run_id
+        float cpu_hours
+        float memory_gb
+        float storage_gb
+        float compute_cost
+        timestamp ingest_ts
+        string source_system
+    }
+
+    run_files {
+        string run_file_id
+        string run_id
+        string filename
+        string object_uri
+        string file_format
+        string metadata_json
+        timestamp ingest_ts
+        string source_system
+    }

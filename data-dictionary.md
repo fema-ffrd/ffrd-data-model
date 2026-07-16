@@ -208,8 +208,10 @@ Dam inventory. Each record represents one dam structure within a model domain.
 | `structure_id` | `int` | 🔑 ✱ |  | Unique structure identifier shared across dams, levees, and buildings. |
 | `model_id` | `int` | 🔗 | models.model_id | Model domain this dam belongs to. |
 | `system_type` | `str` |  |  | Structural system classification (e.g. earthen, concrete, arch). |
-| `name` | `str` |  |  | Local or project name of the dam. |
-| `nid_name` | `str` |  |  | Authoritative dam name from the National Inventory of Dams (NID). |
+| `nid_id` | `str` |  |  | Authoritative National Inventory of Dams (NID) identifier for this dam. |
+| `nid_dam_name` | `str` |  |  | Authoritative dam name from the National Inventory of Dams (NID). |
+| `top_elev` | `float` |  |  | Top-of-dam (crest) elevation in feet (NAVD88). |
+| `toe_elev` | `float` |  |  | Toe-of-dam elevation in feet (NAVD88). |
 | `source` | `str` |  |  | Data source for this dam record (e.g. NID, state agency, field survey). |
 
 ### levees
@@ -221,9 +223,10 @@ Levee inventory. Each record represents one levee segment within a model domain.
 | `structure_id` | `int` | 🔑 ✱ |  | Unique structure identifier shared across dams, levees, and buildings. |
 | `model_id` | `int` | 🔗 | models.model_id | Model domain this levee belongs to. |
 | `system_type` | `str` |  |  | Levee system classification (e.g. earthen, floodwall, composite). |
-| `name` | `str` |  |  | Local or project name of the levee segment. |
-| `nld_name` | `str` |  |  | Authoritative levee name from the National Levee Database (NLD). |
+| `nld_system_id` | `str` |  |  | Authoritative system identifier from the National Levee Database (NLD). |
+| `nld_system_name` | `str` |  |  | Authoritative levee system name from the National Levee Database (NLD). |
 | `nld_segment_id` | `str` |  |  | Authoritative segment identifier from the NLD. |
+| `breach_fid` | `str` |  |  | Feature identifier of the associated breach location element within the model (references model_elements.element). |
 | `top_elev` | `float` |  |  | Top-of-levee elevation in feet (NAVD88). |
 | `toe_elev` | `float` |  |  | Toe-of-levee elevation in feet (NAVD88). |
 | `source` | `str` |  |  | Data source for this levee record (e.g. NLD, USACE, LiDAR survey). |
@@ -370,12 +373,16 @@ Compute resource consumption and cost per run, used for budget tracking and fore
 
 ### run_files
 
-Raw model file artifacts associated with a run, stored as blobs with structured metadata.
+Raw model file artifacts associated with a run, stored as blobs with structured metadata. RDB implementation: data stored as blob with metadata blob. Lakehouse implementation: data stored externally; object_uri + file_format + metadata_json replace data/metadata blob.
+
 
 | Column | Type | Constraints | References | Description |
 |--------|------|-------------|------------|-------------|
 | `run_file_id` | `int` | 🔑 ✱ |  | Unique file record identifier. |
-| `run_id` | `int` | 🔗 | runs.run_id | Run this file belongs to. |
+| `run_id` | `int` | 🔗 | runs.run_id | Run (rdb) or run_catalog (lakehouse) this file belongs to. |
 | `filename` | `str` |  |  | Original filename of the artifact. |
-| `data` | `blob` |  |  | Raw binary content of the file. |
-| `metadata` | `blob` |  |  | Structured metadata blob for this file. Required keys: file_type (e.g. hms_project, ras_project, ressim_project), mod... |
+| `data` | `blob` |  |  | [rdb only] Raw binary content of the file. |
+| `object_uri` | `str` |  |  | [lakehouse only] Cloud storage URI to the file object (replaces data blob). |
+| `file_format` | `str` |  |  | [lakehouse only] File format classification (e.g. hms_project, ras_project, ressim_project, geotiff). |
+| `metadata` | `blob` |  |  | [rdb only] Structured metadata blob for this file. Required keys: file_type (e.g. hms_project, ras_project, ressim_pr... |
+| `metadata_json` | `str` |  |  | [lakehouse only] JSON string equivalent of metadata blob. Required keys: file_type, model_version, export_uri, expect... |

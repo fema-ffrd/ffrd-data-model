@@ -37,6 +37,8 @@ erDiagram
     gages |o--o{ model_elements : "gage mapping"
     structures |o--o{ model_elements : "dam / levee mapping"
     models ||--o{ model_elements : "contains element"
+    models ||--o{ model_linkages : "donor"
+    models ||--o{ model_linkages : "receiver"
     events ||--o{ output_ts : "event output"
     model_elements ||--o{ output_ts : "element output"
     models ||--o{ output_ts : "denormalized model id"
@@ -63,6 +65,7 @@ erDiagram
         string model_version
         string model_name
         string geom_wkt
+        string metadata_json
         timestamp ingest_ts
         string source_system
     }
@@ -95,11 +98,13 @@ erDiagram
         int run_version
         string run_type
         int model_id
+        string event_id
         timestamp started_at
         timestamp ended_at
         string status
         string trigger
         string code_ref
+        string metadata_uri
         timestamp ingest_ts
         string source_system
     }
@@ -158,4 +163,18 @@ erDiagram
     }
 
     derived_tables{
+    }
+
+    model_linkages {
+        string linkage_id
+        int donor_model_id
+        string donor_model_type
+        string donor_site_type
+        string donor_site_id
+        int receiver_model_id
+        string receiver_model_type
+        string receiver_site_type
+        string receiver_site_id
+        timestamp ingest_ts
+        string source_system
     }

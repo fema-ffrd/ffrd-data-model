@@ -1,7 +1,9 @@
 # Data Model Traceability
 ## How the FFRD Data Model Supports Each User Story
 
-This document maps each user story to the specific tables and relationships in the data model that enable it. References point to the four domain diagrams: **Events** (`events.mmd`), **Models** (`models.mmd`), **Structures** (`structures.mmd`), and **Management** (`management.mmd`).
+This document maps each user story to the specific tables and relationships in the data model that enable it. References point to the five domain diagrams: **Events** (`events.mmd`), **Models** (`models.mmd`), **Structures** (`structures.mmd`), **Management** (`management.mmd`), and **Derived** (`derived.mmd`).
+
+Where a materialized view exists, it is listed as the **preferred query path** for the lakehouse implementation — faster and pre-aggregated. The underlying source tables are still listed for completeness and for use in the rdb implementation.
 
 ---
 
@@ -27,12 +29,13 @@ This document maps each user story to the specific tables and relationships in t
 
 | Table | Role |
 |-------|------|
-| `runs` | `success bool` flags failed runs; `timestamp` records execution time |
+| `runs` / `run_catalog` | `success` / `status` flags failed runs; `timestamp` / `started_at` records execution time |
 | `run_logs` | Links each run to its cloud log `uri` for full error message retrieval |
+| `mv_run_performance` ⚡ | Pre-aggregated `duration_sec`, `status`, and `compute_cost` per run — preferred query path |
 
-**Query path:** Filter `runs` on `success = false`, join `run_logs` to retrieve the log URI for error detail.
+**Query path (rdb):** Filter `runs` on `success = false`, join `run_logs` to retrieve the log URI for error detail.
 
-> **Gap noted:** `runs` currently lacks `start_time` / `end_time` fields for duration tracking. Consider adding these to `runs` to fully support this story.
+**Query path (lakehouse):** Filter `mv_run_performance` on `status = 'failed'` for a ranked list of slow or failing runs; follow `run_logs.uri` for full error messages.
 
 ---
 
@@ -42,11 +45,14 @@ This document maps each user story to the specific tables and relationships in t
 | Table | Role |
 |-------|------|
 | `hotfixes` | Records `original_run_id`, `rerun_id`, `issue_description`, `status`, and `resolved_at` |
-| `runs` | Provides context for both the original failing run and the rerun |
+| `runs` / `run_catalog` | Provides context for both the original failing run and the rerun |
 | `models` | `resolution_model_id` FK identifies which model version resolved the issue |
 | `events` | (via `runs.event_id`) identifies which event triggered the hotfix |
+| `mv_run_performance` ⚡ | `status` column surfaces failed runs; join to `hotfixes` to correlate failures with open remediation items |
 
-**Query path:** `hotfixes` → `runs` (original + rerun) → `events`; `hotfixes.resolution_model_id` → `models`
+**Query path (rdb):** `hotfixes` → `runs` (original + rerun) → `events`; `hotfixes.resolution_model_id` → `models`
+
+**Query path (lakehouse):** Filter `mv_run_performance` on `status = 'failed'` → join `hotfixes` on `original_run_id` to see issue description and resolution model.
 
 ---
 
@@ -56,10 +62,14 @@ This document maps each user story to the specific tables and relationships in t
 | Table | Role |
 |-------|------|
 | `run_resources` | Records `cpu_hours`, `memory_gb`, `storage_gb`, and `compute_cost` per run |
-| `runs` | Links resource records to specific events and models |
+| `runs` / `run_catalog` | Links resource records to specific events and models |
 | `models` | `geom` field enables spatial rollup to basin-level cost summaries |
+| `mv_run_performance` ⚡ | Per-run cost and utilization summary including `duration_sec` and `compute_cost` |
+| `mv_basin_cost_rollup` ⚡ | Pre-aggregated MTD cost, CPU hours, storage, run count, and failure count per basin per billing month — preferred query path for cost dashboards |
 
-**Query path:** Aggregate `run_resources.compute_cost` grouped by `runs.event_id` or model basin geometry for basin-level and period-level rollups.
+**Query path (rdb):** Aggregate `run_resources.compute_cost` grouped by `runs.event_id` or model basin geometry for basin-level and period-level rollups.
+
+**Query path (lakehouse):** Query `mv_basin_cost_rollup` filtered by `model_id` and `billing_month` for MTD and projected spend; use `mv_run_performance` for per-run breakdown.
 
 ---
 
@@ -70,12 +80,15 @@ This document maps each user story to the specific tables and relationships in t
 
 | Table | Role |
 |-------|------|
-| `runs` | `run_type enum` can distinguish conformance runs from calibration runs |
+| `runs` / `run_catalog` | `run_type` distinguishes conformance runs from calibration runs |
 | `output_ts` | Provides the modeled time series values that conformance checks are computed against |
 | `output_grids` | Provides gridded hazard outputs for spatial conformance checks |
-| `models` | `geom` identifies basin extent for aggregating pass/fail by basin |
+| `models` | `geom` identifies basin extent; `metadata_json` carries check results |
+| `mv_conformance_summary` ⚡ | Pre-parsed check results with `check_name`, `threshold`, `result_value`, and `pass` per model version — preferred query path |
 
-> **Gap noted:** A `conformance_checks` table (check name, threshold, pass/fail, run_id) is not yet modeled and would be needed to store check results directly rather than deriving them at query time.
+**Query path (rdb):** Filter `runs` by `run_type = 'conformance'`; evaluate checks against `output_ts` / `output_grids`; results are stored in `models.metadata`.
+
+**Query path (lakehouse):** Query `mv_conformance_summary` filtered by `model_id` and `model_version` for a complete pass/fail checklist per basin.
 
 ---
 
@@ -87,9 +100,12 @@ This document maps each user story to the specific tables and relationships in t
 | `output_ts` | Full time series per `element_id` and `run_id` — primary input for statistical analysis |
 | `output_grids` | Gridded outputs for spatial statistical analysis |
 | `events` | `realization_id` and `block_id` enable filtering by stochastic block or realization |
-| `runs` | Links outputs back to specific events for filtering decisions |
+| `runs` / `run_catalog` | Links outputs back to specific events for filtering decisions |
+| `mv_event_variable_stats` ⚡ | Pre-aggregated mean, max, min, std across elements per event per variable — preferred query path for event ranking and filtering |
 
-**Query path:** Join `output_ts` → `runs` → `events` to compute statistics grouped by event attributes.
+**Query path (rdb):** Join `output_ts` → `runs` → `events` to compute statistics grouped by event attributes.
+
+**Query path (lakehouse):** Query `mv_event_variable_stats` grouped by `event_id` and `variable`; apply ranking or threshold filters to identify events for inclusion or exclusion.
 
 ---
 
@@ -162,8 +178,11 @@ This document maps each user story to the specific tables and relationships in t
 | `events` | `realization_id` groups runs into realizations for statistical aggregation |
 | `seeds` | Records per-process random seeds, enabling replication of any realization |
 | `output_grids` / `output_ts` | Outputs per realization that feed into uncertainty calculations |
+| `mv_aep_frequency_stats` ⚡ | Pre-computed mean, std, and percentile peaks (p10/p50/p90) per AEP band across all realizations — preferred query path |
 
-**Query path:** Group `output_grids` or `output_ts` by AEP band via `runs` → `events.realization_id` to compute mean and standard deviation across realizations.
+**Query path (rdb):** Group `output_grids` or `output_ts` by AEP band via `runs` → `events.realization_id` to compute mean and standard deviation across realizations.
+
+**Query path (lakehouse):** Query `mv_aep_frequency_stats` filtered by `element_id` and `aep_label` for pre-computed `mean_peak`, `std_peak`, and confidence interval percentiles.
 
 ---
 
@@ -220,8 +239,12 @@ This document maps each user story to the specific tables and relationships in t
 | `output_ts` | Modeled time series keyed to `element_id` and `run_id` |
 | `gages` | Links observed data to location; `ams` array stores annual maximum series |
 | `model_elements` | `gage_id` FK co-locates a model element with its corresponding gage |
+| `mv_gage_model_comparison` ⚡ | Pre-joined observed vs. modeled peak with `bias` and `percent_error` per gage per event — preferred query path |
+| `mv_peak_output_by_element` ⚡ | Peak modeled values per element; join to `obs_ts` for frequency comparison |
 
-**Query path:** Join `model_elements` on `gage_id` → `obs_ts` and `output_ts` at the same location and variable for direct observed vs. modeled comparison.
+**Query path (rdb):** Join `model_elements` on `gage_id` → `obs_ts` and `output_ts` at the same location and variable for direct observed vs. modeled comparison.
+
+**Query path (lakehouse):** Query `mv_gage_model_comparison` filtered by `gage_id` or `model_id` for pre-computed bias and percent error across all co-located events.
 
 ---
 
@@ -338,8 +361,11 @@ This document maps each user story to the specific tables and relationships in t
 | `model_elements` | Identifies element type and model; `geom` enables spatial co-location |
 | `model_linkages` | `donor_site_id` / `receiver_site_id` explicitly names the hand-off point |
 | `models` | Distinguishes HMS vs. RAS runs for the same event |
+| `mv_peak_output_by_element` ⚡ | Peak flow per element per run; join on `donor_site_id` and `receiver_site_id` for direct HMS vs. RAS peak comparison |
 
-**Query path:** At a linkage point, query `output_ts` for the `donor_site_id` element (HMS run) and the `receiver_site_id` element (RAS run) for the same event and compare peak values.
+**Query path (rdb):** At a linkage point, query `output_ts` for the `donor_site_id` element (HMS run) and the `receiver_site_id` element (RAS run) for the same event and compare peak values.
+
+**Query path (lakehouse):** Query `mv_peak_output_by_element` for both the donor and receiver site elements for the same `event_id`; `model_linkages` provides the site pairing.
 
 ---
 
@@ -348,12 +374,12 @@ This document maps each user story to the specific tables and relationships in t
 
 | Table | Role |
 |-------|------|
-| `model_elements` | `element` field holds the feature name as modeled |
-| `levees` | `nld_name` and `nld_segment_id` provide the authoritative NLD name for comparison |
-| `dams` | `nid_name` provides the authoritative NID name for comparison |
+| `model_elements` | `element` field holds the feature name as used in the model |
+| `levees` | `nld_system_name` and `nld_segment_id` provide the authoritative NLD names for comparison |
+| `dams` | `nid_id` and `nid_dam_name` provide the authoritative NID identifiers for comparison |
 | `gages` | `gage_name` and `gage_owner` provide authoritative gage identifiers |
 
-**Query path:** Compare `model_elements.element` against `levees.nld_name`, `dams.nid_name`, or `gages.gage_name` to flag naming mismatches.
+**Query path:** Compare `model_elements.element` against `levees.nld_system_name`, `dams.nid_dam_name`, or `gages.gage_name` to flag naming mismatches.
 
 ---
 
@@ -395,11 +421,15 @@ This document maps each user story to the specific tables and relationships in t
 | Table | Role |
 |-------|------|
 | `output_grids` | Hazard grids at AEP frequencies keyed to `run_id` |
-| `runs` | Links each grid to its `event_id` |
+| `runs` / `run_catalog` | Links each grid to its `event_id` |
 | `events` | `realization_id` and `block_id` identify the stochastic contributor |
 | `storms` | Storm metadata (rank, type, precip) characterizes the contributing event |
+| `mv_aep_frequency_stats` ⚡ | Identifies which AEP band a result falls within and the ensemble statistics around it |
+| `mv_peak_output_by_element` ⚡ | Ranks events by peak value at a given element to identify the dominant contributors to a frequency result |
 
-**Query path:** Identify the `output_grids` records representing the target AEP → `runs.event_id` → `events` → `storms` to characterize what drove the hazard level.
+**Query path (rdb):** Identify the `output_grids` records representing the target AEP → `runs.event_id` → `events` → `storms` to characterize what drove the hazard level.
+
+**Query path (lakehouse):** Query `mv_peak_output_by_element` ranked by `peak_value` at the target element; join `run_catalog` → `events` → `storms` to characterize the top contributing events for the target AEP band.
 
 ---
 
@@ -442,8 +472,11 @@ This document maps each user story to the specific tables and relationships in t
 | `events` | `realization_id` groups the stochastic ensemble |
 | `seeds` | Enables full replication of any realization for uncertainty decomposition |
 | `output_grids` / `output_ts` | Per-realization outputs for computing spread across the ensemble |
+| `mv_aep_frequency_stats` ⚡ | Pre-computed p10/p50/p90 and std across realizations per AEP — preferred query path for communicating confidence bounds |
 
-**Query path:** Aggregate `output_grids` or `output_ts` by AEP band grouped on `events.realization_id` to compute mean, standard deviation, and confidence intervals.
+**Query path (rdb):** Aggregate `output_grids` or `output_ts` by AEP band grouped on `events.realization_id` to compute mean, standard deviation, and confidence intervals.
+
+**Query path (lakehouse):** Query `mv_aep_frequency_stats` for the target `element_id` and `aep_label` to retrieve pre-computed uncertainty bounds (`std_peak`, `pct_10_peak`, `pct_90_peak`).
 
 ---
 
@@ -454,10 +487,14 @@ This document maps each user story to the specific tables and relationships in t
 |-------|------|
 | `output_grids` | Frequency-based hazard grids (100-yr, 500-yr, etc.) keyed to `run_id` |
 | `models` | `geom` identifies basin extent |
-| `runs` | Links grids to events and models |
+| `runs` / `run_catalog` | Links grids to events and models |
 | `events` | `event_type` or `realization_id` scopes to the relevant frequency band |
+| `mv_aep_frequency_stats` ⚡ | Basin-wide frequency statistics (mean peak, std, percentiles) per AEP label per element |
+| `mv_event_variable_stats` ⚡ | Event-level summaries useful for ranking and presenting the distribution of outcomes at a given frequency |
 
-**Query path:** Filter `output_grids` by frequency variable → `runs` → `models.geom` to render basin-level hazard maps at standard return periods.
+**Query path (rdb):** Filter `output_grids` by frequency variable → `runs` → `models.geom` to render basin-level hazard maps at standard return periods.
+
+**Query path (lakehouse):** Query `mv_aep_frequency_stats` for target `aep_label` values (e.g. 0.01, 0.002) across all elements in a basin; join `model_elements.geom` for spatial rendering.
 
 ---
 
