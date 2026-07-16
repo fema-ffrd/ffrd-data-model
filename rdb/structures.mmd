@@ -10,6 +10,7 @@ erDiagram
     levees ||--|{ model_elements : ""
     dams ||--o{ structure_response : ""
     dams ||--|{ model_elements : ""
+    buildings ||--o{ model_elements : ""
     model_elements ||--o{ output_ts : ""
     events ||--o{ structure_failure_elev : ""
     structure_failure_elev ||--o{ structure_response : ""
@@ -52,4 +53,39 @@ erDiagram
         structure_response_id int PK
         event_id int FK
         failure_elev float
+    }
+
+    buildings {
+        structure_id int PK
+        source_building_id str
+        inventory_source str
+        inventory_version str
+        latitude float
+        longitude float
+        geom geom
+        state_fips str
+        county_fips str
+        census_block_fips str
+        occupancy_type str
+        general_building_type str
+        number_stories int
+        area_sqft float
+        foundation_type str
+        first_floor_height_ft float
+        basement_type int
+        building_cost float
+        content_cost float
+        inventory_cost float
+        bldg_insurance_deductible float
+        bldg_insurance_limit float
+        content_insurance_deductible float
+        content_insurance_limit float
+        ground_elevation_ft float
+        pop_2am int
+        pop_2pm int
+        pop_2am_under65 int
+        pop_2am_over65 int
+        pop_2pm_under65 int
+        pop_2pm_over65 int
+        source str
     }

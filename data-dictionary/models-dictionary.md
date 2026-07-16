@@ -31,6 +31,7 @@ TODO
 | `element_id` | string | TODO | TODO |
 | `model_id` | int | TODO | TODO |
 | `structure_id` | string | TODO | TODO |
+| `structure_type` | string | TODO | Discriminator for `structure_id` resolution. Allowed values: `dam`, `levee`, `building`. Null when the element has no structure association (e.g., gage-only elements) |
 | `gage_id` | string | TODO | TODO |
 | `element` | string | TODO | TODO |
 | `geom_wkt` | geom | TODO | TODO |
@@ -178,7 +179,7 @@ These fields are present on all tables.
 |---|---|
 | `model_elements.model_id` | `models.model_id` |
 | `model_elements.gage_id` | `gages.gage_id` |
-| `model_elements.structure_id` | `dams.dam_id` or `levees.levee_id` (see structures schema) |
+| `model_elements.structure_id` | `dams.dam_id`, `levees.levee_id`, or `buildings.building_id` (see structures schema; resolved by `model_elements.structure_type`) |
 | `model_event_files.model_id` | `models.model_id` |
 | `model_event_files.event_id` | `events.event_id` (see events schema) |
 | `run_catalog.model_id` | `models.model_id` |

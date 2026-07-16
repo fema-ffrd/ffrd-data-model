@@ -37,7 +37,8 @@ erDiagram
     model_elements {
         element_id int PK
         model_id int FK
-        structure_id int FK
+        structure_id int
+        structure_type str
         gage_id str FK
         element str
         geom geom
