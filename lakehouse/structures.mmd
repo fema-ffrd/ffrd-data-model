@@ -10,8 +10,8 @@ erDiagram
     %% - structure_response_curves rows are point-level probability-stage records
     %% - xvalues -> probability; ydistributions -> distribution_type/distribution_params_json/stage_value
     %% - structure_failure_elev(structure_response_id, event_id)
-    %% - buildings.building_id is referenced by model_elements.structure_id (see models.mmd)
-    %% - model_elements.structure_type = 'building' disambiguates the polymorphic FK
+    %% - model_elements.structure_id may reference buildings.building_id when model_elements.structure_type = 'building' (see models.mmd)
+    %% - model_elements.structure_type disambiguates the polymorphic structure_id across structures tables
 
     dams ||--o{ structure_response_curves : "response curve"
     levees ||--o{ structure_response_curves : "response curve"

@@ -135,8 +135,7 @@ These fields are present on all tables.
 - Each **levee** may be associated with zero or many **structure_response_curves**.
 - Each **event** may be associated with zero or many **structure_failure_elev** rows, one per structure response curve sampled for that event.
 - Each **structure_response_curve** may produce zero or many **structure_failure_elev** rows across events.
-- Each **building** is a standalone inventory record. It is not a child of any other structures entity.
-- Each **building** may be registered as one or many **model_elements** (via `model_elements.structure_id = buildings.building_id`, disambiguated by `model_elements.structure_type = 'building'`).
+- Each **building** may be registered as zero or many **model_elements** (via `model_elements.structure_id = buildings.building_id`, disambiguated by `model_elements.structure_type = 'building'`).
 
 
 ## Join Intent
@@ -146,7 +145,7 @@ These fields are present on all tables.
 | `structure_response_curves.structure_location_id` | `dams.dam_id` or `levees.levee_id` (see `structure_type` on `structure_response_curves`) |
 | `structure_failure_elev.structure_response_id` | `structure_response_curves.structure_response_id` |
 | `structure_failure_elev.event_id` | `events.event_id` (see events schema) |
-| `model_elements.structure_id` | `buildings.building_id` when `model_elements.structure_type = 'building'` (see models schema) |
+| `model_elements.structure_id` | `dams.dam_id`, `levees.levee_id`, or `buildings.building_id` (resolved by `model_elements.structure_type`; see models schema) |
 
 
 ## Notes
