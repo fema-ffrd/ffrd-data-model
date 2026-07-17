@@ -167,7 +167,7 @@ Attributes:
     crs: WGS 84 (EPSG:4326)
 ```
 
-Cataloged by: `observed_grids` table
+Cataloged by: `observed_grids` table (see: `storm_id`)
 
 ---
 
@@ -193,7 +193,7 @@ Attributes:
     crs: FFRD-Projection
 ```
 
-Cataloged by: `output_grids` table
+Cataloged by: `output_grids` table (see: `event_id`)
 
 ---
 
@@ -218,7 +218,7 @@ Attributes:
     crs: FFRD-Projection
 ```
 
-Cataloged by: `output_grids` table
+Cataloged by: `output_grids` table (see: `event_id`)
 
 ---
 
