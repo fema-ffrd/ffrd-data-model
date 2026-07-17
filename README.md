@@ -133,6 +133,93 @@ These views are **not source-of-truth** — they are regenerated after each batc
 
 ---
 
+## Gridded Data — Icechunk Repositories
+
+Gridded (raster) observed data and model outputs are stored in [Icechunk](https://icechunk.io) repositories rather than as relational tables. Icechunk is a chunked, cloud-native array store built on [Zarr](https://zarr.dev) conventions that provides Iceberg-compatible snapshot semantics and efficient multidimensional indexing. Metadata pointers to Icechunk repositories live in the relational schema (`observed_grids` and `output_grids` tables); the actual gridded data — characterized by dimensions like longitude, latitude, time, and variable — lives in long-lived repos that accumulate snapshots over time. With Iceberg, these datasets can be updated incrementally in-place (with data version control) if the storm catalog changes or events need to be re-run.
+
+See [rdb/grids.mmd](rdb/grids.mmd) for a conceptual diagram of the three repository types and how they relate to the relational catalog tables.
+
+### Repository Types
+
+**1. `observed_precip` — Observed Meteorology from NOAA AORC**
+
+Real-world precipitation and temperature observations; i.e., the raw storm catalog data.
+* `storm_id` is a dimension for efficient slicing by storm.
+* `time` is measured relative to the start of each storm.
+* `abs_time` is the real-world time of occurence.
+
+```
+<xarray.Dataset> Size: 1TB
+Dimensions:    (storm_id: 440, time: 73, y: 1014, x: 2000)
+Coordinates:
+  * storm_id  (storm_id) int64 4kB 1 2 3 4 5 6 ... 436 437 438 439 440
+  * time      (time) timedelta64[ns] 584B 00:00:00 ... 3 days 00:00:00
+  * y         (y) float64 8kB 4.969e+06 4.966e+06 ... 2.129e+06
+  * x         (x) float64 16kB -1.067e+06 -1.064e+06 ... 4.537e+06
+    abs_time  (storm_id, time) datetime64[ns] 257kB 2016-03-09 ... 2...
+Data variables:
+    precip    (storm_id, time, y, x) float64 521GB
+    temp      (storm_id, time, y, x) float64 521GB
+Attributes:
+    source: NOAA AORC
+    crs: WGS 84 (EPSG:4326)
+```
+
+Cataloged by: `observed_grids` table
+
+---
+
+**2. `hms_excess_precip` — HEC-HMS Synthetic Excess Precipitation**
+
+Gridded excess precipitation output from HEC-HMS runs, merged across all SST events.
+* `event_id` is a dimension for efficient slicing by event.
+* `time` is measured relative to the start of each event.
+
+```
+<xarray.Dataset>
+Dimensions:         (event_id: 20000, lon: 2500, lat: 2500, time: 72)
+Coordinates:
+  * event_id        (event_id) int64 1 2 3 4 5 6 ... 20000
+  * lon             (lon) float32 -97.5 -97.49 ... -87.5
+  * lat             (lat) float32 24.5 24.51 ... 34.5
+  * time            (time) timedelta64[ns] 00:00:00 ... 3 days 00:00:00
+Data variables:
+    excess_precip   (event_id, time, lat, lon) float32 ...  [unit: in]
+Attributes:
+    project: Big River Basin (FFRD Validation)
+    model: HEC-HMS
+    crs: FFRD-Projection
+```
+
+Cataloged by: `output_grids` table
+
+---
+
+**3. `ras_output` — HEC-RAS Maximum Depth and Velocity**
+
+Peak flood depths and velocities from HEC-RAS runs, merged across all runs for each event (no time dimension — spatial maximum values only). 
+* `event_id` is a dimension for efficient slicing by event.
+
+```
+<xarray.Dataset>
+Dimensions:       (event_id: 20000, lon: 5000, lat: 5000)
+Coordinates:
+  * event_id      (event_id) int64 1 2 3 4 5 6 ... 20000
+  * lon           (lon) float32 -97.5 -97.49 ... -87.5
+  * lat           (lat) float32 24.5 24.51 ... 34.5
+Data variables:
+    max_depth     (event_id, lat, lon) float32 ...  [unit: ft]
+    max_velocity  (event_id, lat, lon) float32 ...  [unit: ft/s]
+Attributes:
+    project: Big River Basin 
+    model: Upper Big River
+    crs: FFRD-Projection
+```
+
+Cataloged by: `output_grids` table
+
+---
+
 ## Early Iterations
 
 ![Iceberg Data Process](prior-art/iceberg-plugin-data-process.png)
