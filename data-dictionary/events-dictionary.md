@@ -6,17 +6,17 @@ Covers the four Iceberg tables modeled in `events.mmd`. Keys are **logical** (no
 ## Tables and Fields
 ### Table: `storms`
 
-Catalog of historic storms used as forcing inputs.
+Catalog of historic observed storms used as forcing inputs.
 
 | Column | Type | Source | Description |
 |---|---|---|---|
-| `storm_id` | string | TODO | Logical primary key. Unique identifier for a storm, typically composed of rank and type (e.g. TODO) |
-| `storm_rank` | int | TODO | Rank of this storm (1 being the highest) based on maximum total precipitation depth |
-| `storm_type` | string | TODO | Meteorological type of storm (e.g., tropical, MCS, etc.) |
-| `storm_datetime` | timestamp | TODO | UTC timestamp of the storm's reference time (i.e. start of event). |
+| `storm_id` | string | TODO | Logical primary key. Unique identifier for a single observed storm. |
+| `storm_rank` | int | TODO | Rank of this observed storm (1 being the highest) based on maximum total precipitation depth (TODO: confirm). |
+| `storm_type` | string | TODO | Meteorological type of the storm (e.g., tropical, MCS, etc.) |
+| `datetime` | timestamp | TODO | UTC timestamp of the storm's reference time (i.e. start of event). |
 | `duration_hrs` | int | TODO | Total storm duration in hours. |
-| `centroid` | geom | TODO | Point geometry representing the storm centroid in its original (pre-transposition) location. CRS: WGS 84 (TODO). |
-| `mean_precip` | float | TODO | Spatial mean precipitation over the study domain for this storm (units: TODO). |
+| `centroid` | geom | TODO | Point geometry representing the storm centroid in its original (pre-transposition) location. CRS: WGS 84 (TODO: confirm). |
+| `mean_precip` | float | TODO | Spatial mean precipitation over the study domain for this storm. Units: inches (TODO: confirm).  |
 
 
 ### Table: `fishnet_points`
@@ -25,11 +25,9 @@ Regular-grid sample locations used to define transposition target points across 
 
 | Column | Type | Source | Description |
 |---|---|---|---|
-| `fishnet_point_id` | string | TODO | Logical primary key. Unique identifier for a fishnet grid point |
-| `weight` | float | TODO | Relative sampling weight of this fishnet grid point based on importance sampling analysis. |
+| `fishnet_point_id` | string | TODO | Logical primary key. Unique identifier for a fishnet grid point. |
+| `weight` | float | TODO | Relative sampling weight of this fishnet grid point based on importance sampling analysis. (TODO: confirm) |
 | `geom` | string | TODO | Point geometry for this grid location. CRS assumed WGS 84 unless documented otherwise. CRS: WGS 84 (TODO) |
-| `ingest_ts` | timestamp | TODO | Updated datetime. |
-| `source_system` | string | TODO | Identifier of the upstream system or pipeline that produced this record (TODO). |
 
 
 ### Table: `events`
@@ -39,12 +37,12 @@ Transposed storm events Each row is one stochastic event instance.
 | Column | Type | Source | Description |
 |---|---|---|---|
 | `event_id` | string | TODO | Logical primary key. Unique identifier for this transposed event instance. |
-| `storm_id` | string | TODO | Identifies the source storm. |
-| `fishnet_point_id` | string | TODO | Identifies the transposition target location. |
-| `event_type` | string | TODO | Types? (TODO) |
-| `block_id` | int | TODO | Block index  |
-| `realization_id` | int | TODO | Realization index  |
-| `centroid_trnsp_wkt` | string | TODO | WKT point geometry of the storm centroid **after** transposition to the fishnet target location. CRS assumed WGS 84 unless documented otherwise. (TODO) |
+| `storm_id` | string | TODO | Logical foreign key. Identifies the source storm. |
+| `fishnet_point_id` | string | TODO | Logical foriegn key. Identifies the transposition target location. |
+| `event_type` | string | TODO | One of: `conformance`, `calibration`, etc. (TODO: confirm / list all) |
+| `block_id` | int | TODO | Block index of the Event  |
+| `realization_id` | int | TODO | Realization index of the Event  |
+| `centroid_trnsp_wkt` | geom | TODO | Point geometry of the storm centroid **after** transposition to the fishnet target location. CRS: WGS 84 (TODO: confirm). |
 | `event_date` | date | TODO | Calendar date associated with the event (e.g. synthetic date assigned for model forcing). |
 
 
@@ -54,7 +52,7 @@ Stochastic seed values used to reproduce individual event realizations.
 
 | Column | Type | Source | Description |
 |---|---|---|---|
-| `event_id` | string | TODO | Identifies the parent event. |
+| `event_id` | string | TODO | Logical foreign key. Identifies the parent event. |
 | `process_id` | int | TODO | Is this CC Plugin ID? (TODO)|
 | `realization_seed` | int | TODO | Realization seed value for the Event. |
 | `block_seed` | int | TODO | Block seed value for the Event. |
