@@ -12,6 +12,7 @@ rdb/                        Relational schema (PostgreSQL / PostGIS target)
   events.mmd                Events domain: storms, fishnet points, seeds
   models.mmd                Models domain: models, elements, runs, outputs, linkages
   structures.mmd            Structures domain: dams, levees, buildings, response curves
+  grids.mmd                 Gridded data: Icechunk repositories for meteorology and model outputs
   management.mmd            Management domain: manifests, plugins, hotfixes, costs, logs
 
 lakehouse/                  Apache Iceberg lakehouse implementation
@@ -42,6 +43,7 @@ The data model is organized into five domains. Each domain has both an **rdb** (
 | Events | Stochastic storm catalog, fishnet spatial grid, realized events, and random seeds | [rdb/events.mmd](rdb/events.mmd) | [lakehouse/events.mmd](lakehouse/events.mmd) |
 | Models | Models, model elements, inter-model linkages, runs, time series and gridded outputs, observed gage data | [rdb/models.mmd](rdb/models.mmd) | [lakehouse/models.mmd](lakehouse/models.mmd) |
 | Structures | Dams, levees, buildings, fragility response curves, event failure elevations | [rdb/structures.mmd](rdb/structures.mmd) | [lakehouse/structures.mmd](lakehouse/structures.mmd) |
+| Grids | Icechunk repositories for observed meteorology and model gridded outputs (depth, velocity, excess precip) | [rdb/grids.mmd](rdb/grids.mmd) | — |
 | Management | Manifests, plugins, hotfixes, run logs, resource costs, file artifacts | [rdb/management.mmd](rdb/management.mmd) | [lakehouse/management.mmd](lakehouse/management.mmd) |
 | Derived | Materialized aggregation views (lakehouse only) | — | [lakehouse/derived.mmd](lakehouse/derived.mmd) |
 
@@ -152,14 +154,14 @@ Real-world precipitation and temperature observations; i.e., the raw storm catal
 <xarray.Dataset> Size: 1TB
 Dimensions:    (storm_id: 440, time: 73, y: 1014, x: 2000)
 Coordinates:
-  * storm_id  (storm_id) int64 4kB 1 2 3 4 5 6 ... 436 437 438 439 440
-  * time      (time) timedelta64[ns] 584B 00:00:00 ... 3 days 00:00:00
-  * y         (y) float64 8kB 4.969e+06 4.966e+06 ... 2.129e+06
-  * x         (x) float64 16kB -1.067e+06 -1.064e+06 ... 4.537e+06
-    abs_time  (storm_id, time) datetime64[ns] 257kB 2016-03-09 ... 2...
+  * storm_id  (storm_id) int64 1 2 3 4 5 6 ... 436 437 438 439 440
+  * time      (time) timedelta64[ns] 00:00:00 ... 3 days 00:00:00
+  * y         (y) float64 4.969e+06 4.966e+06 ... 2.129e+06
+  * x         (x) float64 -1.067e+06 -1.064e+06 ... 4.537e+06
+    abs_time  (storm_id, time) datetime64[ns] 2016-03-09 ... 2...
 Data variables:
-    precip    (storm_id, time, y, x) float64 521GB
-    temp      (storm_id, time, y, x) float64 521GB
+    precip    (storm_id, time, y, x) float64
+    temp      (storm_id, time, y, x) float64
 Attributes:
     source: NOAA AORC
     crs: WGS 84 (EPSG:4326)
