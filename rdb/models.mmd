@@ -7,9 +7,6 @@ erDiagram
     obs_ts }o--|| gages : ""
     models ||--o{ model_elements : ""
     model_elements ||--o{ output_ts : ""
-    model_links }o--o{ model_elements : ""
-    run_files }o--|| models : ""
-    run_files }o--|| runs : ""
     gages |o--o{ model_elements : ""
     runs ||--o{ output_ts : ""
     events ||--o{ output_grids : ""
@@ -18,8 +15,8 @@ erDiagram
     events ||--o{ structure_failure_elev : ""
     runs }o--|| models : ""
     runs }o--|| events : ""
-    model_linking }o--|| models : ""
-    model_linking }o--|| model_elements : ""
+    models ||--o{ model_linkages : "donor"
+    models ||--o{ model_linkages : "receiver"
 
     events {
        }
@@ -36,6 +33,7 @@ erDiagram
         model_name str
         model_version str
         geom geom
+        metadata uri
     }
     model_elements {
         element_id int PK
@@ -46,23 +44,6 @@ erDiagram
         element str
         geom geom
     }
-    model_linking {
-        donor_model_id int FK
-        donor_model_type str
-        donor_site_type str
-        donor_site_id str FK
-        receiver_model_id int FK
-        receiver_model_type str
-        receiver_site_type str
-        receiver_site_id str FK
-    }
-    run_files {
-        run_file_id int PK
-        run_id int FK
-        filename str
-        data blob
-        metadata blob
-    }
     output_ts {
         run_id int FK
         element_id int FK
@@ -71,16 +52,23 @@ erDiagram
         value float
         units str
     }
-    grids {
-    }
-    output_grids {
-    }
     obs_ts {
         gage_id str FK
         timestamp datetime
         variable str
         value float
         units str
+    }
+    model_linkages {
+        linkage_id int PK
+        donor_model_id int FK
+        donor_model_type str
+        donor_site_type str
+        donor_site_id str FK
+        receiver_model_id int FK
+        receiver_model_type str
+        receiver_site_type str
+        receiver_site_id str FK
     }
     structures {
     }
@@ -94,7 +82,7 @@ erDiagram
         metadata uri
     }
     structure_failure_elev {
-        structure_id int FK
+        structure_response_id int FK
         event_id int FK
         failure_elev float
     }
