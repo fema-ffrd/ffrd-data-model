@@ -1,48 +1,18 @@
 ---
-title: Grids
+title: Gridded Data — Icechunk Repositories
 ---
+flowchart LR
+    AORC["NOAA AORC<br/>Observed meteorology<br/>for each storm"]
+    HMS["HEC-HMS Runs<br/>Excess precipitation<br/>for each event"]
+    RAS["HEC-RAS Runs<br/>Depth &amp; velocity<br/>for each event"]
 
-erDiagram
-    %% Gridded (raster) data lives in long-lived Icechunk repositories,
-    %% one per data domain. Two tables catalog grid metadata and pointers.
-    %% Spatial metadata (crs, resolution, extent) belongs in grid_repos.
+    AORC -->|accumulate| OBS["🧊 observed_precip repo<br/>Dimensions: lon × lat × time<br/>Variables: precip, temperature, ...<br/>Indexed by: storm_id<br/>Snapshots grow with each storm<br/><br/>Table: observed_grids"]
+    HMS -->|merge across runs| HMSREPO["🧊 hms_excess_precip repo<br/>Dimensions: lon × lat × time<br/>Variables: excess_precip<br/>Indexed by: event_id<br/>Snapshots grow with each event<br/><br/>Table: output_grids"]
+    RAS -->|merge across runs| RASREPO["🧊ras_output repo<br/>Dimensions: lon × lat<br/>Variables: max_depth, max_velocity<br/>Indexed by: event_id<br/>Snapshots grow with each event<br/><br/>Table: output_grids"]
 
-    grid_repos ||--o{ observed_grids : ""
-    grid_repos ||--o{ output_grids : ""
-    storms ||--o{ observed_grids : ""
-    events ||--o{ output_grids : ""
-
-    grid_repos {
-        repo_id int PK
-        domain enum "ras_output | hms_excess_precip | observed_precip"
-        uri str "Icechunk repo location, e.g. s3://bucket/path"
-        description str
-        crs str
-        resolution float
-        created_at datetime
-    }
-
-    observed_grids {
-        observed_grid_id int PK
-        repo_id int FK
-        storm_id int FK
-        variable str "precip || temp"
-        array_path str "array/group name within the shared repo"
-        snapshot_id str "Icechunk snapshot/commit id (or tag)"
-        time_start datetime
-        time_end datetime
-    }
-
-    output_grids {
-        output_grid_id int PK
-        repo_id int FK
-        event_id int FK
-        variable str "depth | velocity | excess_precip"
-        array_path str "array/group name within the shared repo"
-        snapshot_id str "Icechunk snapshot/commit id (or tag)"
-    }
-
-    events {
-    }
-    storms {
-    }
+    style OBS fill:#1976d2,stroke:#0d47a1,stroke-width:2px,color:#fff
+    style HMSREPO fill:#7b1fa2,stroke:#4a148c,stroke-width:2px,color:#fff
+    style RASREPO fill:#c2185b,stroke:#880e4f,stroke-width:2px,color:#fff
+    style AORC fill:#558b2f,stroke:#33691e,stroke-width:1px,color:#fff
+    style HMS fill:#558b2f,stroke:#33691e,stroke-width:1px,color:#fff
+    style RAS fill:#558b2f,stroke:#33691e,stroke-width:1px,color:#fff
