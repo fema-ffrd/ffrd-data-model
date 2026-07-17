@@ -12,7 +12,7 @@ erDiagram
     run_files }o--|| runs : ""
     gages |o--o{ model_elements : ""
     runs ||--o{ output_ts : ""
-    events ||--o{ grids : ""
+    events ||--o{ output_grids : ""
     structures ||--|{ model_elements : ""
     structures ||--o{ structure_failure_elev : ""
     events ||--o{ structure_failure_elev : ""
@@ -72,6 +72,8 @@ erDiagram
         units str
     }
     grids {
+    }
+    output_grids {
     }
     obs_ts {
         gage_id str FK

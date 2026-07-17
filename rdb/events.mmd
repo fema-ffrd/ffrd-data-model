@@ -10,8 +10,8 @@ erDiagram
     models }|--o{ events : ""
     runs }o--|| models : ""
     runs }o--|| events : ""
-    storms ||--o{ grids : ""
-    events ||--o{ grids : ""
+    storms ||--o{ observed_grids : ""
+    events ||--o{ output_grids : ""
 
 
     storms {
@@ -50,5 +50,7 @@ erDiagram
     }
     runs {
     }
-    grids {
+    observed_grids {
+    }
+    output_grids {
     }

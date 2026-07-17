@@ -4,39 +4,45 @@ title: Grids
 
 erDiagram
     %% Gridded (raster) data lives in long-lived Icechunk repositories,
-    %% one per data domain. Each repo accumulates snapshots over time.
-    %% grid_repos: catalog of the Icechunk repositories themselves.
-    %% grids: catalog/pointer rows, one per variable per event (RAS/HMS,
-    %%   merged across runs) or per storm (observed precip, pre-transposition).
-    %% Exactly one of event_id or storm_id is populated per row:
-    %%   - event_id: ras_output or hms_excess_precip (merged per event)
-    %%   - storm_id: observed_precip (computed at runtime for events)
+    %% one per data domain. Two tables catalog grid metadata and pointers.
+    %% Spatial metadata (crs, resolution, extent) belongs in grid_repos.
 
-    grid_repos ||--o{ grids : ""
-    events ||--o{ grids : ""
+    grid_repos ||--o{ observed_grids : ""
+    grid_repos ||--o{ output_grids : ""
+    storms ||--o{ observed_grids : ""
+    events ||--o{ output_grids : ""
 
     grid_repos {
         repo_id int PK
-        description str "Description of this Icechunk repo and its contents"
-        domain enum "observed_meteorology || ras_output || hms_excess_precip"
+        domain enum "ras_output | hms_excess_precip | observed_precip"
         uri str "Icechunk repo location, e.g. s3://bucket/path"
+        description str
         crs str
+        resolution float
         created_at datetime
-        metadata uri
     }
 
-    grids {
-        grid_id int PK
+    observed_grids {
+        observed_grid_id int PK
         repo_id int FK
-        event_id int FK "Populated for ras_output, hms_excess_precip; null for observed_meteorology"
-        variable str "depth || velocity || excess_precip || precip || temperature || etc."
-        array_path str "Array/group name within the shared repo"
-        snapshot_id str "Icechunk snapshot/commit id (or tag) pinning the version"
-        units str
-        nodata_value float
-        created_at datetime
-        metadata uri
+        storm_id int FK
+        variable str "precip || temp"
+        array_path str "array/group name within the shared repo"
+        snapshot_id str "Icechunk snapshot/commit id (or tag)"
+        time_start datetime
+        time_end datetime
+    }
+
+    output_grids {
+        output_grid_id int PK
+        repo_id int FK
+        event_id int FK
+        variable str "depth | velocity | excess_precip"
+        array_path str "array/group name within the shared repo"
+        snapshot_id str "Icechunk snapshot/commit id (or tag)"
     }
 
     events {
+    }
+    storms {
     }

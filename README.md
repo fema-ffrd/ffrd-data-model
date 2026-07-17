@@ -15,13 +15,13 @@ FFRD Data Model
 * fishnet: what is `weight`? importance sampling?
 * reservoir, levee, and system response tables -- how is this supposed to work?
 * Gridded data (RAS depth/velocity, HMS excess precip, observed precip) is cataloged in
-  [`rdb/grids.mmd`](./rdb/grids.mmd) rather than stored in relational tables. Each domain
-  is backed by one long-lived Icechunk repository that accumulates snapshots over time
-  (not one repo per run/event); the `grids` table holds catalog/pointer rows (one per
-  variable per `event` or `storm`) into the shared repo. For model outputs (RAS/HMS),
-  each grid is merged across all runs for a given event. Transposed/event-specific
-  precipitation is computed at runtime from the storm-level grid and is not persisted
-  separately.
+  [`rdb/grids.mmd`](./rdb/grids.mmd) as two purpose-specific tables backed by long-lived
+  Icechunk repositories:
+  - `observed_grids`: Real-world meteorology (precip) with `time_start`, `time_end`, `timestep_sec`.
+  - `output_grids`: Model outputs (RAS max values and HMS synthetic durations) with `duration_sec`
+    populated for HMS excess precip and null for RAS depth/velocity.
+  Both reference `grid_repos` for repository metadata (crs, resolution). Transposed/event-specific
+  precipitation is computed at runtime and not persisted separately.
 
 ## Prior Art
 ![Iceberg Data Process](prior-art/iceberg-plugin-data-process.png)
