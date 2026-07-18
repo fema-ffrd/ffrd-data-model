@@ -6,9 +6,9 @@ flowchart LR
     HMS["HEC-HMS Runs<br/>Excess precipitation<br/>for each event"]
     RAS["HEC-RAS Runs<br/>Depth &amp; velocity<br/>for each event"]
 
-    AORC -->|accumulate| OBS["🧊 observed_precip repo<br/>Dimensions: lon × lat × time<br/>Variables: precip, temperature, ...<br/>Indexed by: storm_id<br/>Snapshots grow with each storm<br/><br/>Table: observed_grids"]
-    HMS -->|merge across runs| HMSREPO["🧊 hms_excess_precip repo<br/>Dimensions: lon × lat × time<br/>Variables: excess_precip<br/>Indexed by: event_id<br/>Snapshots grow with each event<br/><br/>Table: output_grids"]
-    RAS -->|merge across runs| RASREPO["🧊ras_output repo<br/>Dimensions: lon × lat<br/>Variables: max_depth, max_velocity<br/>Indexed by: event_id<br/>Snapshots grow with each event<br/><br/>Table: output_grids"]
+    AORC -->|accumulate| OBS["🧊 observed_precip repo<br/>Dimensions: lon × lat × time<br/>Variables: precip, temperature, ...<br/>Indexed by: storm_id<br/>Snapshots grow with each storm<br/><br/>Catalog: obs_grids"]
+    HMS -->|merge across runs| HMSREPO["🧊 hms_excess_precip repo<br/>Dimensions: lon × lat × time<br/>Variables: excess_precip<br/>Indexed by: event_id<br/>Snapshots grow with each event<br/><br/>Catalog: output_grids"]
+    RAS -->|merge across runs| RASREPO["🧊 ras_output repo<br/>Dimensions: lon × lat<br/>Variables: max_depth, max_velocity<br/>Indexed by: event_id<br/>Snapshots grow with each event<br/><br/>Catalog: output_grids"]
 
     style OBS fill:#1976d2,stroke:#0d47a1,stroke-width:2px,color:#fff
     style HMSREPO fill:#7b1fa2,stroke:#4a148c,stroke-width:2px,color:#fff

@@ -1,0 +1,37 @@
+---
+title: Lakehouse Results
+---
+
+erDiagram
+
+    %% Iceberg table: modeled time series
+    run_catalog ||--o{ output_ts : ""
+    run_catalog }o--|| events : ""
+
+    %% Icechunk repos: gridded model outputs
+    run_catalog ||--o{ output_grids : ""
+
+    %% Iceberg table: modeled time series
+    output_ts {
+        run_id int
+        event_id int
+        model_id int
+        element_id int
+        timestamp datetime
+        variable str
+        value float
+        units str
+    }
+
+    %% Icechunk repo registry
+    output_grids {
+        repo_id int
+        repo_name str
+        repo_uri str
+        %% run_id int
+        %% event_id int
+        %% model_id int
+        variables str
+        dimensions str
+        index_key str
+    }

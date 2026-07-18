@@ -4,27 +4,18 @@ title: Management (CC Admin)
 
 erDiagram
 
-    %% Story 1 - All Versions: manifest + plugin provenance per run
-    runs ||--o{ run_manifest : ""
-    manifests ||--o{ run_manifest : ""
-    manifests ||--o{ manifest_plugins : ""
-    plugins ||--o{ manifest_plugins : ""
-
-    %% Story 2 - Reliability and Performance: link run to cloud log
-    runs ||--o{ run_logs : ""
-
-    %% Story 3 - Re-runs and Hotfixes
-    runs ||--o{ hotfixes : "original"
-    runs ||--o{ hotfixes : "rerun"
-    models ||--o{ hotfixes : "resolution"
-
-    %% Story 4 - Resources and Cost Estimates
-    runs ||--o| run_resources : ""
+    run_catalog ||--o{ manifests : ""
+    run_catalog }o--|| models : ""
+    run_catalog ||--o{ run_logs : "Container Logs"
+    run_catalog ||--o| run_resources : ""
 
     %% Run artifact files
-    runs ||--o{ run_files : ""
+    run_catalog ||--o{ run_files : "CC Raw Output Files"
 
-    runs {
+    %% Lakehouse tables (Iceberg) linked to runs
+    run_catalog ||--o{ results : "lakehouse output_ts, lakehouse output_grids, lakehouse derived_tables"
+
+    run_catalog {
         run_id int PK
         event_id int FK
         model_id int FK
@@ -33,55 +24,35 @@ erDiagram
         success bool
         metadata uri
     }
-    models {
-        model_id int PK
-        model_name str
-    }
+
     manifests {
+        run_id int FK
         manifest_id int PK
+        model_id int FK
         manifest_version str
+        plugin_id int PK
+        plugin_name str
+        plugin_version str
         linkage_version str
         uri str
         created_at datetime
     }
-    plugins {
-        plugin_id int PK
-        plugin_name str
-        plugin_version str
-    }
-    manifest_plugins {
-        manifest_id int FK
-        plugin_id int FK
-    }
-    run_manifest {
-        run_id int FK
-        manifest_id int FK
-    }
+
     run_logs {
         log_id int PK
         run_id int FK
         uri str
     }
-    hotfixes {
-        hotfix_id int PK
-        original_run_id int FK
-        rerun_id int FK
-        issue_description str
-        resolution_model_id int FK
-        status enum
-        resolved_at datetime
-    }
+
     run_resources {
         run_id int FK
         cpu_hours float
         memory_gb float
         storage_gb float
-        compute_cost float
     }
+    
     run_files {
         run_file_id int PK
         run_id int FK
-        filename str
-        data blob
-        metadata blob
+        uri str
     }

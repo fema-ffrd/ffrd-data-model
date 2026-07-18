@@ -1,0 +1,26 @@
+---
+title: Tabular Data — Iceberg Tables
+---
+flowchart LR
+    classDef obs fill:#1976d2,stroke:#0d47a1,stroke-width:2px,color:#fff
+    classDef result fill:#7b1fa2,stroke:#4a148c,stroke-width:2px,color:#fff
+    classDef derived fill:#2e7d32,stroke:#1b5e20,stroke-width:2px,color:#fff
+    classDef source fill:#558b2f,stroke:#33691e,stroke-width:1px,color:#fff
+
+    USGS["USGS / USACE Gages<br/>Historical streamflow &amp; stage"]
+    SST["Stochastic Storm Catalog<br/>Synthetic &amp; historical storms"]
+    RUNS["HEC-HMS &amp; HEC-RAS Runs<br/>Modeled time series per element"]
+    AGG["Aggregation Pipelines<br/>Post-run materialization"]
+
+    USGS -->|ingest| GAGES["🧊 gages<br/>Gage metadata &amp; STAC references<br/><br/>Schema: observations.mmd"]
+    USGS -->|ingest| OBS_TS["🧊 obs_ts<br/>Partition: bucket(256, gage_id), months(ts)<br/>Sort: gage_id, variable, ts<br/><br/>Schema: observations.mmd"]
+    SST -->|catalog| STORMS["🧊 storms<br/>One row per storm<br/>Indexed by: storm_id<br/><br/>Schema: observations.mmd"]
+    RUNS -->|write per run| OUTPUT_TS["🧊 output_ts<br/>Partition: bucket(512, event_id), run_type<br/>Sort: event_id, element_id, variable, ts<br/><br/>Schema: results.mmd"]
+    AGG -->|materialize| DERIVED["🧊 Derived Views<br/>mv_peak_output_by_element<br/>mv_event_variable_stats<br/>mv_aep_frequency_stats<br/>mv_gage_model_comparison<br/>mv_run_performance<br/>mv_basin_cost_rollup<br/>mv_conformance_summary<br/><br/>Schema: derived.mmd"]
+
+    class GAGES obs
+    class OBS_TS obs
+    class STORMS obs
+    class OUTPUT_TS result
+    class DERIVED derived
+    class USGS,SST,RUNS,AGG source
