@@ -4,35 +4,25 @@ title: Models
 
 erDiagram
 
-    obs_ts }o--|| gages : ""
+    observations }o--|| gages : ""
     models ||--o{ model_elements : ""
-    model_elements ||--o{ output_ts : ""
-    run_files }o--|| models : ""
-    run_files }o--|| runs : ""
     gages |o--o{ model_elements : ""
-    runs ||--o{ output_ts : ""
-    runs ||--o| output_grids : ""
-    structures ||--|{ model_elements : ""
-    structures ||--o{ structure_failure_elev : ""
-    events ||--o{ structure_failure_elev : ""
-    runs }o--|| models : ""
-    runs }o--|| events : ""
 
-    events {
-       }
-    gages {
-        gage_id str PK
-        gage_name str
-        gage_owner str
-        ams array
-        geom geom
-    }
+    structures ||--|{ model_elements : ""
+    events ||--o{ structures : ""
+    run_catalog }o--|| models : ""
+    run_catalog }o--|| events : ""
+    models ||--o{ model_linkages : "donor"
+    models ||--o{ model_linkages : "receiver"
+    hotfixes }o--|| models : ""
+
     models {
         model_id int PK
         model_type str
         model_name str
         model_version str
         geom geom
+        stac_metadata uri
     }
     model_elements {
         element_id int PK
@@ -43,47 +33,24 @@ erDiagram
         element str
         geom geom
     }
-    run_files {
-        run_file_id int PK
-        run_id int FK
-        filename str
-        data blob
-        metadata blob
+
+    model_linkages {
+        linkage_id int PK
+        donor_model_id int FK
+        donor_model_type str
+        donor_site_type str
+        donor_site_id str FK
+        receiver_model_id int FK
+        receiver_model_type str
+        receiver_site_type str
+        receiver_site_id str FK
     }
-    output_ts {
-        run_id int FK
-        element_id int FK
-        timestamp datetime
-        variable str
-        value float
-        units str
-    }
-    output_grids {
-        output_grid_id int PK
-        run_id int FK
-        variable str
-        uri str
-    }
-    obs_ts {
-        gage_id str FK
-        timestamp datetime
-        variable str
-        value float
-        units str
-    }
-    structures {
-    }
-    runs {
-        run_id int PK
-        event_id int FK
+
+    hotfixes {
         model_id int FK
-        run_type enum
-        timestamp datetime
-        success bool
-        metadata uri
-    }
-    structure_failure_elev {
-        structure_id int FK
-        event_id int FK
-        failure_elev float
+        model_version str
+        hotfix_id int PK
+        issue_description str
+        status enum
+        resolved_at datetime
     }

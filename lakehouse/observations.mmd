@@ -1,0 +1,55 @@
+---
+title: Lakehouse Observations
+---
+
+erDiagram
+
+    %% Iceberg tables: observed/input data
+    gages ||--o{ obs_ts : ""
+    storms ||--o{ obs_grids : ""
+
+    %% Iceberg table: gage metadata
+    gages {
+        gage_id str
+        gage_name str
+        gage_owner str
+        geom geom
+        stac_metadata uri
+    }
+
+    %% Iceberg table: observed gage time series
+    obs_ts {
+        gage_id string
+        ts timestamp
+        variable string
+        value float
+        units string
+        ingest_ts timestamp
+    }
+
+    %% Iceberg table: storm catalog
+    storms {
+        storm_id int
+        storm_rank int
+        storm_type string
+        datetime datetime
+        duration_hrs int
+        centroid geom
+        mean_precip float
+        stac_metadata uri
+        netcdf uri
+        icechunk_repo uri
+    }
+
+    %%Icechunk repo registry
+    obs_grids {
+        repo_id int
+        repo_name str
+        repo_uri str
+        %% run_id int
+        %% event_id int
+        %% model_id int
+        variables str
+        dimensions str
+        index_key str
+    }

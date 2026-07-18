@@ -1,0 +1,58 @@
+---
+title: Management (CC Admin)
+---
+
+erDiagram
+
+    run_catalog ||--o{ manifests : ""
+    run_catalog }o--|| models : ""
+    run_catalog ||--o{ run_logs : "Container Logs"
+    run_catalog ||--o| run_resources : ""
+
+    %% Run artifact files
+    run_catalog ||--o{ run_files : "CC Raw Output Files"
+
+    %% Lakehouse tables (Iceberg) linked to runs
+    run_catalog ||--o{ results : "lakehouse output_ts, lakehouse output_grids, lakehouse derived_tables"
+
+    run_catalog {
+        run_id int PK
+        event_id int FK
+        model_id int FK
+        run_type enum
+        timestamp datetime
+        success bool
+        metadata uri
+    }
+
+    manifests {
+        run_id int FK
+        manifest_id int PK
+        model_id int FK
+        manifest_version str
+        plugin_id int PK
+        plugin_name str
+        plugin_version str
+        linkage_version str
+        uri str
+        created_at datetime
+    }
+
+    run_logs {
+        log_id int PK
+        run_id int FK
+        uri str
+    }
+
+    run_resources {
+        run_id int FK
+        cpu_hours float
+        memory_gb float
+        storage_gb float
+    }
+    
+    run_files {
+        run_file_id int PK
+        run_id int FK
+        uri str
+    }

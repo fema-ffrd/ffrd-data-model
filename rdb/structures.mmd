@@ -5,41 +5,42 @@ title: Structures
 erDiagram
 
     models ||--o{ model_elements : ""
-    events ||--o{ output_ts : ""
     levees ||--o{ structure_response :""
     levees ||--|{ model_elements : ""
     dams ||--o{ structure_response : ""
     dams ||--|{ model_elements : ""
-    buildings ||--o{ model_elements : ""
-    model_elements ||--o{ output_ts : ""
-    events ||--o{ structure_failure_elev : ""
+
+    events ||--o{ structure_failure_elev : "Predetermined via random sampling"
+    events ||--o{ buildings_impacted : "Attributed from RAS Depth Grids"
+    buildings ||--o{ buildings_impacted : ""
     structure_failure_elev ||--o{ structure_response : ""
 
-    events {
-    }
-    models{
-    }
-    model_elements {
-    }
 
     levees {
         structure_id int PK
         model_id int FK
         system_type str
-        name str
-        nld_name str
+        nld_system_id str
+        nld_system_name str
         nld_segment_id str
+        breach_fid str
         top_elev float
         toe_elev float
         source str
+        geom geom
+        stac_metadata uri
     }
     dams {
         structure_id int PK
         model_id int FK
         system_type str
-        name str
-        nid_name str
+        nid_id str
+        nid_dam_name str
+        top_elev float
+        toe_elev float
         source str
+        geom geom
+        stac_metadata uri
     }
     structure_response {
         structure_response_id int PK
@@ -63,9 +64,6 @@ erDiagram
         latitude float
         longitude float
         geom geom
-        state_fips str
-        county_fips str
-        census_block_fips str
         occupancy_type str
         general_building_type str
         number_stories int
@@ -81,11 +79,11 @@ erDiagram
         content_insurance_deductible float
         content_insurance_limit float
         ground_elevation_ft float
-        pop_2am int
-        pop_2pm int
-        pop_2am_under65 int
-        pop_2am_over65 int
-        pop_2pm_under65 int
-        pop_2pm_over65 int
         source str
+    }
+
+    buildings_impacted {
+        structure_id int PK
+        event_id int FK
+        inundation_depth float
     }

@@ -1,0 +1,1045 @@
+# FFRD Data Dictionary
+# Derived from the .mmd files in rdb/ and lakehouse/.
+# Storage tiers: rdb (PostgreSQL) | iceberg (Lakehouse Iceberg tables) | icechunk (Lakehouse Icechunk repos)
+# Column constraints: PK = primary key, FK = foreign key, NN = not null
+
+tables:
+
+  # ---------------------------------------------------------------------------
+  # Domain: Events  (rdb/events.mmd — PostgreSQL)
+  # ---------------------------------------------------------------------------
+
+  fishnet_points:
+    domain: events
+    storage: rdb
+    description: Spatial sampling grid points used to place storms across the basin.
+    columns:
+      fishnet_point_id:
+        type: int
+        constraints: [PK, NN]
+        description: Unique identifier for the fishnet sample point.
+      weight:
+        type: float
+        description: Spatial weight assigned to this point for event frequency calculations.
+      geom:
+        type: geom
+        description: Point geometry of the fishnet location.
+
+  events:
+    domain: events
+    storage: rdb
+    description: Realized simulation events, each combining a storm with a spatial placement (fishnet point) within a stochastic block and realization.
+    columns:
+      event_id:
+        type: int
+        constraints: [PK, NN]
+        description: Unique event identifier.
+      storm_id:
+        type: int
+        constraints: [FK]
+        references: storms.storm_id
+        description: Storm from the catalog used for this event.
+      fishnet_point_id:
+        type: int
+        constraints: [FK]
+        references: fishnet_points.fishnet_point_id
+        description: Spatial placement point for this event.
+      event_type:
+        type: enum
+        description: Classification of the event (e.g. calibration, stochastic, historical).
+      block_id:
+        type: int
+        description: Stochastic block identifier grouping events into frequency bands.
+      realization_id:
+        type: int
+        description: Realization index within the stochastic ensemble, used for uncertainty quantification.
+
+  seeds:
+    domain: events
+    storage: rdb
+    description: Random seeds used to reproduce each stochastic realization. One record per process per event.
+    columns:
+      seed_id:
+        type: int
+        constraints: [PK, NN]
+        description: Unique seed record identifier.
+      event_id:
+        type: int
+        constraints: [FK]
+        references: events.event_id
+        description: Event this seed applies to.
+      process_id:
+        type: int
+        description: Identifier for the stochastic process (e.g. precipitation, initial conditions).
+      realization_seed:
+        type: int
+        description: Seed value for the realization-level random draw.
+      block_seed:
+        type: int
+        description: Seed value for the block-level random draw.
+      event_seed:
+        type: int
+        description: Seed value for the event-level random draw.
+
+  # ---------------------------------------------------------------------------
+  # Domain: Models  (rdb/models.mmd — PostgreSQL)
+  # ---------------------------------------------------------------------------
+
+  models:
+    domain: models
+    storage: rdb
+    description: Hydrologic and hydraulic models (HEC-HMS, HEC-RAS, ResSim) organized by basin and version.
+    columns:
+      model_id:
+        type: int
+        constraints: [PK, NN]
+        description: Unique model identifier.
+      model_type:
+        type: str
+        description: Model software type (e.g. hec-hms, hec-ras, ressim).
+      model_name:
+        type: str
+        description: Human-readable name identifying the model basin or domain.
+      model_version:
+        type: str
+        description: Version string distinguishing calibration, conformance, and hotfix variants.
+      geom:
+        type: geom
+        description: Polygon geometry representing the model domain or basin boundary.
+      stac_metadata:
+        type: uri
+        description: URI to a STAC-formatted metadata document for this model.
+
+  model_elements:
+    domain: models
+    storage: rdb
+    description: Individual features within a model — junctions, subbasins, 2D flow areas, boundary conditions, reaches, etc.
+    columns:
+      element_id:
+        type: int
+        constraints: [PK, NN]
+        description: Unique element identifier.
+      model_id:
+        type: int
+        constraints: [FK]
+        references: models.model_id
+        description: Model this element belongs to.
+      structure_id:
+        type: int
+        description: Optional reference to a dam, levee, or building if this element represents a structure.
+      structure_type:
+        type: str
+        description: Type of structure represented (e.g. dam, levee, building). Null if not a structure element.
+      gage_id:
+        type: str
+        constraints: [FK]
+        references: gages.gage_id
+        description: Associated gage for observed vs. modeled comparison. Null if no gage co-location.
+      element:
+        type: str
+        description: Feature name as used in the model input file.
+      geom:
+        type: geom
+        description: Geometry of the element (point, line, or polygon depending on element type).
+
+  model_linkages:
+    domain: models
+    storage: rdb
+    description: Inter-model connections defining how outputs from one model (donor) become inputs to another (receiver).
+    columns:
+      linkage_id:
+        type: int
+        constraints: [PK, NN]
+        description: Unique linkage identifier.
+      donor_model_id:
+        type: int
+        constraints: [FK]
+        references: models.model_id
+        description: Model providing the output at this linkage point.
+      donor_model_type:
+        type: str
+        description: Software type of the donor model (e.g. hec-hms).
+      donor_site_type:
+        type: str
+        description: Element type at the donor hand-off point (e.g. hms_junction, hms_subbasin).
+      donor_site_id:
+        type: str
+        constraints: [FK]
+        references: model_elements.element
+        description: Named element in the donor model that provides the output.
+      receiver_model_id:
+        type: int
+        constraints: [FK]
+        references: models.model_id
+        description: Model consuming the input at this linkage point.
+      receiver_model_type:
+        type: str
+        description: Software type of the receiver model (e.g. hec-ras).
+      receiver_site_type:
+        type: str
+        description: Element type at the receiver intake point (e.g. ras_bc, ras_2d_flow_area).
+      receiver_site_id:
+        type: str
+        constraints: [FK]
+        references: model_elements.element
+        description: Named element in the receiver model that accepts the input.
+
+  hotfixes:
+    domain: models
+    storage: rdb
+    description: Tracks model versions that required remediation, recording the issue and resolution status.
+    columns:
+      hotfix_id:
+        type: int
+        constraints: [PK, NN]
+        description: Unique hotfix record identifier.
+      model_id:
+        type: int
+        constraints: [FK]
+        references: models.model_id
+        description: Model this hotfix applies to.
+      model_version:
+        type: str
+        description: Model version associated with this hotfix.
+      issue_description:
+        type: str
+        description: Plain-language description of the issue that triggered the hotfix.
+      status:
+        type: enum
+        description: Current state of the hotfix (e.g. open, in_progress, resolved, verified).
+      resolved_at:
+        type: datetime
+        description: UTC timestamp when the hotfix was confirmed resolved.
+
+  # ---------------------------------------------------------------------------
+  # Domain: Structures  (rdb/structures.mmd — PostgreSQL)
+  # ---------------------------------------------------------------------------
+
+  levees:
+    domain: structures
+    storage: rdb
+    description: Levee inventory. Each record represents one levee segment within a model domain.
+    columns:
+      structure_id:
+        type: int
+        constraints: [PK, NN]
+        description: Unique structure identifier shared across dams, levees, and buildings.
+      model_id:
+        type: int
+        constraints: [FK]
+        references: models.model_id
+        description: Model domain this levee belongs to.
+      system_type:
+        type: str
+        description: Levee system classification (e.g. earthen, floodwall, composite).
+      nld_system_id:
+        type: str
+        description: Authoritative system identifier from the National Levee Database (NLD).
+      nld_system_name:
+        type: str
+        description: Authoritative levee system name from the National Levee Database (NLD).
+      nld_segment_id:
+        type: str
+        description: Authoritative segment identifier from the NLD.
+      breach_fid:
+        type: str
+        description: Feature identifier of the associated breach location element within the model.
+      top_elev:
+        type: float
+        description: Top-of-levee elevation in feet (NAVD88).
+      toe_elev:
+        type: float
+        description: Toe-of-levee elevation in feet (NAVD88).
+      source:
+        type: str
+        description: Data source for this levee record (e.g. NLD, USACE, LiDAR survey).
+      geom:
+        type: geom
+        description: Geometry of the levee segment.
+      stac_metadata:
+        type: uri
+        description: URI to a STAC-formatted metadata document for this levee.
+
+  dams:
+    domain: structures
+    storage: rdb
+    description: Dam inventory. Each record represents one dam structure within a model domain.
+    columns:
+      structure_id:
+        type: int
+        constraints: [PK, NN]
+        description: Unique structure identifier shared across dams, levees, and buildings.
+      model_id:
+        type: int
+        constraints: [FK]
+        references: models.model_id
+        description: Model domain this dam belongs to.
+      system_type:
+        type: str
+        description: Structural system classification (e.g. earthen, concrete, arch).
+      nid_id:
+        type: str
+        description: Authoritative National Inventory of Dams (NID) identifier for this dam.
+      nid_dam_name:
+        type: str
+        description: Authoritative dam name from the National Inventory of Dams (NID).
+      top_elev:
+        type: float
+        description: Top-of-dam (crest) elevation in feet (NAVD88).
+      toe_elev:
+        type: float
+        description: Toe-of-dam elevation in feet (NAVD88).
+      source:
+        type: str
+        description: Data source for this dam record (e.g. NID, state agency, field survey).
+      geom:
+        type: geom
+        description: Geometry of the dam.
+      stac_metadata:
+        type: uri
+        description: URI to a STAC-formatted metadata document for this dam.
+
+  structure_response:
+    domain: structures
+    storage: rdb
+    description: Fragility or response functions defining the probability of a structure failing at a given hazard level.
+    columns:
+      structure_response_id:
+        type: int
+        constraints: [PK, NN]
+        description: Unique response function identifier.
+      structure_id:
+        type: int
+        constraints: [FK]
+        description: Dam or levee this response function applies to.
+      failure_mode:
+        type: str
+        description: Failure mechanism described by this function (e.g. overtopping, piping, seepage).
+      source:
+        type: str
+        description: Source of the fragility function (e.g. USACE, peer-reviewed, project-specific).
+      prob_x:
+        type: float
+        description: Hazard input value (e.g. water surface elevation or head differential) for this fragility point.
+      prob_y:
+        type: float
+        description: Probability of failure corresponding to prob_x (0.0–1.0).
+
+  structure_failure_elev:
+    domain: structures
+    storage: rdb
+    description: Per-event failure water surface elevation for each structure, derived from simulation results and fragility functions.
+    columns:
+      structure_response_id:
+        type: int
+        constraints: [PK, FK]
+        references: structure_response.structure_response_id
+        description: Response function instance associated with this failure record.
+      event_id:
+        type: int
+        constraints: [FK]
+        references: events.event_id
+        description: Event during which this failure elevation applies.
+      failure_elev:
+        type: float
+        description: Water surface elevation (ft, NAVD88) at which the structure fails for this event.
+
+  buildings:
+    domain: structures
+    storage: rdb
+    description: Building inventory used for consequence analysis. Includes structural, financial, and occupancy attributes.
+    columns:
+      structure_id:
+        type: int
+        constraints: [PK, NN]
+        description: Unique structure identifier shared across dams, levees, and buildings.
+      source_building_id:
+        type: str
+        description: Identifier for this building in its source inventory dataset.
+      inventory_source:
+        type: str
+        description: Name of the building inventory dataset (e.g. NSI, HAZUS).
+      inventory_version:
+        type: str
+        description: Version or vintage of the inventory dataset.
+      latitude:
+        type: float
+        description: Latitude of the building centroid in decimal degrees (WGS84).
+      longitude:
+        type: float
+        description: Longitude of the building centroid in decimal degrees (WGS84).
+      geom:
+        type: geom
+        description: Point geometry of the building location.
+      occupancy_type:
+        type: str
+        description: HAZUS occupancy class code (e.g. RES1, COM1, IND2).
+      general_building_type:
+        type: str
+        description: General structural type (e.g. wood frame, masonry, steel frame).
+      number_stories:
+        type: int
+        description: Number of above-ground stories.
+      area_sqft:
+        type: float
+        description: Total floor area in square feet.
+      foundation_type:
+        type: str
+        description: Foundation classification (e.g. slab, crawlspace, basement, pier).
+      first_floor_height_ft:
+        type: float
+        description: Height of the first finished floor above grade in feet.
+      basement_type:
+        type: int
+        description: Basement classification code (0 = none, 1 = unfinished, 2 = finished).
+      building_cost:
+        type: float
+        description: Replacement cost of the building structure in USD.
+      content_cost:
+        type: float
+        description: Replacement cost of building contents in USD.
+      inventory_cost:
+        type: float
+        description: Replacement cost of business inventory in USD (commercial/industrial only).
+      bldg_insurance_deductible:
+        type: float
+        description: Building insurance deductible amount in USD.
+      bldg_insurance_limit:
+        type: float
+        description: Building insurance coverage limit in USD.
+      content_insurance_deductible:
+        type: float
+        description: Contents insurance deductible amount in USD.
+      content_insurance_limit:
+        type: float
+        description: Contents insurance coverage limit in USD.
+      ground_elevation_ft:
+        type: float
+        description: Ground surface elevation at the building location in feet (NAVD88).
+      source:
+        type: str
+        description: Primary data source for this building record.
+
+  buildings_impacted:
+    domain: structures
+    storage: rdb
+    description: Per-event building inundation results linking buildings to events with modeled inundation depth.
+    columns:
+      structure_id:
+        type: int
+        constraints: [PK]
+        references: buildings.structure_id
+        description: Building impacted.
+      event_id:
+        type: int
+        constraints: [PK, FK]
+        references: events.event_id
+        description: Event causing the impact.
+      inundation_depth:
+        type: float
+        description: Modeled inundation depth at the building location in feet.
+
+  # ---------------------------------------------------------------------------
+  # Domain: Management  (rdb/management.mmd — PostgreSQL)
+  # ---------------------------------------------------------------------------
+
+  run_catalog:
+    domain: management
+    storage: rdb
+    description: Individual simulation executions, each pairing one event with one model version.
+    columns:
+      run_id:
+        type: int
+        constraints: [PK, NN]
+        description: Unique run identifier.
+      event_id:
+        type: int
+        constraints: [FK]
+        references: events.event_id
+        description: Stochastic or calibration event simulated in this run.
+      model_id:
+        type: int
+        constraints: [FK]
+        references: models.model_id
+        description: Model version used for this run.
+      run_type:
+        type: enum
+        description: Classification of the run (e.g. calibration, conformance, hotfix, rerun).
+      timestamp:
+        type: datetime
+        description: UTC timestamp when the run was initiated.
+      success:
+        type: bool
+        description: Whether the run completed successfully without fatal errors.
+      metadata:
+        type: uri
+        description: URI to run-level metadata document.
+
+  manifests:
+    domain: management
+    storage: rdb
+    description: Execution manifests capturing the software configuration active for a set of runs, including plugin and linkage versions.
+    columns:
+      manifest_id:
+        type: int
+        constraints: [PK, NN]
+        description: Unique manifest identifier.
+      run_id:
+        type: int
+        constraints: [FK]
+        references: run_catalog.run_id
+        description: Run associated with this manifest.
+      model_id:
+        type: int
+        constraints: [FK]
+        references: models.model_id
+        description: Model associated with this manifest.
+      manifest_version:
+        type: str
+        description: Version string of the manifest document itself.
+      plugin_id:
+        type: int
+        constraints: [PK]
+        description: Identifier for the plugin active under this manifest.
+      plugin_name:
+        type: str
+        description: Name of the plugin or software component.
+      plugin_version:
+        type: str
+        description: Semantic version string of the plugin.
+      linkage_version:
+        type: str
+        description: Version of the inter-model linkage configuration active for this manifest.
+      uri:
+        type: str
+        description: Cloud storage URI pointing to the full manifest document.
+      created_at:
+        type: datetime
+        description: UTC timestamp when this manifest was created or published.
+
+  run_logs:
+    domain: management
+    storage: rdb
+    description: Links each run to its cloud container execution log.
+    columns:
+      log_id:
+        type: int
+        constraints: [PK, NN]
+        description: Unique log record identifier.
+      run_id:
+        type: int
+        constraints: [FK]
+        references: run_catalog.run_id
+        description: Run this log belongs to.
+      uri:
+        type: str
+        description: Cloud storage or logging service URI for the run's full execution log.
+
+  run_resources:
+    domain: management
+    storage: rdb
+    description: Compute resource consumption per run, used for budget tracking and forecasting.
+    columns:
+      run_id:
+        type: int
+        constraints: [FK]
+        references: run_catalog.run_id
+        description: Run this resource record applies to.
+      cpu_hours:
+        type: float
+        description: Total CPU core-hours consumed by the run.
+      memory_gb:
+        type: float
+        description: Peak memory usage in gigabytes during the run.
+      storage_gb:
+        type: float
+        description: Total cloud storage consumed by run outputs in gigabytes.
+
+  run_files:
+    domain: management
+    storage: rdb
+    description: Raw model file artifacts (CC raw output) associated with a run, referenced by URI.
+    columns:
+      run_file_id:
+        type: int
+        constraints: [PK, NN]
+        description: Unique file record identifier.
+      run_id:
+        type: int
+        constraints: [FK]
+        references: run_catalog.run_id
+        description: Run this file belongs to.
+      uri:
+        type: str
+        description: Cloud storage URI pointing to the file artifact.
+
+  # ---------------------------------------------------------------------------
+  # Domain: Observations  (lakehouse/observations.mmd — Iceberg tables + Icechunk)
+  # ---------------------------------------------------------------------------
+
+  gages:
+    domain: observations
+    storage: iceberg
+    description: Gage metadata for stream and reservoir gages used for calibration and observed data comparison.
+    columns:
+      gage_id:
+        type: str
+        description: Authoritative gage identifier (e.g. USGS site number).
+      gage_name:
+        type: str
+        description: Human-readable name of the gage station.
+      gage_owner:
+        type: str
+        description: Agency or organization responsible for operating the gage (e.g. USGS, USACE).
+      geom:
+        type: geom
+        description: Point geometry of the gage location.
+      stac_metadata:
+        type: uri
+        description: URI to a STAC-formatted metadata document for this gage.
+
+  obs_ts:
+    domain: observations
+    storage: iceberg
+    description: >
+      Observed time series from gages used for model calibration and validation.
+      Partitioned by bucket(256, gage_id), months(ts).
+    columns:
+      gage_id:
+        type: string
+        description: Gage that recorded this observation. References gages.gage_id.
+      ts:
+        type: timestamp
+        description: Timestamp of the observation.
+      variable:
+        type: string
+        description: Observed variable (e.g. flow, stage).
+      value:
+        type: float
+        description: Numeric observed value.
+      units:
+        type: string
+        description: Units of the observed value (e.g. cfs, ft).
+      ingest_ts:
+        type: timestamp
+        description: UTC timestamp when this record was ingested into the lakehouse.
+
+  storms:
+    domain: observations
+    storage: iceberg
+    description: Stochastic storm catalog. Gridded storm data lives in Icechunk repos referenced via obs_grids.
+    columns:
+      storm_id:
+        type: int
+        description: Unique storm identifier.
+      storm_rank:
+        type: int
+        description: Rank of the storm within its catalog by severity or selection order.
+      storm_type:
+        type: string
+        description: Classification of the storm (e.g. synoptic, convective, snowmelt).
+      datetime:
+        type: datetime
+        description: Reference timestamp for the storm (typically centroid or start time).
+      duration_hrs:
+        type: int
+        description: Storm duration in hours.
+      centroid:
+        type: geom
+        description: Geographic centroid of the storm as a point geometry.
+      mean_precip:
+        type: float
+        description: Mean precipitation depth over the storm domain in inches.
+      stac_metadata:
+        type: uri
+        description: URI to a STAC-formatted metadata document for this storm.
+      netcdf:
+        type: uri
+        description: URI to the NetCDF file containing the storm precipitation grid.
+      icechunk_repo:
+        type: uri
+        description: URI to the Icechunk repository containing the storm's gridded data.
+
+  obs_grids:
+    domain: observations
+    storage: icechunk
+    description: >
+      Registry of Icechunk repositories storing observed gridded data (e.g. AORC precipitation).
+    columns:
+      repo_id:
+        type: int
+        description: Repository identifier.
+      repo_name:
+        type: str
+        description: Short name of the repository (e.g. observed_precip).
+      repo_uri:
+        type: str
+        description: Cloud storage URI to the Icechunk store root.
+      variables:
+        type: str
+        description: Comma-separated list of variables stored (e.g. precip,temperature).
+      dimensions:
+        type: str
+        description: Comma-separated dimension names (e.g. lon,lat,time).
+      index_key:
+        type: str
+        description: Entity key used to index snapshots within the repo (storm_id).
+
+  # ---------------------------------------------------------------------------
+  # Domain: Results  (lakehouse/results.mmd — Iceberg tables + Icechunk)
+  # ---------------------------------------------------------------------------
+
+  output_ts:
+    domain: results
+    storage: iceberg
+    description: >
+      Modeled time series output values per element per run. Stores flows, stages, volumes,
+      and other scalar time-varying outputs. Partitioned by bucket(512, event_id), run_type.
+    columns:
+      run_id:
+        type: int
+        description: Run that produced this output. References run_catalog.run_id.
+      event_id:
+        type: int
+        description: Event simulated.
+      model_id:
+        type: int
+        description: Model that produced this output.
+      element_id:
+        type: int
+        description: Model element at which the output was recorded.
+      timestamp:
+        type: datetime
+        description: UTC timestamp of the output value.
+      variable:
+        type: str
+        description: Output variable name (e.g. flow, stage, storage, velocity).
+      value:
+        type: float
+        description: Numeric value of the output variable at this timestep.
+      units:
+        type: str
+        description: Units of the output value (e.g. cfs, ft, acre-ft).
+
+  output_grids:
+    domain: results
+    storage: icechunk
+    description: >
+      Registry of Icechunk repositories storing gridded model output data
+      (e.g. hms_excess_precip, ras_output).
+    columns:
+      repo_id:
+        type: int
+        description: Repository identifier.
+      repo_name:
+        type: str
+        description: Short name of the repository (e.g. hms_excess_precip, ras_output).
+      repo_uri:
+        type: str
+        description: Cloud storage URI to the Icechunk store root.
+      variables:
+        type: str
+        description: Comma-separated list of variables stored (e.g. excess_precip or max_depth,max_velocity).
+      dimensions:
+        type: str
+        description: Comma-separated dimension names (e.g. lon,lat,time).
+      index_key:
+        type: str
+        description: Entity key used to index snapshots within the repo (event_id).
+
+  # ---------------------------------------------------------------------------
+  # Domain: Derived  (lakehouse/derived.mmd — Iceberg materialized views)
+  # ---------------------------------------------------------------------------
+
+  mv_peak_output_by_element:
+    domain: derived
+    storage: iceberg
+    description: >
+      Peak value per element per variable per run. Materialized from output_ts after each run_catalog batch commit.
+      Partition: bucket(512, event_id), variable. Sort: event_id, element_id, variable.
+    columns:
+      event_id:
+        type: string
+        description: Event this peak was produced for.
+      element_id:
+        type: string
+        description: Model element at which the peak was recorded.
+      model_id:
+        type: int
+        description: Denormalized model identifier for direct filtering.
+      run_id:
+        type: string
+        description: Run that produced this peak.
+      run_version:
+        type: int
+        description: Monotonic rerun version number.
+      run_type:
+        type: string
+        description: Run classification (e.g. calibration, conformance).
+      variable:
+        type: string
+        description: Output variable (e.g. flow, stage, storage).
+      peak_value:
+        type: float
+        description: Maximum value of the variable over the simulation window.
+      units:
+        type: string
+        description: Units of peak_value.
+      peak_ts:
+        type: timestamp
+        description: Timestamp at which the peak occurred.
+      derived_at:
+        type: timestamp
+        description: UTC timestamp when this materialized record was written.
+
+  mv_event_variable_stats:
+    domain: derived
+    storage: iceberg
+    description: >
+      Summary statistics (mean, max, min, std) across all elements for a variable per event per run.
+      Materialized from output_ts after each run batch commit.
+      Partition: bucket(512, event_id), variable. Sort: event_id, variable, run_type, run_version.
+    columns:
+      event_id:
+        type: string
+        description: Event summarized.
+      model_id:
+        type: int
+        description: Denormalized model identifier.
+      run_id:
+        type: string
+        description: Run that produced the outputs.
+      run_version:
+        type: int
+        description: Monotonic rerun version number.
+      run_type:
+        type: string
+        description: Run classification.
+      variable:
+        type: string
+        description: Output variable summarized.
+      mean_value:
+        type: float
+        description: Mean value across all elements for this event/variable/run.
+      max_value:
+        type: float
+        description: Maximum value across all elements.
+      min_value:
+        type: float
+        description: Minimum value across all elements.
+      std_value:
+        type: float
+        description: Standard deviation across all elements.
+      element_count:
+        type: int
+        description: Number of elements contributing to the summary.
+      units:
+        type: string
+        description: Units of the summarized values.
+      derived_at:
+        type: timestamp
+        description: UTC timestamp when this materialized record was written.
+
+  mv_aep_frequency_stats:
+    domain: derived
+    storage: iceberg
+    description: >
+      Frequency statistics (mean, std, percentiles) of peak values per element per AEP band.
+      Materialized from output_ts joined to events.realization_id after full ensemble commit.
+      Partition: variable, aep_label. Sort: element_id, variable, aep_label.
+    columns:
+      element_id:
+        type: string
+        description: Model element at which frequency stats are computed.
+      model_id:
+        type: int
+        description: Denormalized model identifier.
+      run_type:
+        type: string
+        description: Run classification used to scope the ensemble.
+      variable:
+        type: string
+        description: Output variable (e.g. peak flow, peak stage).
+      aep_label:
+        type: string
+        description: Human-readable AEP label (e.g. 0.01, 0.002, 100-yr, 500-yr).
+      aep_value:
+        type: float
+        description: Numeric annual exceedance probability (0.0–1.0).
+      mean_peak:
+        type: float
+        description: Mean peak value across realizations at this AEP.
+      std_peak:
+        type: float
+        description: Standard deviation of peak values across realizations.
+      pct_10_peak:
+        type: float
+        description: 10th percentile peak value across realizations.
+      pct_50_peak:
+        type: float
+        description: Median peak value across realizations.
+      pct_90_peak:
+        type: float
+        description: 90th percentile peak value across realizations.
+      units:
+        type: string
+        description: Units of peak values.
+      realization_count:
+        type: int
+        description: Number of realizations contributing to the statistics.
+      derived_at:
+        type: timestamp
+        description: UTC timestamp when this materialized record was written.
+
+  mv_gage_model_comparison:
+    domain: derived
+    storage: iceberg
+    description: >
+      Co-located observed vs. modeled peak comparison per gage per event.
+      Materialized from output_ts joined to obs_ts via model_elements.gage_id.
+      Partition: bucket(256, gage_id), variable. Sort: gage_id, variable, event_id.
+    columns:
+      gage_id:
+        type: string
+        description: Gage at which the comparison is made.
+      event_id:
+        type: string
+        description: Event for which observed and modeled values are compared.
+      element_id:
+        type: string
+        description: Model element co-located with the gage.
+      model_id:
+        type: int
+        description: Denormalized model identifier.
+      run_id:
+        type: string
+        description: Run that produced the modeled output.
+      variable:
+        type: string
+        description: Variable being compared (e.g. flow, stage).
+      observed_peak:
+        type: float
+        description: Peak observed value at the gage for the event period.
+      modeled_peak:
+        type: float
+        description: Peak modeled value at the co-located element.
+      bias:
+        type: float
+        description: Absolute difference (modeled_peak - observed_peak).
+      percent_error:
+        type: float
+        description: Relative error as a percentage ((modeled - observed) / observed * 100).
+      units:
+        type: string
+        description: Units of observed and modeled values.
+      derived_at:
+        type: timestamp
+        description: UTC timestamp when this materialized record was written.
+
+  mv_run_performance:
+    domain: derived
+    storage: iceberg
+    description: >
+      Per-run performance and cost summary. Materialized from run_catalog joined to run_resources.
+      Partition: run_type, status. Sort: model_id, started_at.
+    columns:
+      run_id:
+        type: string
+        description: Run identifier.
+      model_id:
+        type: int
+        description: Denormalized model identifier.
+      run_type:
+        type: string
+        description: Run classification.
+      status:
+        type: string
+        description: Terminal run status (e.g. success, failed, hotfix).
+      duration_sec:
+        type: float
+        description: Elapsed wall-clock time in seconds.
+      cpu_hours:
+        type: float
+        description: Total CPU core-hours consumed.
+      compute_cost:
+        type: float
+        description: Estimated compute cost in USD.
+      element_count:
+        type: int
+        description: Number of model elements active in the run.
+      output_ts_rows:
+        type: int
+        description: Total number of output_ts rows written by this run.
+      started_at:
+        type: timestamp
+        description: UTC run start timestamp.
+      derived_at:
+        type: timestamp
+        description: UTC timestamp when this materialized record was written.
+
+  mv_basin_cost_rollup:
+    domain: derived
+    storage: iceberg
+    description: >
+      Monthly cost and utilization rollup per basin (model_id). Materialized from run_resources joined to run_catalog.
+      Partition: billing_month. Sort: model_id, billing_month.
+    columns:
+      model_id:
+        type: int
+        description: Basin model this rollup belongs to.
+      billing_month:
+        type: string
+        description: Billing period in YYYY-MM format.
+      total_compute_cost:
+        type: float
+        description: Sum of compute_cost for all runs in the period for this model.
+      total_cpu_hours:
+        type: float
+        description: Sum of CPU core-hours for all runs in the period.
+      total_storage_gb:
+        type: float
+        description: Sum of storage consumed by all runs in the period in GB.
+      run_count:
+        type: int
+        description: Total number of runs in the period for this model.
+      failed_run_count:
+        type: int
+        description: Number of failed runs in the period for this model.
+      derived_at:
+        type: timestamp
+        description: UTC timestamp when this materialized record was written.
+
+  mv_conformance_summary:
+    domain: derived
+    storage: iceberg
+    description: >
+      Per-check conformance pass/fail results per model version. Materialized by parsing models.stac_metadata joined to run_catalog.
+      Partition: model_id. Sort: model_id, model_version, check_name.
+    columns:
+      model_id:
+        type: int
+        description: Model evaluated for conformance.
+      model_version:
+        type: string
+        description: Model version under review.
+      check_name:
+        type: string
+        description: Name of the conformance check (e.g. volume_error, frequency_bias).
+      threshold:
+        type: float
+        description: Acceptable threshold value for this check.
+      result_value:
+        type: float
+        description: Actual computed result for this check.
+      pass:
+        type: string
+        description: Whether the check passed (true/false as string to accommodate null/unknown states).
+      run_id:
+        type: string
+        description: Run against which this conformance check was evaluated.
+      checked_at:
+        type: timestamp
+        description: Timestamp when the conformance check was performed.
+      derived_at:
+        type: timestamp
+        description: UTC timestamp when this materialized record was written.

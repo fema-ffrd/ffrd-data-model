@@ -1,0 +1,53 @@
+---
+title: FFRD Data Model — Unified View
+---
+graph TB
+    subgraph PG ["PostgreSQL — Relational Tables"]
+        direction TB
+        EVENTS["<b>Events</b><br/>events · seeds · fishnet_points"]
+        STRUCT["<b>Structures</b><br/>dams · levees · buildings<br/>structure_response · structure_failure_elev<br/>buildings_impacted"]
+        MODELS["<b>Models</b><br/>models · model_elements<br/>model_linkages · hotfixes"]
+        MGMT["<b>Management</b><br/>run_catalog · manifests<br/>run_logs · run_resources · run_files"]
+    end
+
+    subgraph ICE ["Lakehouse — Iceberg Tables"]
+        direction TB
+        STORM["<b>storms</b><br/>Storm catalog"]
+        GAGES["<b>gages</b><br/>Gage metadata"]
+        OBS["<b>obs_ts</b><br/>Observed gage time series"]
+        TS["<b>output_ts</b><br/>Modeled time series per element"]
+        DER["<b>Derived Views</b><br/>mv_peak_output_by_element<br/>mv_event_variable_stats<br/>mv_aep_frequency_stats<br/>mv_gage_model_comparison<br/>mv_run_performance<br/>mv_basin_cost_rollup<br/>mv_conformance_summary"]
+    end
+
+    subgraph CHUNK ["Lakehouse — Icechunk Repos"]
+        REPOS["<b>output_grids</b><br/>observed_precip · hms_excess_precip · ras_output"]
+    end
+
+    %% invisible edges to force top-down: PG → Iceberg → Icechunk
+    PG ~~~ ICE
+    ICE ~~~ CHUNK
+
+    EVENTS -->|"storm_id"| STORM
+    EVENTS -->|"events"| MODELS
+    STRUCT -->|"structures, fragility"| MODELS
+    MODELS -->|"run_catalog"| MGMT
+
+    MGMT -->|"run_id, event_id"| TS
+    MGMT -->|"run_catalog"| REPOS
+    MODELS -->|"gage_id"| GAGES
+    OBS -->|"gage_id"| GAGES
+
+    TS -->|"materialized"| DER
+    OBS -->|"materialized"| DER
+    MGMT -->|"run_resources"| DER
+
+    click EVENTS "https://github.com/fema-ffrd/ffrd-data-model/blob/main/rdb/events.mmd" "View Events domain detail"
+    click STRUCT "https://github.com/fema-ffrd/ffrd-data-model/blob/main/rdb/structures.mmd" "View Structures domain detail"
+    click MODELS "https://github.com/fema-ffrd/ffrd-data-model/blob/main/rdb/models.mmd" "View Models domain detail"
+    click MGMT "https://github.com/fema-ffrd/ffrd-data-model/blob/main/rdb/management.mmd" "View Management domain detail"
+    click STORM "https://github.com/fema-ffrd/ffrd-data-model/blob/main/lakehouse/observations.mmd" "View Observations"
+    click GAGES "https://github.com/fema-ffrd/ffrd-data-model/blob/main/lakehouse/observations.mmd" "View Observations"
+    click OBS "https://github.com/fema-ffrd/ffrd-data-model/blob/main/lakehouse/observations.mmd" "View Observations"
+    click TS "https://github.com/fema-ffrd/ffrd-data-model/blob/main/lakehouse/results.mmd" "View Lakehouse Results"
+    click REPOS "https://github.com/fema-ffrd/ffrd-data-model/blob/main/lakehouse/results.mmd" "View Lakehouse Results"
+    click DER "https://github.com/fema-ffrd/ffrd-data-model/blob/main/lakehouse/derived.mmd" "View Derived Views"
