@@ -62,7 +62,7 @@ docs/                            ← supplemental documentation
 
 | Document | Description |
 |----------|-------------|
-| [User Guide](docs/user-guide.md) | Data population workflow, provenance tracing, plugin mapping |
+| [User Guide](docs/readme.md) | Data population workflow, provenance tracing, plugin mapping |
 | [Data Dictionary](data-dictionary.md) | Every table and column with types, constraints, and descriptions |
 | [User Stories](docs/user-stories.md) | 33 use cases organized by persona |
 | [Story Validation](docs/user-stories-validated.md) | How each story maps to specific tables and columns |
