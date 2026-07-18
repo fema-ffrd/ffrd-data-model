@@ -44,7 +44,7 @@ FFRD's stochastic flood-risk pipeline produces data that varies by several order
 
 | Concern | Tier Choice | Rationale |
 |---------|-------------|-----------|
-| **Relational integrity** | PostgreSQL | Model registration, run management, structural inventories, and consequence results have rich foreign-key relationships and require ACID transactions. PostgreSQL enforces referential integrity and supports the provenance joins that let any published result be traced back to its storm, model version, and execution context — a core FEMA regulatory requirement. |
+| **Relational integrity** | PostgreSQL | Model registration, run management, structural inventories, and consequence results have rich foreign-key relationships and require ACID transactions. PostgreSQL enforces referential integrity and supports the provenance joins that let any published result be traced back to its storm, model version, and execution context. |
 | **Analytical scale** | Apache Iceberg | A full stochastic ensemble generates billions of time-series records. Iceberg provides schema evolution, time travel, and partition pruning over cloud object storage, enabling distributed analytics (Spark, Dask) without a running database server. Materialized views (`mv_*` tables) pre-compute the most common queries while remaining rebuildable from source tables. |
 | **N-dimensional grids** | Icechunk (Zarr) | Precipitation fields, depth grids, and velocity arrays are inherently multi-dimensional (x, y, time, realization). Zarr stores them natively with chunked, cloud-optimized access — avoiding the overhead and information loss of flattening grids into rows or columns. Icechunk adds Git-like versioning on top. |
 
