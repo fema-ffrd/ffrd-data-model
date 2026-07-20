@@ -80,7 +80,7 @@ After a run completes, its outputs are parsed and written to the lakehouse.
 | `output_ts` | Iceberg | Modeled time series (flow, stage, volume) per element per run |
 | `output_grids` | Icechunk | Registry of gridded output repos (excess precip, depth, velocity) |
 
-> See the [Icechunk repository flowchart](grids.mmd) for how gridded data flows into obs_grids and output_grids.
+> See the [Icechunk repository flowchart](grids.mmd) for how gridded data flows into obs_grids and output_grids. For detailed repository schemas and derived products, see [icechunk.md](icechunk.md).
 
 ### Phase 5 — Derived Products
 
