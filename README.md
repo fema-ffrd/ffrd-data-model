@@ -141,9 +141,9 @@ Gridded (raster) observed data and model outputs are stored in [Icechunk](https:
 
 See [rdb/grids.mmd](rdb/grids.mmd) for a conceptual diagram of the three repository types and how they relate to the relational catalog tables.
 
-### Repository Types
+### Icechunk Repository Types
 
-**1. `observed_precip` — Observed Meteorology from NOAA AORC**
+#### 1. `observed_precip` — Observed Meteorology from NOAA AORC
 
 Real-world precipitation and temperature observations; i.e., the raw storm catalog data.
 * `storm_id` is a dimension for efficient slicing by storm.
@@ -171,7 +171,7 @@ Cataloged by: `observed_grids` table (see: `storm_id`)
 
 ---
 
-**2. `hms_excess_precip` — HEC-HMS Synthetic Excess Precipitation**
+#### 2. `hms_excess_precip` — HEC-HMS Excess Precipitation
 
 Gridded excess precipitation output from HEC-HMS runs, merged across all SST events.
 * `event_id` is a dimension for efficient slicing by event.
@@ -197,7 +197,7 @@ Cataloged by: `output_grids` table (see: `event_id`)
 
 ---
 
-**3. `ras_output` — HEC-RAS Maximum Depth and Velocity**
+#### 3. `ras_output` — HEC-RAS Maximum Depth and Velocity
 
 Peak flood depths and velocities from HEC-RAS runs, merged across all runs for each event (no time dimension — spatial maximum values only). 
 * `event_id` is a dimension for efficient slicing by event.
