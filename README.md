@@ -12,6 +12,48 @@ The data model spans three storage tiers:
 | **Tabular** | Apache Iceberg | High-volume time series (observed & modeled), storm catalog, gage metadata, materialized views |
 | **Gridded** | Icechunk (Zarr) | Observed and modeled gridded data (precipitation, depth, velocity) |
 
+```mermaid
+graph TB
+    subgraph PG ["PostgreSQL — Relational Tables"]
+        direction TB
+        EVENTS["Events · seeds · fishnet_points"]
+        STRUCT["Structures · dams · levees · buildings"]
+        MODELS["Models · elements · linkages · hotfixes"]
+        MGMT["Management · run_catalog · manifests · logs"]
+    end
+    subgraph ICE ["Lakehouse — Iceberg Tables"]
+        direction TB
+        OBS["storms · gages · obs_ts"]
+        TS["output_ts"]
+        DER["Derived Views (7 mv_ tables)"]
+    end
+    subgraph CHUNK ["Lakehouse — Icechunk Repos"]
+        GRIDS["obs_grids · output_grids"]
+    end
+    PG ~~~ ICE
+    ICE ~~~ CHUNK
+    EVENTS --> MODELS --> MGMT --> TS --> DER
+    MGMT --> GRIDS
+```
+
+> See [`ffrd-erd.mmd`](ffrd-erd.mmd) for the full interactive ERD with clickable links to each domain diagram.
+
+### Why Three Tiers
+
+FFRD's stochastic flood-risk pipeline produces data that varies by several orders of magnitude in volume, shape, and access pattern. No single storage technology handles all of it well, so the model separates concerns into three purpose-built tiers:
+
+| Concern | Tier Choice | Rationale |
+|---------|-------------|-----------|
+| **Relational integrity** | PostgreSQL | Model registration, run management, structural inventories, and consequence results have rich foreign-key relationships and require ACID transactions. PostgreSQL enforces referential integrity and supports the provenance joins that let any published result be traced back to its storm, model version, and execution context. |
+| **Analytical scale** | Apache Iceberg | A full stochastic ensemble generates billions of time-series records. Iceberg provides schema evolution, time travel, and partition pruning over cloud object storage, enabling distributed analytics (Spark, Dask) without a running database server. Materialized views (`mv_*` tables) pre-compute the most common queries while remaining rebuildable from source tables. |
+| **N-dimensional grids** | Icechunk (Zarr) | Precipitation fields, depth grids, and velocity arrays are inherently multi-dimensional (x, y, time, realization). Zarr stores them natively with chunked, cloud-optimized access — avoiding the overhead and information loss of flattening grids into rows or columns. Icechunk adds Git-like versioning on top. |
+
+Additional design drivers:
+
+- **Cost alignment** — Hot operational metadata stays in PostgreSQL; high-volume analytical and gridded data lives in object storage where per-GB costs are orders of magnitude lower.
+- **Open standards** — All three tiers (PostgreSQL, Apache Iceberg, Zarr) are open-source, vendor-neutral formats, preventing lock-in and enabling a broad tool ecosystem.
+- **Provenance by design** — The `run_catalog → manifests → events → storms` join chain gives every output a complete lineage record (software version, model version, storm, spatial placement, random seeds) without relying on external metadata stores.
+
 ## Repository Layout
 
 ```
