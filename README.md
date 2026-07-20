@@ -1,20 +1,18 @@
-# ffrd-data-model
+# FFRD Data Model
 
-FFRD Data Model — schema design, user stories, data dictionary, and lakehouse implementation reference for the validation basin studies.
+Data model for the FEMA Future of Flood Risk Data (FFRD) cloud-compute system. Defines the schema for stochastic flood risk simulation — from storm catalogs and model registration through cloud execution, results ingestion, and derived analytics.
 
----
+## Architecture
 
-## Repository Structure
+The data model spans three storage tiers:
 
-```
-rdb/                        Relational schema (PostgreSQL / PostGIS target)
-  ffrd-erd-unified.mmd      Unified domain overview diagram
-  events.mmd                Events domain: storms, fishnet points, seeds
-  models.mmd                Models domain: models, elements, runs, outputs, linkages
-  structures.mmd            Structures domain: dams, levees, buildings, response curves
-  grids.mmd                 Gridded data: Icechunk repositories for meteorology and model outputs
-  management.mmd            Management domain: manifests, plugins, hotfixes, costs, logs
+| Tier | Technology | Purpose |
+|------|-----------|---------|
+| **Relational** | PostgreSQL | Models, structures, events, run management, consequence results |
+| **Tabular** | Apache Iceberg | High-volume time series (observed & modeled), storm catalog, gage metadata, materialized views |
+| **Gridded** | Icechunk (Zarr) | Observed and modeled gridded data (precipitation, depth, velocity) |
 
+<<<<<<< HEAD
 grids/                      Gridded data documentation and schemas
   icechunk.md               Detailed Icechunk repository design and derived products
 
@@ -33,36 +31,96 @@ preview_dict.py             Script to regenerate data-dictionary.md from the YAM
 
 user-storeis.md             Persona-centered user stories (33 stories across 12 personas)
 user-stories-implementation.md  Data model traceability: how each story is supported
+=======
+```mermaid
+graph TB
+    subgraph PG ["PostgreSQL — Relational Tables"]
+        direction TB
+        EVENTS["Events · seeds · fishnet_points"]
+        STRUCT["Structures · dams · levees · buildings"]
+        MODELS["Models · elements · linkages · hotfixes"]
+        MGMT["Management · run_catalog · manifests · logs"]
+    end
+    subgraph ICE ["Lakehouse — Iceberg Tables"]
+        direction TB
+        OBS["storms · gages · obs_ts"]
+        TS["output_ts"]
+        DER["Derived Views (7 mv_ tables)"]
+    end
+    subgraph CHUNK ["Lakehouse — Icechunk Repos"]
+        GRIDS["obs_grids · output_grids"]
+    end
+    PG ~~~ ICE
+    ICE ~~~ CHUNK
+    EVENTS --> MODELS --> MGMT --> TS --> DER
+    MGMT --> GRIDS
+>>>>>>> main
 ```
 
+> See [`ffrd-erd.mmd`](ffrd-erd.mmd) for the full interactive ERD with clickable links to each domain diagram.
+
+### Why Three Tiers
+
+FFRD's stochastic flood-risk pipeline produces data that varies by several orders of magnitude in volume, shape, and access pattern. No single storage technology handles all of it well, so the model separates concerns into three purpose-built tiers:
+
+| Concern | Tier Choice | Rationale |
+|---------|-------------|-----------|
+| **Relational integrity** | PostgreSQL | Model registration, run management, structural inventories, and consequence results have rich foreign-key relationships and require ACID transactions. PostgreSQL enforces referential integrity and supports the provenance joins that let any published result be traced back to its storm, model version, and execution context. |
+| **Analytical scale** | Apache Iceberg | A full stochastic ensemble generates billions of time-series records. Iceberg provides schema evolution, time travel, and partition pruning over cloud object storage, enabling distributed analytics (Spark, Dask) without a running database server. Materialized views (`mv_*` tables) pre-compute the most common queries while remaining rebuildable from source tables. |
+| **N-dimensional grids** | Icechunk (Zarr) | Precipitation fields, depth grids, and velocity arrays are inherently multi-dimensional (x, y, time, realization). Zarr stores them natively with chunked, cloud-optimized access — avoiding the overhead and information loss of flattening grids into rows or columns. Icechunk adds Git-like versioning on top. |
+
+Additional design drivers:
+
+- **Cost alignment** — Hot operational metadata stays in PostgreSQL; high-volume analytical and gridded data lives in object storage where per-GB costs are orders of magnitude lower.
+- **Open standards** — All three tiers (PostgreSQL, Apache Iceberg, Zarr) are open-source, vendor-neutral formats, preventing lock-in and enabling a broad tool ecosystem.
+- **Provenance by design** — The `run_catalog → manifests → events → storms` join chain gives every output a complete lineage record (software version, model version, storm, spatial placement, random seeds) without relying on external metadata stores.
+
+## Repository Layout
+
+```
+ffrd-erd.mmd                     ← unified entity-relationship diagram
+data-dictionary.yaml             ← canonical data dictionary (YAML)
+data-dictionary.md               ← auto-generated readable version
+
+rdb/                             ← PostgreSQL domain diagrams
+lakehouse/                       ← Iceberg / Icechunk domain diagrams
+
+docs/                            ← supplemental documentation
+  user-guide.md                    workflow, data population sequence, provenance
+  user-stories.md                  33 user stories by persona
+  user-stories-validated.md        story-to-table validation matrix
+  grids.mmd                        Icechunk repository flowchart
+  tables.mmd                       Iceberg table flowchart
+  cc-mapping/                      plugin-to-data-model mapping specs
+  prior-art/                       reference diagrams and archived materials
+```
+
+## Documentation
+
+| Document | Description |
+|----------|-------------|
+| [User Guide](docs/readme.md) | Data population workflow, provenance tracing, plugin mapping |
+| [Data Dictionary](data-dictionary.md) | Every table and column with types, constraints, and descriptions |
+| [User Stories](docs/user-stories.md) | 33 use cases organized by persona |
+| [Story Validation](docs/user-stories-validated.md) | How each story maps to specific tables and columns |
+
+
+
+## Conventions
+
+- **Source of truth:** The `.mmd` files in `rdb/` and `lakehouse/` are the authoritative schema definitions
+- **Data dictionary:** `data-dictionary.yaml` is derived from the `.mmd` files and kept in sync manually
+- **STAC metadata:** Semi-structured metadata (conformance checks, input datasets, dam scoping) lives in external STAC documents referenced by `stac_metadata` URI columns
+- **Iceberg keys:** Logical only — no enforced PK/FK constraints; integrity is maintained at the ingestion layer
+- **Plugin mappings:** Per-plugin ETL specs in `docs/cc-mapping/` document how raw CC outputs are transformed into the data model
+
+
 ---
-
-## Domain Diagrams
-
-The data model is organized into five domains. Each domain has both an **rdb** (relational) and a **lakehouse** (Iceberg) representation.
-
-| Domain | Description | rdb | Lakehouse |
-|--------|-------------|-----|-----------|
-| Events | Stochastic storm catalog, fishnet spatial grid, realized events, and random seeds | [rdb/events.mmd](rdb/events.mmd) | [lakehouse/events.mmd](lakehouse/events.mmd) |
-| Models | Models, model elements, inter-model linkages, runs, time series and gridded outputs, observed gage data | [rdb/models.mmd](rdb/models.mmd) | [lakehouse/models.mmd](lakehouse/models.mmd) |
-| Structures | Dams, levees, buildings, fragility response curves, event failure elevations | [rdb/structures.mmd](rdb/structures.mmd) | [lakehouse/structures.mmd](lakehouse/structures.mmd) |
-| Grids | Icechunk repositories for observed meteorology and model gridded outputs (depth, velocity, excess precip) | [rdb/grids.mmd](rdb/grids.mmd) | — |
-| Management | Manifests, plugins, hotfixes, run logs, resource costs, file artifacts | [rdb/management.mmd](rdb/management.mmd) | [lakehouse/management.mmd](lakehouse/management.mmd) |
-| Derived | Materialized aggregation views (lakehouse only) | — | [lakehouse/derived.mmd](lakehouse/derived.mmd) |
-
-Unified overview diagrams:
-- [rdb/ffrd-erd-unified.mmd](rdb/ffrd-erd-unified.mmd)
-- [lakehouse/ffrd-lakehouse.mmd](lakehouse/ffrd-lakehouse.mmd)
-
----
-
-## Data Dictionary
-
-[data-dictionary.yaml](data-dictionary.yaml) is the single source of truth for all table and column definitions across all five domains. It defines type, constraints, FK references, and descriptions for every column. The rendered Markdown version is [data-dictionary.md](data-dictionary.md).
-
-To regenerate the Markdown preview after editing the YAML:
+ 
+*__Note__:* Regenerate the readable data dictionary from the YAML source (create `data-dictionary.md` from `data-dictionary.yaml`):
 
 ```bash
+<<<<<<< HEAD
 python3 preview_dict.py
 ```
 
@@ -161,3 +219,7 @@ Conceptual diagram of source repositories and relational linkages: [rdb/grids.mm
 
 ![Iceberg Data Process](prior-art/iceberg-plugin-data-process.png)
 ![Iceberg Production Data](prior-art/iceberg-production-data.png)
+=======
+python preview_dict.py
+```
+>>>>>>> main

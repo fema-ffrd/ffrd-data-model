@@ -7,20 +7,12 @@ erDiagram
     events }o--|| storms : ""
     events }o--|| fishnet_points : ""
     structures }o--o{ events : ""
-    models }|--o{ events : ""
-    runs }o--|| models : ""
-    runs }o--|| events : ""
-    storms ||--o{ observed_grids : ""
+    run_catalog }o--|| models : ""
+    run_catalog }o--|| events : ""
 
 
+    %% Lakehouse: Iceberg table (defined in lakehouse/observations.mmd)
     storms {
-        storm_id int PK
-        storm_rank int
-        storm_type str
-        datetime datetime
-        duration_hrs int
-        centroid geom
-        mean_precip float
     }
     fishnet_points {
         fishnet_point_id int PK
@@ -42,16 +34,4 @@ erDiagram
         realization_seed int
         block_seed int
         event_seed int
-    }
-    structures {
-    }
-    events {
-    }
-    runs {
-    }
-    observed_grids {
-        observed_grid_id int PK
-        storm_id str FK
-        variable str
-        uri str
     }
