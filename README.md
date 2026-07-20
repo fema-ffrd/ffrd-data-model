@@ -65,10 +65,11 @@ rdb/                             ← PostgreSQL domain diagrams
 lakehouse/                       ← Iceberg / Icechunk domain diagrams
 
 docs/                            ← supplemental documentation
-  user-guide.md                    workflow, data population sequence, provenance
+  readme.md                        workflow, data population sequence, provenance
   user-stories.md                  33 user stories by persona
   user-stories-validated.md        story-to-table validation matrix
   grids.mmd                        Icechunk repository flowchart
+  icechunk.md                      detailed Icechunk schema and derived products
   tables.mmd                       Iceberg table flowchart
   cc-mapping/                      plugin-to-data-model mapping specs
   prior-art/                       reference diagrams and archived materials
@@ -80,6 +81,8 @@ docs/                            ← supplemental documentation
 |----------|-------------|
 | [User Guide](docs/readme.md) | Data population workflow, provenance tracing, plugin mapping |
 | [Data Dictionary](data-dictionary.md) | Every table and column with types, constraints, and descriptions |
+| [Gridded Data](docs/icechunk.md) | Icechunk repositories, xarray schemas, derived products |
+| [Icechunk Diagram](docs/grids.mmd) | Flowchart of source and derived gridded repositories |
 | [User Stories](docs/user-stories.md) | 33 use cases organized by persona |
 | [Story Validation](docs/user-stories-validated.md) | How each story maps to specific tables and columns |
 
