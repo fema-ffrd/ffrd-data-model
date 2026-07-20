@@ -3,17 +3,17 @@ title: Gridded Data — Icechunk Repositories & Derived Products
 ---
 flowchart LR
     AORC["NOAA AORC<br/>Observed meteorology<br/>for each storm"]
-    HMS["HEC-HMS Runs<br/>Excess precipitation<br/>for each event"]
+    HMS["HEC-HMS Runs<br/>Excess precip<br/>for each event"]
     RAS["HEC-RAS Runs<br/>Depth &amp; velocity<br/>for each event"]
 
-    AORC -->|accumulate| OBS["🧊 `observed_precip` repo<br/>Dimensions: `storm_id` × `lon` × `lat` × `time`<br/>Variables: `precip`, `temperature`, ...<br/>Snapshots grow with each storm"]
-    HMS -->|merge across runs| HMSREPO["🧊 `hms_excess_precip` repo<br/>Dimensions: `event_id` × `lon` × `lat` × `time`<br/>Variables: `excess_precip`<br/>Coords: `block_id`, `realization_id`<br/>Snapshots grow with each event"]
-    RAS -->|merge across runs| RASREPO["🧊 `ras_output` repo<br/>Dimensions: `event_id` × `lon` × `lat`<br/>Variables: `max_depth`, `max_velocity`<br/>Coords: `block_id`, `realization_id`<br/>Snapshots grow with each event"]
+    AORC -->|accumulate| OBS["🧊 `observed_precip` repo<br/>Dimensions: `storm_id` × `lon` × `lat` × `time`<br/>Variables: `precip`, `temp`, ..."]
+    HMS -->|merge across runs| HMSREPO["🧊 `hms_excess_precip` repo<br/>Dimensions: `event_id` × `lon` × `lat` × `time`<br/>Variables: `excess_precip`<br/>Coords: `block_id`, `realization_id`"]
+    RAS -->|merge across runs| RASREPO["🧊 `ras_output` repo<br/>Dimensions: `event_id` × `lon` × `lat`<br/>Variables: `max_depth`, `max_velocity`<br/>Coords: `block_id`, `realization_id`"]
 
-    OBS -->|frequency analysis| PRECIP_RI["📊 `precip_recurrence_grids`<br/>Dims: `recurrence_interval` × `lon` × `lat`<br/>Observed precipitation at 10/25/50/100/250/500-yr RI"]
-    HMS -->|per-realization<br/>frequency analysis| HMS_RI["📊 `hms_recurrence_grids`<br/>Dims: `realization_id` × `recurrence_interval` × `lon` × `lat`<br/>Excess precip at standard RIs per realization"]
-    RAS -->|inundation analysis| INUND["📊 `inundation_probability_grids`<br/>Dims: `realization_id` × `lon` × `lat`<br/>Prob(depth &gt; 0) per realization"]
-    RAS -->|per-realization<br/>frequency analysis| RAS_RI["📊 `ras_recurrence_grids`<br/>Dims: `realization_id` × `recurrence_interval` × `lon` × `lat`<br/>Flood depth &amp; velocity at 10/25/50/100/250/500-yr RI"]
+    OBS -->|frequency analysis| PRECIP_RI["📊 `precip_recurrence_grids`<br/>Dims: `recurrence_interval` × `lon` × `lat`<br/>Observed precip at standard RIs"]
+    HMSREPO -->|per-realization<br/>frequency analysis| HMS_RI["📊 `hms_recurrence_grids`<br/>Dims: `realization_id` × `recurrence_interval` × `lon` × `lat`<br/>Excess SST precip at standard RIs per realization"]
+    RASREPO -->|inundation analysis| INUND["📊 `inundation_probability_grids`<br/>Dims: `realization_id` × `lon` × `lat`<br/>Prob(depth &gt; 0) per realization"]
+    RASREPO -->|per-realization<br/>frequency analysis| RAS_RI["📊 `ras_recurrence_grids`<br/>Dims: `realization_id` × `recurrence_interval` × `lon` × `lat`<br/>Flood depth &amp; velocity at standard RIs"]
     RAS_RI -->|ensemble<br/>aggregation| RAS_STATS["📊 `ras_recurrence_ensemble_stats`<br/>Dims: `recurrence_interval` × `lon` × `lat`<br/>Mean, median, std, 5th/95th percentile across realizations"]
 
     style OBS fill:#1976d2,stroke:#0d47a1,stroke-width:2px,color:#fff
