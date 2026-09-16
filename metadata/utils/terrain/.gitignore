@@ -9,6 +9,7 @@ __pycache__/
 # Data Files
 terrain-data/
 validation/
+local/
 
 # Distribution / packaging
 .Python
