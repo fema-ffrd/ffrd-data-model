@@ -9,3 +9,7 @@ The `models` folder contains scripts for generating standalone HEC-HMS and HEC-R
 ## Terrain
 
 The `terrain` folder contains utilities for building STAC metadata for terrain data.
+
+## Portable collection
+
+The `portable-collection` folder contains utilities for creating standalone STAC collections with a STAC GeoParquet archive of collection items.
