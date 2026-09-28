@@ -9,3 +9,7 @@ The `models` folder contains scripts for generating standalone HEC-HMS and HEC-R
 ## Terrain
 
 The `terrain` folder contains utilities for building STAC metadata for terrain data.
+
+## Basin data
+
+The `basin-data` folder contains a command-line utility for generating a STAC Collection from an S3 prefix with one Item per zip archive. It reads geospatial content directly from S3, writes mirrored STAC outputs, keeps item/collection links relative, stores zip-specific analysis on each item, and places non-zip shared files as collection-level assets.
