@@ -19,9 +19,11 @@ from create_nid_collection import (
     NID_HOME,
     SOURCE_RETRIEVED_ON,
     THUMBNAIL_MANIFEST,
+    VERSION_EXTENSION_URL,
     build_collection,
     derived_properties,
     fetch_thumbnail_urls,
+    normalize_version,
 )
 
 
@@ -33,7 +35,9 @@ class NidCollectionTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             output = Path(directory) / "collection.json"
             collection, entries = build_collection(SOURCE, output)
-            validate_dict(collection)
+            validate_dict(collection, extensions=[])
+            self.assertEqual(collection["version"], "1.0")
+            self.assertEqual(collection["stac_extensions"], [VERSION_EXTENSION_URL])
             self.assertEqual(len(entries), 239)
             self.assertEqual(len([link for link in collection["links"] if link["rel"] == "item"]), 239)
             self.assertEqual(
@@ -98,6 +102,9 @@ class NidCollectionTest(unittest.TestCase):
             )
             for item_path, item, asset_path, asset in entries:
                 validate_dict(item)
+                self.assertNotIn("version", item["properties"])
+                self.assertNotIn(VERSION_EXTENSION_URL, item["stac_extensions"])
+                self.assertIsInstance(item["properties"]["title"], str)
                 ids.add(item["id"])
                 self.assertEqual(item["collection"], collection["id"])
                 self.assertEqual(item["geometry"], asset["geometry"])
@@ -176,6 +183,8 @@ class NidCollectionTest(unittest.TestCase):
                     "https://example.org/dams.geojson",
                     "--id",
                     "allegheny-dams",
+                    "--version",
+                    "2.3.4",
                     "--parent-href",
                     "https://example.org/watershed.json",
                     "--root-href",
@@ -184,8 +193,9 @@ class NidCollectionTest(unittest.TestCase):
                 check=True,
             )
             collection = json.loads(output.read_text(encoding="utf-8"))
-            validate_dict(collection)
+            validate_dict(collection, extensions=[])
             self.assertEqual(collection["id"], "allegheny-dams")
+            self.assertEqual(collection["version"], "2.3")
             self.assertEqual(collection["assets"]["source"]["href"], "https://example.org/dams.geojson")
             item_links = [link for link in collection["links"] if link["rel"] == "item"]
             for link in item_links:
@@ -259,6 +269,14 @@ class NidCollectionTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             with self.assertRaisesRegex(ValueError, "No cached HTTPS thumbnail"):
                 build_collection(SOURCE, Path(directory) / "collection.json", thumbnail_urls={})
+
+    def test_collection_version_input(self):
+        self.assertEqual(normalize_version("2.3"), "2.3")
+        self.assertEqual(normalize_version("2.3.4"), "2.3")
+        self.assertEqual(normalize_version(" 2.3.4 "), "2.3")
+        for value in ("", "2", "2.3.4.5", "v2.3", "-1.0", "2.3a"):
+            with self.subTest(value=value), self.assertRaisesRegex(ValueError, "Collection version"):
+                normalize_version(value)
 
     def test_derived_thresholds_and_missing_inputs(self):
         props = {

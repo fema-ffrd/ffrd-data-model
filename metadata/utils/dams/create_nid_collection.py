@@ -23,6 +23,7 @@ NID_DOWNLOADS = f"{NID_HOME}downloads"
 NID_INVENTORY_API = "https://nid.sec.usace.army.mil/api/dams"
 SOURCE_RETRIEVED_ON = "2026-09-30"
 THUMBNAIL_MANIFEST = Path(__file__).with_name("thumbnail_urls.json")
+VERSION_EXTENSION_URL = "https://stac-extensions.github.io/version/v1.2.0/schema.json"
 
 ITEM_PROPERTY_LABELS = {
     "nidId": "nid_id",
@@ -181,6 +182,13 @@ def relative_href(target: Path, document: Path) -> str:
     return Path(os.path.relpath(target.resolve(), document.resolve().parent)).as_posix()
 
 
+def normalize_version(version: str) -> str:
+    match = re.fullmatch(r"(\d+)\.(\d+)(?:\.\d+)?", version.strip())
+    if not match:
+        raise ValueError(f"Collection version must match X.Y or X.Y.Z: {version!r}")
+    return f"{int(match.group(1))}.{int(match.group(2))}"
+
+
 def fetch_thumbnail_urls(source: Path) -> dict[str, str]:
     data = json.loads(source.read_text(encoding="utf-8"))
     features = data.get("features")
@@ -220,7 +228,9 @@ def build_collection(
     parent_href: str | None = None,
     root_href: str | None = None,
     thumbnail_urls: dict[str, str] | None = None,
+    version: str = "1.0",
 ) -> tuple[dict, list[tuple[Path, dict, Path, dict]]]:
+    version = normalize_version(version)
     if source.resolve() == output.resolve():
         raise ValueError("Collection output must not overwrite the source GeoJSON")
     if source_href is not None and urlparse(source_href).scheme not in {
@@ -362,7 +372,7 @@ def build_collection(
             if media_type is not None:
                 thumbnail["type"] = media_type
             assets["thumbnail"] = thumbnail
-        title = properties.get("name") or nid_id,
+        title = properties.get("name") or nid_id
         item = {
             "type": "Feature",
             "stac_version": "1.1.0",
@@ -417,7 +427,8 @@ def build_collection(
     collection = {
         "type": "Collection",
         "stac_version": "1.1.0",
-        "stac_extensions": [],
+        "stac_extensions": [VERSION_EXTENSION_URL],
+        "version": version,
         "id": collection_id,
         "title": "National Inventory of Dams: Allegheny watershed (HUC4 0501)",
         "description": (
@@ -466,6 +477,10 @@ def main() -> None:
     parser.add_argument("--parent-href", help="URL/URI of containing watershed Catalog")
     parser.add_argument("--root-href", help="URL/URI of root Catalog")
     parser.add_argument(
+        "--version", default="1.0",
+        help="Collection version (X.Y; legacy X.Y.Z is normalized to X.Y)",
+    )
+    parser.add_argument(
         "--refresh-thumbnails",
         action="store_true",
         help="Fetch thumbnail URLs from the NID API and update thumbnail_urls.json",
@@ -481,6 +496,7 @@ def main() -> None:
         args.parent_href,
         args.root_href,
         thumbnail_urls,
+        args.version,
     )
     if args.refresh_thumbnails:
         write_json(THUMBNAIL_MANIFEST, thumbnail_urls)

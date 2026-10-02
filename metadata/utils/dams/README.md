@@ -29,6 +29,12 @@ Links within this layout are relative. The generated Collection and Item
 original inventory and per-dam GeoJSON assets retain all source attributes
 and field names.
 
+The Collection's STAC Version extension field defaults to `version: "1.0"`.
+Use `--version 1.1` to set another release version. Legacy `X.Y.Z` input is
+accepted and stored as `X.Y` (for example, `1.2.3` becomes `1.2`). Only the
+Collection is versioned: Items do not receive versions, and this local
+generator does not compare releases or deprecate previous ones.
+
 ## What is in an Item?
 
 Items expose 26 searchable NID attributes with snake_case names. Of these,
