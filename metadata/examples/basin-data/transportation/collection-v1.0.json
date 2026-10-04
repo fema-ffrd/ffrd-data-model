@@ -1,0 +1,74 @@
+{
+  "type": "Collection",
+  "id": "transportation",
+  "stac_version": "1.1.0",
+  "description": "Transportation data from Census and other sources",
+  "links": [
+    {
+      "rel": "root",
+      "href": "./collection.json",
+      "type": "application/json",
+      "title": "transportation"
+    },
+    {
+      "rel": "self",
+      "href": "collection.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "items/ntad_national_network.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "item",
+      "href": "items/ntad_north_american_rail_network_lines.json",
+      "type": "application/geo+json"
+    }
+  ],
+  "stac_extensions": [
+    "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
+    "https://stac-extensions.github.io/version/v1.2.0/schema.json"
+  ],
+  "version": "1.0",
+  "deprecated": false,
+  "source_prefix": "s3://south-platte/basin-data/transportation/",
+  "created": "2026-09-28T18:47:49.484746Z",
+  "title": "transportation",
+  "extent": {
+    "spatial": {
+      "bbox": [
+        [
+          -159.779821,
+          14.672258,
+          -59.927231,
+          64.926145
+        ]
+      ]
+    },
+    "temporal": {
+      "interval": [
+        [
+          "2026-09-24T14:29:48Z",
+          null
+        ]
+      ]
+    }
+  },
+  "summaries": {
+    "proj:epsg": [
+      4326
+    ]
+  },
+  "assets": {
+    "README.md": {
+      "href": "./README.md",
+      "type": "text/markdown",
+      "title": "README.md",
+      "file:size": 129,
+      "roles": [
+        "metadata"
+      ]
+    }
+  }
+}

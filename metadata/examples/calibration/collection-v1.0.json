@@ -1,0 +1,78 @@
+{
+  "type": "Collection",
+  "stac_version": "1.1.0",
+  "stac_extensions": [
+    "https://stac-extensions.github.io/version/v1.2.0/schema.json"
+  ],
+  "id": "calibration",
+  "description": "HEC-RAS and HEC-HMS calibration models",
+  "version": "1.0",
+  "deprecated": false,
+  "extent": {
+    "spatial": {
+      "bbox": [
+        [
+          -105.80331448424108,
+          40.22708328895349,
+          -104.78470784318976,
+          40.629230433342336
+        ]
+      ]
+    },
+    "temporal": {
+      "interval": [
+        [
+          "2026-08-25T17:03:11Z",
+          null
+        ]
+      ]
+    }
+  },
+  "links": [
+    {
+      "rel": "root",
+      "href": "./collection-v1.0.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "self",
+      "href": "./collection-v1.0.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "predecessor-version",
+      "href": "./collection-v1.0.json",
+      "type": "application/json",
+      "title": "No predecessor version available (initial release)"
+    },
+    {
+      "rel": "latest-version",
+      "href": "./collection-v1.0.json",
+      "type": "application/json",
+      "title": "Latest version (v1.0)"
+    },
+    {
+      "rel": "item",
+      "href": "./hydraulics/big-thompson/v1.0/big-thompson-ras-v1.0.json",
+      "type": "application/json",
+      "title": "Big Thompson HEC-RAS Metadata v1.0"
+    },
+    {
+      "rel": "item",
+      "href": "./hydrology/big-thompson/v1.0/big-thompson-hms-v1.0.json",
+      "type": "application/json",
+      "title": "Big Thompson HEC-HMS Metadata v1.0"
+    }
+  ],
+  "assets": {
+    "README.md": {
+      "href": "./README.md",
+      "type": "text/markdown",
+      "title": "README.md",
+      "file:size": 269,
+      "roles": [
+        "metadata"
+      ]
+    }
+  }
+}

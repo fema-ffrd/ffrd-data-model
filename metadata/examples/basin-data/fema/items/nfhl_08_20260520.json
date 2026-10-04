@@ -1,0 +1,361 @@
+{
+  "type": "Feature",
+  "stac_version": "1.1.0",
+  "stac_extensions": [
+    "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
+    "https://stac-extensions.github.io/version/v1.2.0/schema.json"
+  ],
+  "id": "nfhl_08_20260520",
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          -109.966074,
+          35.994347
+        ],
+        [
+          -100.826095,
+          35.994347
+        ],
+        [
+          -100.826095,
+          41.998319
+        ],
+        [
+          -109.966074,
+          41.998319
+        ],
+        [
+          -109.966074,
+          35.994347
+        ]
+      ]
+    ]
+  },
+  "bbox": [
+    -109.966074,
+    35.994347,
+    -100.826095,
+    41.998319
+  ],
+  "properties": {
+    "title": "NFHL_08_20260520.zip",
+    "source_prefix": "s3://south-platte/basin-data/fema/",
+    "zip_member_count": 235,
+    "zip:asset_name": "NFHL_08_20260520.zip",
+    "zip:analysis": {
+      "geospatial_dataset": {
+        "inner_path": "NFHL_08_20260520.gdb",
+        "layer_count": 43,
+        "layers": [
+          {
+            "name": "L_MANNINGSN",
+            "geometry_type": "None"
+          },
+          {
+            "name": "S_SUBBASINS",
+            "geometry_type": "Multi Polygon"
+          },
+          {
+            "name": "S_TRNSPORT_LN",
+            "geometry_type": "Multi Line String"
+          },
+          {
+            "name": "S_PLSS_AR",
+            "geometry_type": "Multi Polygon"
+          },
+          {
+            "name": "L_PAN_REVIS",
+            "geometry_type": "None"
+          },
+          {
+            "name": "L_SOURCE_CIT",
+            "geometry_type": "None"
+          },
+          {
+            "name": "L_SUMMARY_DISCHARGES",
+            "geometry_type": "None"
+          },
+          {
+            "name": "S_NODES",
+            "geometry_type": "Point"
+          },
+          {
+            "name": "L_PROFIL_BKWTR_EL",
+            "geometry_type": "None"
+          },
+          {
+            "name": "S_FLD_HAZ_AR",
+            "geometry_type": "Multi Polygon"
+          },
+          {
+            "name": "S_BFE",
+            "geometry_type": "Multi Line String"
+          },
+          {
+            "name": "S_FLD_HAZ_LN",
+            "geometry_type": "Multi Line String"
+          },
+          {
+            "name": "L_XS_ELEV",
+            "geometry_type": "None"
+          },
+          {
+            "name": "L_PROFIL_LABEL",
+            "geometry_type": "None"
+          },
+          {
+            "name": "L_XS_STRUCT",
+            "geometry_type": "None"
+          },
+          {
+            "name": "L_POL_FHBM",
+            "geometry_type": "None"
+          },
+          {
+            "name": "S_DATUM_CONV_PT",
+            "geometry_type": "Point"
+          },
+          {
+            "name": "L_SUMMARY_ELEVATIONS",
+            "geometry_type": "None"
+          },
+          {
+            "name": "S_POL_AR",
+            "geometry_type": "Multi Polygon"
+          },
+          {
+            "name": "STUDY_INFO",
+            "geometry_type": "None"
+          },
+          {
+            "name": "L_MT2_LOMR",
+            "geometry_type": "None"
+          },
+          {
+            "name": "S_SUBMITTAL_INFO",
+            "geometry_type": "Multi Polygon"
+          },
+          {
+            "name": "S_FIRM_PAN",
+            "geometry_type": "Multi Polygon"
+          },
+          {
+            "name": "S_GAGE",
+            "geometry_type": "Point"
+          },
+          {
+            "name": "S_BASE_INDEX",
+            "geometry_type": "Multi Polygon"
+          },
+          {
+            "name": "S_WTR_LN",
+            "geometry_type": "Multi Line String"
+          },
+          {
+            "name": "S_WTR_AR",
+            "geometry_type": "Multi Polygon"
+          },
+          {
+            "name": "S_LOMR",
+            "geometry_type": "Multi Polygon"
+          },
+          {
+            "name": "S_LEVEE",
+            "geometry_type": "Multi Line String"
+          },
+          {
+            "name": "S_TOPO_CONFIDENCE",
+            "geometry_type": "Multi Polygon"
+          },
+          {
+            "name": "L_COMM_INFO",
+            "geometry_type": "None"
+          },
+          {
+            "name": "L_MTG_POC",
+            "geometry_type": "None"
+          },
+          {
+            "name": "L_MEETINGS",
+            "geometry_type": "None"
+          },
+          {
+            "name": "S_STN_START",
+            "geometry_type": "Point"
+          },
+          {
+            "name": "S_XS",
+            "geometry_type": "Multi Line String"
+          },
+          {
+            "name": "L_SURVEY_PT",
+            "geometry_type": "None"
+          },
+          {
+            "name": "S_GEN_STRUCT",
+            "geometry_type": "Multi Line String"
+          },
+          {
+            "name": "L_PROFIL_PANEL",
+            "geometry_type": "None"
+          },
+          {
+            "name": "S_HYDRO_REACH",
+            "geometry_type": "Multi Line String"
+          },
+          {
+            "name": "S_LABEL_PT",
+            "geometry_type": "Point"
+          },
+          {
+            "name": "L_COMM_REVIS",
+            "geometry_type": "None"
+          },
+          {
+            "name": "S_PROFIL_BASLN",
+            "geometry_type": "3D Multi Line String"
+          },
+          {
+            "name": "S_LABEL_LD",
+            "geometry_type": "Multi Line String"
+          }
+        ]
+      },
+      "table_summary": {
+        "table_names": [
+          "L_MANNINGSN",
+          "S_SUBBASINS",
+          "S_TRNSPORT_LN",
+          "S_PLSS_AR",
+          "L_PAN_REVIS",
+          "L_SOURCE_CIT",
+          "L_SUMMARY_DISCHARGES",
+          "S_NODES",
+          "L_PROFIL_BKWTR_EL",
+          "S_FLD_HAZ_AR",
+          "S_BFE",
+          "S_FLD_HAZ_LN",
+          "L_XS_ELEV",
+          "L_PROFIL_LABEL",
+          "L_XS_STRUCT",
+          "L_POL_FHBM",
+          "S_DATUM_CONV_PT",
+          "L_SUMMARY_ELEVATIONS",
+          "S_POL_AR",
+          "STUDY_INFO",
+          "L_MT2_LOMR",
+          "S_SUBMITTAL_INFO",
+          "S_FIRM_PAN",
+          "S_GAGE",
+          "S_BASE_INDEX",
+          "S_WTR_LN",
+          "S_WTR_AR",
+          "S_LOMR",
+          "S_LEVEE",
+          "S_TOPO_CONFIDENCE",
+          "L_COMM_INFO",
+          "L_MTG_POC",
+          "L_MEETINGS",
+          "S_STN_START",
+          "S_XS",
+          "L_SURVEY_PT",
+          "S_GEN_STRUCT",
+          "L_PROFIL_PANEL",
+          "S_HYDRO_REACH",
+          "S_LABEL_PT",
+          "L_COMM_REVIS",
+          "S_PROFIL_BASLN",
+          "S_LABEL_LD"
+        ],
+        "table_count": 43
+      },
+      "asset": {
+        "key": "NFHL_08_20260520.zip",
+        "name": "NFHL_08_20260520.zip",
+        "href": "s3://south-platte/basin-data/fema/NFHL_08_20260520.zip"
+      }
+    },
+    "version": "1.0",
+    "deprecated": false,
+    "proj:epsg": 4326,
+    "proj:wkt2": "GEOGCRS[\"WGS 84\",ENSEMBLE[\"World Geodetic System 1984 ensemble\",MEMBER[\"World Geodetic System 1984 (Transit)\"],MEMBER[\"World Geodetic System 1984 (G730)\"],MEMBER[\"World Geodetic System 1984 (G873)\"],MEMBER[\"World Geodetic System 1984 (G1150)\"],MEMBER[\"World Geodetic System 1984 (G1674)\"],MEMBER[\"World Geodetic System 1984 (G1762)\"],MEMBER[\"World Geodetic System 1984 (G2139)\"],MEMBER[\"World Geodetic System 1984 (G2296)\"],ELLIPSOID[\"WGS 84\",6378137,298.257223563,LENGTHUNIT[\"metre\",1]],ENSEMBLEACCURACY[2.0]],PRIMEM[\"Greenwich\",0,ANGLEUNIT[\"degree\",0.0174532925199433]],CS[ellipsoidal,2],AXIS[\"geodetic latitude (Lat)\",north,ORDER[1],ANGLEUNIT[\"degree\",0.0174532925199433]],AXIS[\"geodetic longitude (Lon)\",east,ORDER[2],ANGLEUNIT[\"degree\",0.0174532925199433]],USAGE[SCOPE[\"Horizontal component of 3D system.\"],AREA[\"World.\"],BBOX[-90,-180,90,180]],ID[\"EPSG\",4326]]",
+    "proj:bbox": [
+      -109.966074,
+      35.994347,
+      -100.826095,
+      41.998319
+    ],
+    "proj:geometry": {
+      "type": "Polygon",
+      "coordinates": [
+        [
+          [
+            -109.966074,
+            35.994347
+          ],
+          [
+            -100.826095,
+            35.994347
+          ],
+          [
+            -100.826095,
+            41.998319
+          ],
+          [
+            -109.966074,
+            41.998319
+          ],
+          [
+            -109.966074,
+            35.994347
+          ]
+        ]
+      ]
+    },
+    "datetime": "2026-09-24T14:11:19Z"
+  },
+  "links": [
+    {
+      "rel": "self",
+      "href": "items/nfhl_08_20260520.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "root",
+      "href": "../collection.json",
+      "type": "application/json",
+      "title": "fema"
+    },
+    {
+      "rel": "parent",
+      "href": "../collection.json",
+      "type": "application/json",
+      "title": "fema"
+    },
+    {
+      "rel": "collection",
+      "href": "../collection.json",
+      "type": "application/json",
+      "title": "fema"
+    },
+    {
+      "rel": "latest-version",
+      "href": "items/nfhl_08_20260520.json",
+      "type": "application/geo+json"
+    }
+  ],
+  "assets": {
+    "NFHL_08_20260520.zip": {
+      "href": "s3://south-platte/basin-data/fema/NFHL_08_20260520.zip",
+      "type": "application/zip",
+      "title": "NFHL_08_20260520.zip",
+      "file:size": 252596611,
+      "roles": [
+        "data"
+      ]
+    }
+  },
+  "collection": "fema"
+}

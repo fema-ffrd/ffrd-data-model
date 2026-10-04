@@ -1,0 +1,151 @@
+{
+  "type": "Feature",
+  "stac_version": "1.1.0",
+  "stac_extensions": [
+    "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
+    "https://stac-extensions.github.io/version/v1.2.0/schema.json"
+  ],
+  "id": "ntad_national_network",
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          -159.779821,
+          17.974
+        ],
+        [
+          -65.637193,
+          17.974
+        ],
+        [
+          -65.637193,
+          64.86012
+        ],
+        [
+          -159.779821,
+          64.86012
+        ],
+        [
+          -159.779821,
+          17.974
+        ]
+      ]
+    ]
+  },
+  "bbox": [
+    -159.779821,
+    17.974,
+    -65.637193,
+    64.86012
+  ],
+  "properties": {
+    "title": "NTAD_National_Network.zip",
+    "source_prefix": "s3://south-platte/basin-data/transportation/",
+    "zip_member_count": 62,
+    "zip:asset_name": "NTAD_National_Network.zip",
+    "zip:analysis": {
+      "geospatial_dataset": {
+        "inner_path": "7b9b87c0-7744-4b79-b75b-55c0ee3c70e3.gdb",
+        "layer_count": 1,
+        "layers": [
+          {
+            "name": "National_Network",
+            "geometry_type": "Multi Line String"
+          }
+        ]
+      },
+      "table_summary": {
+        "table_names": [
+          "National_Network"
+        ],
+        "table_count": 1
+      },
+      "asset": {
+        "key": "NTAD_National_Network.zip",
+        "name": "NTAD_National_Network.zip",
+        "href": "s3://south-platte/basin-data/transportation/NTAD_National_Network.zip"
+      }
+    },
+    "version": "1.0",
+    "deprecated": false,
+    "proj:epsg": 4326,
+    "proj:wkt2": "GEOGCRS[\"WGS 84\",ENSEMBLE[\"World Geodetic System 1984 ensemble\",MEMBER[\"World Geodetic System 1984 (Transit)\"],MEMBER[\"World Geodetic System 1984 (G730)\"],MEMBER[\"World Geodetic System 1984 (G873)\"],MEMBER[\"World Geodetic System 1984 (G1150)\"],MEMBER[\"World Geodetic System 1984 (G1674)\"],MEMBER[\"World Geodetic System 1984 (G1762)\"],MEMBER[\"World Geodetic System 1984 (G2139)\"],MEMBER[\"World Geodetic System 1984 (G2296)\"],ELLIPSOID[\"WGS 84\",6378137,298.257223563,LENGTHUNIT[\"metre\",1]],ENSEMBLEACCURACY[2.0]],PRIMEM[\"Greenwich\",0,ANGLEUNIT[\"degree\",0.0174532925199433]],CS[ellipsoidal,2],AXIS[\"geodetic latitude (Lat)\",north,ORDER[1],ANGLEUNIT[\"degree\",0.0174532925199433]],AXIS[\"geodetic longitude (Lon)\",east,ORDER[2],ANGLEUNIT[\"degree\",0.0174532925199433]],USAGE[SCOPE[\"Horizontal component of 3D system.\"],AREA[\"World.\"],BBOX[-90,-180,90,180]],ID[\"EPSG\",4326]]",
+    "proj:bbox": [
+      -159.779821,
+      17.974,
+      -65.637193,
+      64.86012
+    ],
+    "proj:geometry": {
+      "type": "Polygon",
+      "coordinates": [
+        [
+          [
+            -159.779821,
+            17.974
+          ],
+          [
+            -65.637193,
+            17.974
+          ],
+          [
+            -65.637193,
+            64.86012
+          ],
+          [
+            -159.779821,
+            64.86012
+          ],
+          [
+            -159.779821,
+            17.974
+          ]
+        ]
+      ]
+    },
+    "datetime": "2026-09-24T14:29:48Z"
+  },
+  "links": [
+    {
+      "rel": "self",
+      "href": "items/ntad_national_network.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "root",
+      "href": "../collection.json",
+      "type": "application/json",
+      "title": "transportation"
+    },
+    {
+      "rel": "parent",
+      "href": "../collection.json",
+      "type": "application/json",
+      "title": "transportation"
+    },
+    {
+      "rel": "collection",
+      "href": "../collection.json",
+      "type": "application/json",
+      "title": "transportation"
+    },
+    {
+      "rel": "latest-version",
+      "href": "items/ntad_national_network.json",
+      "type": "application/geo+json"
+    }
+  ],
+  "assets": {
+    "NTAD_National_Network.zip": {
+      "href": "s3://south-platte/basin-data/transportation/NTAD_National_Network.zip",
+      "type": "application/zip",
+      "title": "NTAD_National_Network.zip",
+      "file:size": 50654938,
+      "roles": [
+        "data"
+      ]
+    }
+  },
+  "collection": "transportation"
+}
