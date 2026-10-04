@@ -1,0 +1,26 @@
+profile:
+  id: basin-data-soils
+  version: 0.1
+  description: Metadata profile for soils datasets.
+
+collection:
+  required:
+    assets:
+      - key: README.md
+        type: text/markdown
+  recommended:
+    native_properties:
+      - name: source_prefix
+        description: S3 prefix used to build the soils collection.
+
+item:
+  required:
+    links: []
+  recommended:
+    native_properties:
+      - name: title
+        description: Human-readable item title.
+      - name: source_prefix
+        description: S3 prefix of the source soils package.
+      - name: datetime
+        description: Item timestamp.

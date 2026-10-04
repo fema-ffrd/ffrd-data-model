@@ -1,0 +1,30 @@
+profile:
+  id: basin-data-fishnet
+  version: 0.1
+  description: Metadata profile for fishnet grid and associated sampling points.
+
+collection:
+  required:
+    assets:
+      - key: README.md
+        type: text/markdown
+  recommended:
+    native_properties:
+      - name: grid_definition
+        description: Fishnet grid definition details.
+      - name: coordinate_basis
+        description: Coordinate basis used for fishnet geometry.
+
+item:
+  required:
+    links: []
+  recommended:
+    native_properties:
+      - name: fishnet_point_id
+        description: Identifier for fishnet cell or sample point.
+      - name: weight
+        description: Weight associated with fishnet sample point.
+      - name: cell_identifier
+        description: Human-readable fishnet cell identifier.
+      - name: weighting_method
+        description: Method used to compute or assign fishnet weights.

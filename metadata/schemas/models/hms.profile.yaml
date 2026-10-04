@@ -1,0 +1,41 @@
+profile:
+  id: models-hms
+  version: 0.1
+  description: Metadata profile for HEC-HMS model items and collections.
+
+collection:
+  required:
+    assets:
+      - key: README.md
+        type: text/markdown
+  recommended:
+
+item:
+  required:
+    links: []
+  recommended:
+    native_properties:
+      - name: hms:project
+        description: HMS project identifier.
+      - name: hms:project_title
+        description: HMS project title.
+      - name: hms:version
+        description: HMS model version string.
+      - name: hms:unit system
+        description: HMS unit system value.
+      - name: hms:description
+        description: Model description text.
+      - name: hms:summary
+        description: HMS component counts and summary metadata.
+      - name: hms:gages
+        description: Gage metadata associated with the model.
+      - name: hecstac:asset_scope
+        description: Scope of represented assets.
+      - name: hecstac:asset_count
+        description: Number of assets attached to the item.
+      - name: hecstac:projection_source
+        description: Source of projection metadata used in item generation.
+      - name: hecstac:source_prefix
+        description: Source prefix where model assets were discovered.
+      - name: datetime
+        description: Item timestamp.
