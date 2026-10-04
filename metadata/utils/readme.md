@@ -4,9 +4,12 @@ These tools create and serve STAC metadata. They are grouped by data type:
 
 | Folder | What it does |
 | --- | --- |
-| [`models/`](models/) | Creates standalone HEC-HMS and HEC-RAS Items; adds derived Parquet assets, version details, and source lineage. |
-| [`terrain/`](terrain/) | Builds STAC metadata for terrain data. |
+| [`basin-data/`](basin-data/README.md) | Generates STAC Collections from S3 zip archives with one Item per archive. |
 | [`dams/`](dams/README.md) | Builds an Allegheny watershed dam Collection with one Item and GeoJSON asset per dam. |
+| [`models/`](models/) | Creates standalone HEC-HMS and HEC-RAS Items; adds derived Parquet assets, version details, and source lineage. |
+| [`portable-collection/`](portable-collection/) | Creates standalone STAC collections with a STAC GeoParquet archive of collection items. |
+| [`terrain/`](terrain/) | Builds STAC metadata for terrain data. |
+
 
 ## Preview a catalog locally
 
@@ -36,19 +39,3 @@ STAC viewer:
 **Caution:** Binding to `0.0.0.0` exposes the served files to the network. Use
 this development server only on a trusted network, not in production.
 Utilities are organized by data domain. Add a section below when introducing a new utility folder.
-
-## Models
-
-The `models` folder contains scripts for generating standalone HEC-HMS and HEC-RAS STAC Items and for adding derived Parquet assets, version metadata, and source-asset lineage to an existing Item.
-
-## Terrain
-
-The `terrain` folder contains utilities for building STAC metadata for terrain data.
-
-## Portable collection
-
-The `portable-collection` folder contains utilities for creating standalone STAC collections with a STAC GeoParquet archive of collection items.
-
-## Basin data
-
-The `basin-data` folder contains a command-line utility for generating a STAC Collection from an S3 prefix with one Item per zip archive. It reads geospatial content directly from S3, writes mirrored STAC outputs, keeps item/collection links relative, stores zip-specific analysis on each item, and places non-zip shared files as collection-level assets.
