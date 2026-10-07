@@ -17,7 +17,6 @@ from urllib.request import Request, urlopen
 
 from pyproj import CRS, Transformer
 
-
 NID_HOME = "https://nid.sec.usace.army.mil/nid/#/"
 NID_DOWNLOADS = f"{NID_HOME}downloads"
 NID_INVENTORY_API = "https://nid.sec.usace.army.mil/api/dams"
@@ -54,14 +53,28 @@ ITEM_PROPERTY_LABELS = {
     "sourceAgency": "source_agency",
 }
 
+REQUIRED_SOURCE_KEYS = {"nidId", "dataUpdated"}
+
 MEASUREMENT_KEYS = {
-    "damHeight", "hydraulicHeight", "structuralHeight", "nidHeight",
-    "damLength", "volume", "nidStorage", "maxStorage", "normalStorage",
-    "surfaceArea", "drainageArea", "maxDischarge", "spillwayWidth",
+    "damHeight",
+    "hydraulicHeight",
+    "structuralHeight",
+    "nidHeight",
+    "damLength",
+    "volume",
+    "nidStorage",
+    "maxStorage",
+    "normalStorage",
+    "surfaceArea",
+    "drainageArea",
+    "maxDischarge",
+    "spillwayWidth",
 }
 
 
-def measurement(value: str | int | float | None, key: str, index: int) -> int | float | None:
+def measurement(
+    value: str | int | float | None, key: str, index: int
+) -> int | float | None:
     if value is None:
         return None
     try:
@@ -90,8 +103,10 @@ def derived_properties(properties: dict) -> dict:
     )
     if dam_type == "Earth":
         breach_class = (
-            "EarthenDamGT30ft" if height > 30 else "EarthenDamLE30ft"
-        ) if height is not None else None
+            ("EarthenDamGT30ft" if height > 30 else "EarthenDamLE30ft")
+            if height is not None
+            else None
+        )
     elif dam_type is None:
         breach_class = None
     elif "Concrete" in dam_type:
@@ -117,22 +132,36 @@ def derived_properties(properties: dict) -> dict:
         return False
 
     size_class = (
-        "Large" if height >= 100 else "Medium" if height >= 50 else "Small"
-    ) if height is not None else None
+        ("Large" if height >= 100 else "Medium" if height >= 50 else "Small")
+        if height is not None
+        else None
+    )
     storage_class = (
-        "Major" if storage >= 100000 else
-        "Significant" if storage >= 10000 else
-        "Moderate" if storage >= 1000 else "Minor"
-    ) if storage is not None else None
+        (
+            "Major"
+            if storage >= 100000
+            else (
+                "Significant"
+                if storage >= 10000
+                else "Moderate" if storage >= 1000 else "Minor"
+            )
+        )
+        if storage is not None
+        else None
+    )
     hydrologic_influence = (
-        "Regional" if drainage >= 250 else
-        "Watershed" if drainage >= 50 else "Local"
-    ) if drainage is not None else None
+        ("Regional" if drainage >= 250 else "Watershed" if drainage >= 50 else "Local")
+        if drainage is not None
+        else None
+    )
     if storage is not None and drainage is not None:
         score = (
             {"Low": 1, "Significant": 3, "High": 5}.get(hazard, 0)
-            + (4 if storage >= 100000 else 3 if storage >= 10000 else
-               2 if storage >= 1000 else 1)
+            + (
+                4
+                if storage >= 100000
+                else 3 if storage >= 10000 else 2 if storage >= 1000 else 1
+            )
             + (3 if purpose == "Flood Risk Reduction" else 1)
             + (3 if drainage >= 250 else 2 if drainage >= 50 else 1)
         )
@@ -143,7 +172,8 @@ def derived_properties(properties: dict) -> dict:
         "ffrd:flood_pool_fraction": flood_fraction,
         "ffrd:data_emergency_action_plan": (
             properties["eap_prepared"] == "Yes"
-            if properties["eap_prepared"] is not None else None
+            if properties["eap_prepared"] is not None
+            else None
         ),
         "ffrd:data_operations_manual_likely": (
             agency == "US Army Corps of Engineers" if agency is not None else None
@@ -170,9 +200,12 @@ def derived_properties(properties: dict) -> dict:
             at_least(storage, 10000),
         ),
         "ffrd_screening:recommended_hydraulic_type": (
-            "TypeA" if agency == "US Army Corps of Engineers"
+            "TypeA"
+            if agency == "US Army Corps of Engineers"
             and purpose == "Flood Risk Reduction"
-            and storage is not None and storage >= 10000 else None
+            and storage is not None
+            and storage >= 10000
+            else None
         ),
         "ffrd_screening:modeling_priority": priority,
     }
@@ -205,7 +238,10 @@ def fetch_thumbnail_urls(source: Path) -> dict[str, str]:
             raise ValueError(f"Invalid NID ID for thumbnail lookup: {nid_id!r}")
         request = Request(
             f"{NID_INVENTORY_API}/{nid_id}/inventory",
-            headers={"Accept": "application/json", "User-Agent": "ffrd-stac-generator/1.0"},
+            headers={
+                "Accept": "application/json",
+                "User-Agent": "ffrd-stac-generator/1.0",
+            },
         )
         with urlopen(request, timeout=20) as response:
             record = json.load(response)
@@ -215,9 +251,69 @@ def fetch_thumbnail_urls(source: Path) -> dict[str, str]:
         if not isinstance(url, str) or not (
             urlparse(url).scheme == "https" and urlparse(url).netloc
         ):
-            raise ValueError(f"NID API returned no HTTPS thumbnail for {nid_id}: {url!r}")
+            raise ValueError(
+                f"NID API returned no HTTPS thumbnail for {nid_id}: {url!r}"
+            )
         urls[nid_id] = url
     return urls
+
+
+def collection_metadata(
+    source: Path, features: list[dict]
+) -> tuple[str, str, list[str]]:
+    dataset_name = source.stem.replace("_", " ").replace("-", " ")
+    huc4_values = sorted(
+        {
+            props.get("huc4")
+            for feature in features
+            if isinstance(feature, dict)
+            for props in [feature.get("properties")]
+            if isinstance(props, dict)
+            and isinstance(props.get("huc4"), str)
+            and props.get("huc4")
+        }
+    )
+    state_values = sorted(
+        {
+            props.get("state")
+            for feature in features
+            if isinstance(feature, dict)
+            for props in [feature.get("properties")]
+            if isinstance(props, dict)
+            and isinstance(props.get("state"), str)
+            and props.get("state")
+        }
+    )
+    if len(huc4_values) == 1:
+        huc_text = f"HUC4 {huc4_values[0]}"
+    elif len(huc4_values) > 1:
+        huc_text = f"{len(huc4_values)} HUC4 regions"
+    else:
+        huc_text = "unspecified HUC4 region"
+
+    title = f"National Inventory of Dams: {dataset_name}"
+    description = (
+        f"USACE National Inventory of Dams points from source dataset '{source.name}' "
+        f"covering {huc_text}. Temporal extent represents record-level "
+        "dataUpdated dates, not construction or observation dates. "
+        f"Source inventory retrieved from NID downloads on {SOURCE_RETRIEVED_ON}."
+    )
+
+    keywords = ["dams", "National Inventory of Dams"]
+    keywords.extend([f"HUC4 {value}" for value in huc4_values])
+    keywords.extend(state_values)
+    return title, description, keywords
+
+
+def normalized_item_timestamp(value: object) -> str:
+    if isinstance(value, str):
+        candidate = value.strip()
+        if candidate and candidate.lower() != "nan/nan/nan":
+            try:
+                return f"{date.fromisoformat(candidate).isoformat()}T00:00:00Z"
+            except ValueError:
+                pass
+    return f"{SOURCE_RETRIEVED_ON}T00:00:00Z"
 
 
 def build_collection(
@@ -234,7 +330,10 @@ def build_collection(
     if source.resolve() == output.resolve():
         raise ValueError("Collection output must not overwrite the source GeoJSON")
     if source_href is not None and urlparse(source_href).scheme not in {
-        "http", "https", "s3", "file"
+        "http",
+        "https",
+        "s3",
+        "file",
     }:
         raise ValueError("--source-href must be an absolute URL or URI")
 
@@ -261,7 +360,7 @@ def build_collection(
     )
 
     collection_id = collection_id or source.stem
-    item_dir = output.parent / f"{output.stem}-items"
+    item_dir = output.parent / collection_id
     collection_href = output.name
     collection_links = [
         {"rel": "self", "href": collection_href, "type": "application/json"},
@@ -272,25 +371,29 @@ def build_collection(
         },
     ]
     if parent_href or root_href:
-        collection_links.append({
-            "rel": "parent",
-            "href": parent_href or root_href,
-            "type": "application/json",
-        })
-    collection_links.extend([
-        {
-            "rel": "related",
-            "href": NID_HOME,
-            "type": "text/html",
-            "title": "National Inventory of Dams",
-        },
-        {
-            "rel": "via",
-            "href": NID_DOWNLOADS,
-            "type": "text/html",
-            "title": "NID Data Downloads",
-        },
-    ])
+        collection_links.append(
+            {
+                "rel": "parent",
+                "href": parent_href or root_href,
+                "type": "application/json",
+            }
+        )
+    collection_links.extend(
+        [
+            {
+                "rel": "related",
+                "href": NID_HOME,
+                "type": "text/html",
+                "title": "National Inventory of Dams",
+            },
+            {
+                "rel": "via",
+                "href": NID_DOWNLOADS,
+                "type": "text/html",
+                "title": "NID Data Downloads",
+            },
+        ]
+    )
 
     xs, ys, updates = [], [], []
     entries = []
@@ -301,12 +404,18 @@ def build_collection(
         properties = feature.get("properties")
         if not isinstance(properties, dict):
             raise ValueError(f"Feature {index} must have properties")
-        missing = ITEM_PROPERTY_LABELS.keys() - properties.keys()
-        if missing:
-            raise ValueError(f"Feature {index} is missing Item fields: {sorted(missing)}")
+        missing_required = REQUIRED_SOURCE_KEYS - properties.keys()
+        if missing_required:
+            raise ValueError(
+                f"Feature {index} is missing required source fields: {sorted(missing_required)}"
+            )
         nid_id, fid = properties.get("nidId"), properties.get("fid")
         if not isinstance(nid_id, str) or not re.fullmatch(r"[A-Za-z0-9_-]+", nid_id):
             raise ValueError(f"Feature {index} has an invalid nidId")
+        if fid is None:
+            fid = index
+        elif isinstance(fid, str) and fid.isdigit():
+            fid = int(fid)
         if not isinstance(fid, int) or isinstance(fid, bool) or fid < 0:
             raise ValueError(f"Feature {index} has an invalid fid")
         item_id = f"{nid_id}-{fid}"
@@ -318,22 +427,25 @@ def build_collection(
         if not isinstance(geometry, dict) or geometry.get("type") != "Point":
             raise ValueError(f"Feature {index} must have a Point geometry")
         point = geometry.get("coordinates")
-        if not isinstance(point, list) or len(point) != 2 or not all(
-            isinstance(value, (int, float)) and not isinstance(value, bool)
-            for value in point
+        if (
+            not isinstance(point, list)
+            or len(point) != 2
+            or not all(
+                isinstance(value, (int, float)) and not isinstance(value, bool)
+                for value in point
+            )
         ):
             raise ValueError(f"Feature {index} must have two numeric coordinates")
         lon, lat = transformer.transform(*point)
         if not (
-            math.isfinite(lon) and math.isfinite(lat)
-            and -180 <= lon <= 180 and -90 <= lat <= 90
+            math.isfinite(lon)
+            and math.isfinite(lat)
+            and -180 <= lon <= 180
+            and -90 <= lat <= 90
         ):
             raise ValueError(f"Feature {index} has invalid WGS84 coordinates")
         updated = properties.get("dataUpdated")
-        if not isinstance(updated, str):
-            raise ValueError(f"Feature {index} is missing a dataUpdated date")
-        updated_date = date.fromisoformat(updated)
-        timestamp = f"{updated_date.isoformat()}T00:00:00Z"
+        timestamp = normalized_item_timestamp(updated)
         xs.append(lon)
         ys.append(lat)
         updates.append(timestamp)
@@ -342,10 +454,12 @@ def build_collection(
         asset_path = item_dir / f"{item_id}.geojson"
         item_parent_href = relative_href(output, item_path)
         wgs84_geometry = {"type": "Point", "coordinates": [lon, lat]}
+        mapped_properties = {key: properties.get(key) for key in ITEM_PROPERTY_LABELS}
         item_properties = {
             (f"dam:{label}" if key in MEASUREMENT_KEYS else label): (
-                measurement(properties[key], key, index)
-                if key in MEASUREMENT_KEYS else properties[key]
+                measurement(mapped_properties[key], key, index)
+                if key in MEASUREMENT_KEYS
+                else mapped_properties[key]
             )
             for key, label in ITEM_PROPERTY_LABELS.items()
         }
@@ -360,9 +474,12 @@ def build_collection(
         if properties.get("hasDamPhotoId") == "Yes":
             thumbnail_url = thumbnail_urls.get(nid_id)
             if not isinstance(thumbnail_url, str) or not (
-                urlparse(thumbnail_url).scheme == "https" and urlparse(thumbnail_url).netloc
+                urlparse(thumbnail_url).scheme == "https"
+                and urlparse(thumbnail_url).netloc
             ):
-                raise ValueError(f"No cached HTTPS thumbnail for {nid_id}; use --refresh-thumbnails")
+                raise ValueError(
+                    f"No cached HTTPS thumbnail for {nid_id}; use --refresh-thumbnails"
+                )
             thumbnail = {
                 "href": thumbnail_url,
                 "roles": ["thumbnail"],
@@ -391,7 +508,11 @@ def build_collection(
             "assets": assets,
             "links": [
                 {"rel": "self", "href": item_path.name, "type": "application/geo+json"},
-                {"rel": "collection", "href": item_parent_href, "type": "application/json"},
+                {
+                    "rel": "collection",
+                    "href": item_parent_href,
+                    "type": "application/json",
+                },
                 {"rel": "parent", "href": item_parent_href, "type": "application/json"},
                 {
                     "rel": "root",
@@ -418,33 +539,32 @@ def build_collection(
             "geometry": wgs84_geometry,
         }
         entries.append((item_path, item, asset_path, asset))
-        collection_links.append({
-            "rel": "item",
-            "href": relative_href(item_path, output),
-            "type": "application/geo+json",
-        })
+        collection_links.append(
+            {
+                "rel": "item",
+                "href": relative_href(item_path, output),
+                "type": "application/geo+json",
+            }
+        )
 
+    title, description, keywords = collection_metadata(source, features)
     collection = {
         "type": "Collection",
         "stac_version": "1.1.0",
         "stac_extensions": [VERSION_EXTENSION_URL],
         "version": version,
         "id": collection_id,
-        "title": "National Inventory of Dams: Allegheny watershed (HUC4 0501)",
-        "description": (
-            "USACE National Inventory of Dams points selected for the Allegheny "
-            "watershed (HUC4 0501). Temporal extent represents record-level "
-            "dataUpdated dates, not construction or observation dates. "
-            "Source records are not filtered by their own HUC4 attribute. "
-            f"Source inventory retrieved from NID downloads on {SOURCE_RETRIEVED_ON}."
-        ),
+        "title": title,
+        "description": description,
         "license": "other",
-        "keywords": ["dams", "National Inventory of Dams", "Allegheny", "HUC4 0501"],
-        "providers": [{
-            "name": "U.S. Army Corps of Engineers",
-            "roles": ["producer"],
-            "url": "https://nid.sec.usace.army.mil/",
-        }],
+        "keywords": keywords,
+        "providers": [
+            {
+                "name": "U.S. Army Corps of Engineers",
+                "roles": ["producer"],
+                "url": "https://nid.sec.usace.army.mil/",
+            }
+        ],
         "extent": {
             "spatial": {"bbox": [[min(xs), min(ys), max(xs), max(ys)]]},
             "temporal": {"interval": [[min(updates), max(updates)]]},
@@ -471,13 +591,20 @@ def write_json(path: Path, document: dict) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("source", type=Path, help="NID GeoJSON FeatureCollection")
-    parser.add_argument("--output", type=Path, help="Collection JSON (default: beside source)")
-    parser.add_argument("--source-href", help="Published absolute URL/URI for original GeoJSON")
-    parser.add_argument("--id", dest="collection_id", help="Collection ID (default: source stem)")
+    parser.add_argument(
+        "--output", type=Path, help="Collection JSON (default: beside source)"
+    )
+    parser.add_argument(
+        "--source-href", help="Published absolute URL/URI for original GeoJSON"
+    )
+    parser.add_argument(
+        "--id", dest="collection_id", help="Collection ID (default: source stem)"
+    )
     parser.add_argument("--parent-href", help="URL/URI of containing watershed Catalog")
     parser.add_argument("--root-href", help="URL/URI of root Catalog")
     parser.add_argument(
-        "--version", default="1.0",
+        "--version",
+        default="1.0",
         help="Collection version (X.Y; legacy X.Y.Z is normalized to X.Y)",
     )
     parser.add_argument(
@@ -487,7 +614,9 @@ def main() -> None:
     )
     args = parser.parse_args()
     output = args.output or args.source.with_suffix(".collection.json")
-    thumbnail_urls = fetch_thumbnail_urls(args.source) if args.refresh_thumbnails else None
+    thumbnail_urls = (
+        fetch_thumbnail_urls(args.source) if args.refresh_thumbnails else None
+    )
     collection, entries = build_collection(
         args.source,
         output,

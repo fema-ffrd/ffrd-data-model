@@ -239,10 +239,11 @@ class NidCollectionTest(unittest.TestCase):
             source.write_text(json.dumps(data), encoding="utf-8")
             with self.assertRaisesRegex(ValueError, "Duplicate dam Item ID"):
                 build_collection(source, Path(directory) / "collection.json")
-            del data["features"][0]["properties"]["maxStorage"]
+            del data["features"][0]["properties"]["dataUpdated"]
             source.write_text(json.dumps(data), encoding="utf-8")
-            with self.assertRaisesRegex(ValueError, "missing Item fields"):
+            with self.assertRaisesRegex(ValueError, "missing required source fields"):
                 build_collection(source, Path(directory) / "collection.json")
+            data["features"][0]["properties"]["dataUpdated"] = "2020-01-01"
             data["features"][0]["properties"]["maxStorage"] = "not a number"
             source.write_text(json.dumps(data), encoding="utf-8")
             with self.assertRaisesRegex(ValueError, "Feature 0 has invalid maxStorage"):

@@ -1,12 +1,17 @@
-# NID Dams STAC Collection
+# Dams STAC Collections
 
-`create_nid_collection.py` turns NID GeoJSON into a
-**STAC 1.1 Collection with one Item per dam**. Each Item has a WGS84 point
-geometry and a single-dam GeoJSON data asset. The Collection links all 239
-Items and retains a link to the original NAD83 (EPSG:4269) inventory.
+This directory includes two generators:
 
-Allegheny watershed (HUC-4 0501) NID GeoJSON is included as an example
-input dataset.
+- `create_nid_collection.py` for NID dam inventory GeoJSON.
+- `create_lhdi_collection.py` for low-head dam inventory GeoJSON.
+
+Both produce a **STAC 1.1 Collection with one Item per feature**, convert
+point geometry to WGS84, and write a single-feature GeoJSON data asset
+beside each Item JSON.
+
+Example source data now lives under:
+
+- `metadata/examples/dams/0501_allegheny_nid-dams.geojson`
 
 ## Generate the catalog
 
@@ -14,20 +19,23 @@ From the repository root, using [uv](https://docs.astral.sh/uv/) and `pyproj`:
 
 ```bash
 uv run --no-project --with pyproj python metadata/utils/dams/create_nid_collection.py \
-  metadata/utils/dams/0501_allegheny_nid-dams.geojson
+  metadata/examples/dams/0501_allegheny_nid-dams.geojson
 ```
 
-The default output sits beside the source file:
+Typical local output for NID dams:
 
 | Output | Contents |
 | --- | --- |
-| `0501_allegheny_nid-dams.collection.json` | Collection and links to every Item. |
-| `0501_allegheny_nid-dams.collection-items/` | One `.json` Item and one `.geojson` data asset per dam. |
+| `nid-dams.collection.json` | Collection and links to every Item. |
+| `nid-dams/` | One `.json` Item and one `.geojson` data asset per dam. |
 
-Links within this layout are relative. The generated Collection and Item
-**JSON files are Git-ignored**; regenerate them before publishing. The
-original inventory and per-dam GeoJSON assets retain all source attributes
-and field names.
+Links within this layout are relative. The generated Collection and Item JSON
+files are intended to be regenerated before publish.
+
+You can set the output collection path and output item directory name with:
+
+- `--output` (collection file path)
+- `--id` (collection id; also used for item directory name)
 
 The Collection's STAC Version extension field defaults to `version: "1.0"`.
 Use `--version 1.1` to set another release version. Legacy `X.Y.Z` input is
@@ -88,7 +96,7 @@ known condition is true, `null` if the answer remains uncertain, and false
 otherwise. `ffrd:` and `ffrd_screening:` are local property namespaces, not
 declared STAC extensions.
 
-## Source, photos, and dates
+## Source, photos, and dates (NID generator)
 
 The source inventory was retrieved from
 [NID downloads](https://nid.sec.usace.army.mil/nid/#/downloads) on
@@ -103,33 +111,45 @@ instead midnight UTC on that record's `dataUpdated` date; the Collection
 temporal extent spans these **record update dates**, not construction or
 observation dates.
 
-Items with a photo have a `thumbnail` asset using the NID API's
-`thumbnailUrl`. The URLs live in `thumbnail_urls.json` so normal generation
-works offline. To fetch them again, add `--refresh-thumbnails`; the command
-requires API access and fails if a photo-flagged record lacks a valid
-thumbnail. Items without a photo have no thumbnail asset.
+Items with a photo have a `thumbnail` asset using the NID API `thumbnailUrl`.
+URLs are cached in `thumbnail_urls.json`. To refresh cache, add
+`--refresh-thumbnails`.
 
 **Source quirks:** Item IDs use `nidId-fid` because one `nidId` appears
 twice. Two records have HUC4 values outside `0501`; the script preserves all
 239 records and computes the Collection extent from them.
 
+## Low-head dam generator
+
+Generate low-head dam STAC from a low-head inventory GeoJSON:
+
+```bash
+uv run --no-project --with pyproj python metadata/utils/dams/create_lhdi_collection.py \
+  dams/1019_south_platte_nid-low-head-dams.geojson \
+  --output dams/nid-low-head-dams.collection.json \
+  --id nid-low-head-dams
+```
+
+Low-head item pages use:
+
+- `https://nid.sec.usace.army.mil/lhdi/dams/{lhdId}`
+
+The current low-head generator does not add thumbnail assets.
+
 ## Publish within a larger catalog
 
 ```bash
 uv run --no-project --with pyproj python metadata/utils/dams/create_nid_collection.py \
-  metadata/utils/dams/0501_allegheny_nid-dams.geojson \
+  metadata/examples/dams/0501_allegheny_nid-dams.geojson \
   --output /path/to/catalog/dams/collection.json \
   --source-href https://example.org/data/0501_allegheny_nid-dams.geojson \
   --parent-href https://example.org/catalog/allegheny-0501.json \
   --root-href https://example.org/catalog/catalog.json
 ```
 
-Publish the Collection JSON **and** its adjacent `collection-items/`
-directory. Add a `rel=child` link from the containing Catalog; this script
-does not edit that Catalog. Publish the original inventory separately if
-using `--source-href`; otherwise keep its relative path to the Collection
-intact. `--id` changes the Collection ID. Without `--root-href`, a supplied
-`--parent-href` is treated as the root Catalog.
+Publish the Collection JSON and its item directory (for example `nid-dams/`)
+together. Add a `rel=child` link from the containing Catalog; the generator
+does not edit parent catalogs.
 
 The Collection uses `license: other` because the source license has not
 been established. Confirm and update it before publication.

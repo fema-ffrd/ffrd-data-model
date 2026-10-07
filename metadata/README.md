@@ -40,7 +40,7 @@ Shared properties are defined by [global.profile.yaml](schemas/global.profile.ya
 | Model | models-hms | [hms.profile.yaml](schemas/models/hms.profile.yaml) | [big-thompson-hms-v1.0.json](examples/calibration/hydrology/big-thompson/v1.0/big-thompson-hms-v1.0.json) | [create_hms_stac.py](utils/models/create_hms_stac.py) |
 | Model | models-ressim | [ressim.profile.yaml](schemas/models/ressim.profile.yaml) | — | — |
 | Basin data | basin-data-terrain | [basin-data-terrain.profile.yaml](schemas/basin-data-terrain.profile.yaml) | [collection-v1.0.json](examples/terrain-base/test-96ft-v1.0/collection-v1.0.json) | [s3-stac_item_from_tiff.py](utils/terrain/s3-stac_item_from_tiff.py) |
-| Basin data | basin-data-dams | [basin-data-dams.profile.yaml](schemas/basin-data-dams.profile.yaml) | — | [create_nid_collection.py](utils/dams/create_nid_collection.py) |
+| Basin data | basin-data-dams | [basin-data-dams.profile.yaml](schemas/basin-data-dams.profile.yaml) | [0501_allegheny_nid-dams.geojson](examples/dams/0501_allegheny_nid-dams.geojson) | [create_nid_collection.py](utils/dams/create_nid_collection.py), [create_lhdi_collection.py](utils/dams/create_lhdi_collection.py) |
 | Basin data | basin-data-levees | [basin-data-levees.profile.yaml](schemas/basin-data-levees.profile.yaml) | — | — |
 | Basin data | basin-data-fishnet | [basin-data-fishnet.profile.yaml](schemas/basin-data-fishnet.profile.yaml) | — | — |
 | Basin data | basin-data-lulc | [basin-data-lulc.profile.yaml](schemas/basin-data-lulc.profile.yaml) | [collection-v0.1.json](examples/basin-data/landcover/collection-v0.1.json) | [create_basin_data_stac.py](utils/basin-data/create_basin_data_stac.py) |
