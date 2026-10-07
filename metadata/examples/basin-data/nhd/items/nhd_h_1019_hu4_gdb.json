@@ -1,0 +1,302 @@
+{
+  "type": "Feature",
+  "stac_version": "1.1.0",
+  "stac_extensions": [
+    "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
+    "https://stac-extensions.github.io/version/v1.2.0/schema.json"
+  ],
+  "id": "nhd_h_1019_hu4_gdb",
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          -106.19777,
+          38.784549
+        ],
+        [
+          -100.678642,
+          38.784549
+        ],
+        [
+          -100.678642,
+          41.474195
+        ],
+        [
+          -106.19777,
+          41.474195
+        ],
+        [
+          -106.19777,
+          38.784549
+        ]
+      ]
+    ]
+  },
+  "bbox": [
+    -106.19777,
+    38.784549,
+    -100.678642,
+    41.474195
+  ],
+  "properties": {
+    "title": "NHD_H_1019_HU4_GDB.zip",
+    "source_prefix": "s3://south-platte/basin-data/nhd/",
+    "zip_member_count": 199,
+    "zip:asset_name": "NHD_H_1019_HU4_GDB.zip",
+    "zip:analysis": {
+      "geospatial_dataset": {
+        "inner_path": "NHD_H_1019_HU4_GDB.gdb",
+        "bbox_source_layer": "NHDWaterbody",
+        "layer_count": 31,
+        "layers": [
+          {
+            "name": "ExternalCrosswalk",
+            "geometry_type": "None"
+          },
+          {
+            "name": "NHDFCode",
+            "geometry_type": "None"
+          },
+          {
+            "name": "NHDFeatureToMetadata",
+            "geometry_type": "None"
+          },
+          {
+            "name": "NHDFlow",
+            "geometry_type": "None"
+          },
+          {
+            "name": "NHDFlowlineVAA",
+            "geometry_type": "None"
+          },
+          {
+            "name": "NHDMetadata",
+            "geometry_type": "None"
+          },
+          {
+            "name": "NHDProcessingParameters",
+            "geometry_type": "None"
+          },
+          {
+            "name": "NHDReachCodeMaintenance",
+            "geometry_type": "None"
+          },
+          {
+            "name": "NHDReachCrossReference",
+            "geometry_type": "None"
+          },
+          {
+            "name": "NHDSourceCitation",
+            "geometry_type": "None"
+          },
+          {
+            "name": "NHDStatus",
+            "geometry_type": "None"
+          },
+          {
+            "name": "NHDVerticalRelationship",
+            "geometry_type": "None"
+          },
+          {
+            "name": "CLIPPOLY",
+            "geometry_type": "Multi Polygon"
+          },
+          {
+            "name": "NHDWaterbody",
+            "geometry_type": "3D Multi Polygon"
+          },
+          {
+            "name": "NHDPointEventFC",
+            "geometry_type": "Point"
+          },
+          {
+            "name": "NHDPoint",
+            "geometry_type": "3D Point"
+          },
+          {
+            "name": "NHDLineEventFC",
+            "geometry_type": "Multi Line String"
+          },
+          {
+            "name": "NHDLine",
+            "geometry_type": "3D Multi Line String"
+          },
+          {
+            "name": "NHDFlowline",
+            "geometry_type": "3D Measured Multi Line String"
+          },
+          {
+            "name": "NHDAreaEventFC",
+            "geometry_type": "Multi Polygon"
+          },
+          {
+            "name": "NHDArea",
+            "geometry_type": "3D Multi Polygon"
+          },
+          {
+            "name": "WBDLine",
+            "geometry_type": "Multi Line String"
+          },
+          {
+            "name": "WBDHU8",
+            "geometry_type": "Multi Polygon"
+          },
+          {
+            "name": "WBDHU6",
+            "geometry_type": "Multi Polygon"
+          },
+          {
+            "name": "WBDHU4",
+            "geometry_type": "Multi Polygon"
+          },
+          {
+            "name": "WBDHU2",
+            "geometry_type": "Multi Polygon"
+          },
+          {
+            "name": "WBDHU16",
+            "geometry_type": "Multi Polygon"
+          },
+          {
+            "name": "WBDHU14",
+            "geometry_type": "Multi Polygon"
+          },
+          {
+            "name": "WBDHU12",
+            "geometry_type": "Multi Polygon"
+          },
+          {
+            "name": "WBDHU10",
+            "geometry_type": "Multi Polygon"
+          },
+          {
+            "name": "HYDRO_NET_Junctions",
+            "geometry_type": "Point"
+          }
+        ]
+      },
+      "table_summary": {
+        "table_names": [
+          "ExternalCrosswalk",
+          "NHDFCode",
+          "NHDFeatureToMetadata",
+          "NHDFlow",
+          "NHDFlowlineVAA",
+          "NHDMetadata",
+          "NHDProcessingParameters",
+          "NHDReachCodeMaintenance",
+          "NHDReachCrossReference",
+          "NHDSourceCitation",
+          "NHDStatus",
+          "NHDVerticalRelationship",
+          "CLIPPOLY",
+          "NHDWaterbody",
+          "NHDPointEventFC",
+          "NHDPoint",
+          "NHDLineEventFC",
+          "NHDLine",
+          "NHDFlowline",
+          "NHDAreaEventFC",
+          "NHDArea",
+          "WBDLine",
+          "WBDHU8",
+          "WBDHU6",
+          "WBDHU4",
+          "WBDHU2",
+          "WBDHU16",
+          "WBDHU14",
+          "WBDHU12",
+          "WBDHU10",
+          "HYDRO_NET_Junctions"
+        ],
+        "table_count": 31
+      },
+      "asset": {
+        "key": "NHD_H_1019_HU4_GDB.zip",
+        "name": "NHD_H_1019_HU4_GDB.zip",
+        "href": "s3://south-platte/basin-data/nhd/NHD_H_1019_HU4_GDB.zip"
+      }
+    },
+    "version": "1.0",
+    "deprecated": false,
+    "proj:epsg": 4326,
+    "proj:wkt2": "GEOGCRS[\"WGS 84\",ENSEMBLE[\"World Geodetic System 1984 ensemble\",MEMBER[\"World Geodetic System 1984 (Transit)\"],MEMBER[\"World Geodetic System 1984 (G730)\"],MEMBER[\"World Geodetic System 1984 (G873)\"],MEMBER[\"World Geodetic System 1984 (G1150)\"],MEMBER[\"World Geodetic System 1984 (G1674)\"],MEMBER[\"World Geodetic System 1984 (G1762)\"],MEMBER[\"World Geodetic System 1984 (G2139)\"],MEMBER[\"World Geodetic System 1984 (G2296)\"],ELLIPSOID[\"WGS 84\",6378137,298.257223563,LENGTHUNIT[\"metre\",1]],ENSEMBLEACCURACY[2.0]],PRIMEM[\"Greenwich\",0,ANGLEUNIT[\"degree\",0.0174532925199433]],CS[ellipsoidal,2],AXIS[\"geodetic latitude (Lat)\",north,ORDER[1],ANGLEUNIT[\"degree\",0.0174532925199433]],AXIS[\"geodetic longitude (Lon)\",east,ORDER[2],ANGLEUNIT[\"degree\",0.0174532925199433]],USAGE[SCOPE[\"Horizontal component of 3D system.\"],AREA[\"World.\"],BBOX[-90,-180,90,180]],ID[\"EPSG\",4326]]",
+    "proj:bbox": [
+      -106.19777,
+      38.784549,
+      -100.678642,
+      41.474195
+    ],
+    "proj:geometry": {
+      "type": "Polygon",
+      "coordinates": [
+        [
+          [
+            -106.19777,
+            38.784549
+          ],
+          [
+            -100.678642,
+            38.784549
+          ],
+          [
+            -100.678642,
+            41.474195
+          ],
+          [
+            -106.19777,
+            41.474195
+          ],
+          [
+            -106.19777,
+            38.784549
+          ]
+        ]
+      ]
+    },
+    "datetime": "2026-09-24T14:28:49Z"
+  },
+  "links": [
+    {
+      "rel": "self",
+      "href": "items/nhd_h_1019_hu4_gdb.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "root",
+      "href": "../collection.json",
+      "type": "application/json",
+      "title": "nhd"
+    },
+    {
+      "rel": "parent",
+      "href": "../collection.json",
+      "type": "application/json",
+      "title": "nhd"
+    },
+    {
+      "rel": "collection",
+      "href": "../collection.json",
+      "type": "application/json",
+      "title": "nhd"
+    },
+    {
+      "rel": "latest-version",
+      "href": "items/nhd_h_1019_hu4_gdb.json",
+      "type": "application/geo+json"
+    }
+  ],
+  "assets": {
+    "NHD_H_1019_HU4_GDB.zip": {
+      "href": "s3://south-platte/basin-data/nhd/NHD_H_1019_HU4_GDB.zip",
+      "type": "application/zip",
+      "title": "NHD_H_1019_HU4_GDB.zip",
+      "file:size": 104623196,
+      "roles": [
+        "data"
+      ]
+    }
+  },
+  "collection": "nhd"
+}

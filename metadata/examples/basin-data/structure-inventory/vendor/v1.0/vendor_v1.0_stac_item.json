@@ -1,0 +1,488 @@
+{
+  "type": "Feature",
+  "stac_version": "1.1.0",
+  "stac_extensions": [
+    "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
+    "https://stac-extensions.github.io/version/v1.2.0/schema.json",
+    "https://stac-extensions.github.io/table/v1.2.0/schema.json"
+  ],
+  "id": "vendor-v1.0-market-basket-wkb",
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          -111.046728,
+          36.994518939
+        ],
+        [
+          -111.046728,
+          44.999268
+        ],
+        [
+          -95.376466,
+          44.999268
+        ],
+        [
+          -95.376466,
+          36.994518939
+        ],
+        [
+          -111.046728,
+          36.994518939
+        ]
+      ]
+    ]
+  },
+  "bbox": [
+    -111.046728,
+    36.994518939,
+    -95.376466,
+    44.999268
+  ],
+  "properties": {
+    "title": "vendor Market Basket Points v1.0",
+    "description": "vendor market basket points dataset v1.0 with UCMB and UNI portfolios in WKB format",
+    "created": "2026-08-25T17:17:00Z",
+    "updated": "2026-08-25T17:17:00Z",
+    "proj:code": "EPSG:3857",
+    "proj:geometry": {
+      "type": "Polygon",
+      "coordinates": [
+        [
+          [
+            -12362892.65,
+            4450380.03
+          ],
+          [
+            -12362892.65,
+            5621521.49
+          ],
+          [
+            -10619649.87,
+            5621521.49
+          ],
+          [
+            -10619649.87,
+            4450380.03
+          ],
+          [
+            -12362892.65,
+            4450380.03
+          ]
+        ]
+      ]
+    },
+    "proj:bbox": [
+      -12362892.65,
+      4450380.03,
+      -10619649.87,
+      5621521.49
+    ],
+    "version": "1.0",
+    "deprecated": false,
+    "datetime": "2026-08-25T17:17:00Z"
+  },
+  "links": [
+    {
+      "rel": "collection",
+      "href": "../../../collection.json",
+      "type": "application/json"
+    }
+  ],
+  "assets": {
+    "ucmb": {
+      "href": "s3://south-platte/basin-data/structure-inventory/vendor/v1.0/ucmb_wkb.parquet",
+      "type": "application/vnd.apache.parquet",
+      "title": "vendor UCMB Portfolio",
+      "description": "GeoParquet file containing vendor UCMB (Uncorrelated Market Basket) portfolio with WKB geometry in EPSG:3857",
+      "storage:platform": "s3",
+      "storage:region": "us-east-1",
+      "storage:requester_pays": false,
+      "storage:tier": "STANDARD",
+      "file:size": 203824498,
+      "parquet:num_rows": 2389796,
+      "parquet:num_columns": 24,
+      "parquet:compression": "snappy",
+      "access:endpoint": "https://s3.amazonaws.com",
+      "access:public": false,
+      "alternate": {
+        "https": {
+          "href": "https://s3.amazonaws.com/south-platte/basin-data/structure-inventory/vendor/v1.0/ucmb_wkb.parquet",
+          "title": "HTTPS download URL"
+        }
+      },
+      "roles": [
+        "data"
+      ],
+      "parquet:num_row_groups": 5,
+      "table:columns": [
+        {
+          "name": "accntnum",
+          "type": "string",
+          "min": "0-CO00000004",
+          "max": "1-WY00189268",
+          "null_count": 0
+        },
+        {
+          "name": "location",
+          "type": "string",
+          "min": "CO00000001",
+          "max": "WY00189268",
+          "null_count": 0
+        },
+        {
+          "name": "BLDG_DED",
+          "type": "int64",
+          "min": "0",
+          "max": "10000",
+          "null_count": 0
+        },
+        {
+          "name": "BLDG_LIMIT",
+          "type": "int64",
+          "min": "0",
+          "max": "250000",
+          "null_count": 0
+        },
+        {
+          "name": "CNT_DED",
+          "type": "int64",
+          "min": "0",
+          "max": "10000",
+          "null_count": 0
+        },
+        {
+          "name": "CNT_LIMIT",
+          "type": "int64",
+          "min": "0",
+          "max": "100000",
+          "null_count": 0
+        },
+        {
+          "name": "STATE",
+          "type": "string",
+          "min": "CO",
+          "max": "WY",
+          "null_count": 0
+        },
+        {
+          "name": "POSTCODE",
+          "type": "int64",
+          "min": "51557.0",
+          "max": "83414.0",
+          "null_count": 227
+        },
+        {
+          "name": "COUNTRY",
+          "type": "string",
+          "min": "US",
+          "max": "US",
+          "null_count": 0
+        },
+        {
+          "name": "LON",
+          "type": "double",
+          "min": "-111.046728",
+          "max": "-95.376466",
+          "null_count": 0
+        },
+        {
+          "name": "LAT",
+          "type": "double",
+          "min": "36.994518939",
+          "max": "44.999268",
+          "null_count": 0
+        },
+        {
+          "name": "BLDG_VALUE",
+          "type": "int64",
+          "min": "0",
+          "max": "2289000",
+          "null_count": 0
+        },
+        {
+          "name": "CNT_VALUE",
+          "type": "int64",
+          "min": "0",
+          "max": "1491978",
+          "null_count": 0
+        },
+        {
+          "name": "CONSTR_CODE",
+          "type": "int64",
+          "min": "1",
+          "max": "2",
+          "null_count": 0
+        },
+        {
+          "name": "NUM_STORIES",
+          "type": "int64",
+          "min": "1",
+          "max": "3",
+          "null_count": 0
+        },
+        {
+          "name": "YEAR_BUILT",
+          "type": "int64",
+          "min": "1800",
+          "max": "2017",
+          "null_count": 0
+        },
+        {
+          "name": "foundationtype",
+          "type": "int64",
+          "min": "2",
+          "max": "9",
+          "null_count": 0
+        },
+        {
+          "name": "BasementFinishType",
+          "type": "int64",
+          "min": "0",
+          "max": "1",
+          "null_count": 0
+        },
+        {
+          "name": "FIRST_FLOOR_ELEV",
+          "type": "int64",
+          "min": "0",
+          "max": "15",
+          "null_count": 0
+        },
+        {
+          "name": "BASE_FLOOD_ELEV",
+          "type": "string",
+          "min": "1000",
+          "max": "unknown",
+          "null_count": 0
+        },
+        {
+          "name": "elev_ft",
+          "type": "double",
+          "min": "859.97476505",
+          "max": "12904.486482",
+          "null_count": 0
+        },
+        {
+          "name": "x",
+          "type": "double",
+          "min": "-111.046728",
+          "max": "-95.376466",
+          "null_count": 0
+        },
+        {
+          "name": "y",
+          "type": "double",
+          "min": "36.994518939",
+          "max": "44.999268",
+          "null_count": 0
+        },
+        {
+          "name": "geometry",
+          "type": "binary",
+          "min": "",
+          "max": "",
+          "null_count": 0
+        }
+      ]
+    },
+    "uni": {
+      "href": "s3://south-platte/basin-data/structure-inventory/vendor/v1.0/uni_wkb.parquet",
+      "type": "application/vnd.apache.parquet",
+      "title": "vendor UNI Portfolio",
+      "description": "GeoParquet file containing vendor UNI (Uniform) portfolio with WKB geometry in EPSG:3857",
+      "storage:platform": "s3",
+      "storage:region": "us-east-1",
+      "storage:requester_pays": false,
+      "storage:tier": "STANDARD",
+      "file:size": 148174989,
+      "parquet:num_rows": 2389796,
+      "parquet:num_columns": 24,
+      "parquet:compression": "snappy",
+      "access:endpoint": "https://s3.amazonaws.com",
+      "access:public": false,
+      "alternate": {
+        "https": {
+          "href": "https://s3.amazonaws.com/south-platte/basin-data/structure-inventory/vendor/v1.0/uni_wkb.parquet",
+          "title": "HTTPS download URL"
+        }
+      },
+      "roles": [
+        "data"
+      ],
+      "parquet:num_row_groups": 5,
+      "table:columns": [
+        {
+          "name": "accntnum",
+          "type": "string",
+          "min": "CO00000001",
+          "max": "WY00189268",
+          "null_count": 0
+        },
+        {
+          "name": "location",
+          "type": "string",
+          "min": "CO00000001",
+          "max": "WY00189268",
+          "null_count": 0
+        },
+        {
+          "name": "BLDG_DED",
+          "type": "int64",
+          "min": "1500",
+          "max": "1500",
+          "null_count": 0
+        },
+        {
+          "name": "BLDG_LIMIT",
+          "type": "int64",
+          "min": "200000",
+          "max": "200000",
+          "null_count": 0
+        },
+        {
+          "name": "CNT_DED",
+          "type": "int64",
+          "min": "1500",
+          "max": "1500",
+          "null_count": 0
+        },
+        {
+          "name": "CNT_LIMIT",
+          "type": "int64",
+          "min": "50000",
+          "max": "50000",
+          "null_count": 0
+        },
+        {
+          "name": "STATE",
+          "type": "string",
+          "min": "CO",
+          "max": "WY",
+          "null_count": 0
+        },
+        {
+          "name": "POSTCODE",
+          "type": "int64",
+          "min": "51557.0",
+          "max": "83414.0",
+          "null_count": 227
+        },
+        {
+          "name": "COUNTRY",
+          "type": "string",
+          "min": "US",
+          "max": "US",
+          "null_count": 0
+        },
+        {
+          "name": "LON",
+          "type": "double",
+          "min": "-111.046728",
+          "max": "-95.376466",
+          "null_count": 0
+        },
+        {
+          "name": "LAT",
+          "type": "double",
+          "min": "36.994518939",
+          "max": "44.999268",
+          "null_count": 0
+        },
+        {
+          "name": "BLDG_VALUE",
+          "type": "int64",
+          "min": "200000",
+          "max": "200000",
+          "null_count": 0
+        },
+        {
+          "name": "CNT_VALUE",
+          "type": "int64",
+          "min": "50000",
+          "max": "50000",
+          "null_count": 0
+        },
+        {
+          "name": "CONSTR_CODE",
+          "type": "int64",
+          "min": "1",
+          "max": "1",
+          "null_count": 0
+        },
+        {
+          "name": "NUM_STORIES",
+          "type": "int64",
+          "min": "1",
+          "max": "1",
+          "null_count": 0
+        },
+        {
+          "name": "YEAR_BUILT",
+          "type": "int64",
+          "min": "1990",
+          "max": "1990",
+          "null_count": 0
+        },
+        {
+          "name": "foundationtype",
+          "type": "int64",
+          "min": "8",
+          "max": "8",
+          "null_count": 0
+        },
+        {
+          "name": "BasementFinishType",
+          "type": "int64",
+          "min": "0",
+          "max": "0",
+          "null_count": 0
+        },
+        {
+          "name": "FIRST_FLOOR_ELEV",
+          "type": "int64",
+          "min": "1",
+          "max": "1",
+          "null_count": 0
+        },
+        {
+          "name": "BASE_FLOOD_ELEV",
+          "type": "string",
+          "min": "1000",
+          "max": "unknown",
+          "null_count": 0
+        },
+        {
+          "name": "elev_ft",
+          "type": "double",
+          "min": "859.97476505",
+          "max": "12904.486482",
+          "null_count": 0
+        },
+        {
+          "name": "x",
+          "type": "double",
+          "min": "-111.046728",
+          "max": "-95.376466",
+          "null_count": 0
+        },
+        {
+          "name": "y",
+          "type": "double",
+          "min": "36.994518939",
+          "max": "44.999268",
+          "null_count": 0
+        },
+        {
+          "name": "geometry",
+          "type": "binary",
+          "min": "",
+          "max": "",
+          "null_count": 0
+        }
+      ]
+    }
+  },
+  "collection": "structure-inventory"
+}

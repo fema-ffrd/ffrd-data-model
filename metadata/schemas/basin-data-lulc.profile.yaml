@@ -1,0 +1,28 @@
+profile:
+  id: basin-data-lulc
+  version: 0.1
+  description: Metadata profile for land use / land cover datasets.
+
+collection:
+  required:
+    assets:
+      - key: README.md
+        type: text/markdown
+  recommended:
+    native_properties:
+      - name: source_prefix
+        description: S3 prefix for LULC source data.
+      - name: classification_scheme
+        description: LULC classification scheme identifier.
+
+item:
+  required:
+    links: []
+  recommended:
+    native_properties:
+      - name: thematic_classification
+        description: Thematic class system for landcover categories.
+      - name: class_mapping_reference
+        description: Reference to class mapping table or documentation.
+      - name: effective_date
+        description: Effective date of the classification snapshot.

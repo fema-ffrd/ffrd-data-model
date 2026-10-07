@@ -1,0 +1,26 @@
+profile:
+  id: basin-data-fema
+  version: 0.1
+  description: FFRD profile for FEMA basin-data collections.
+
+collection:
+  required:
+    assets:
+      - key: README.md
+        type: text/markdown
+  recommended:
+    native_properties:
+      - name: source_prefix
+        description: S3 prefix for FEMA source data.
+
+item:
+  required:
+    links: []
+  recommended:
+    native_properties:
+      - name: title
+        description: Source archive name for the item.
+      - name: source_prefix
+        description: S3 prefix for source dataset ingestion.
+      - name: datetime
+        description: Item timestamp.

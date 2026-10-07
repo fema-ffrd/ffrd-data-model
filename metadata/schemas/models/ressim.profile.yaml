@@ -1,0 +1,28 @@
+profile:
+  id: models-ressim
+  version: 0.1
+  description: Metadata profile for ResSIM model metadata.
+
+collection:
+  required:
+    assets:
+      - key: README.md
+        type: text/markdown
+  recommended:
+    native_properties:
+      - name: source_prefix
+        description: Source prefix where ResSIM assets are discovered.
+
+item:
+  required:
+    links: []
+  recommended:
+    native_properties:
+      - name: datetime
+        description: Item timestamp.
+      - name: reservoir_identifier
+        description: Reservoir identifier used by the ResSIM model.
+      - name: operations_scenario
+        description: Operations scenario represented by the item.
+      - name: source_lineage
+        description: Source lineage reference for model inputs and outputs.
