@@ -1,0 +1,160 @@
+{
+  "type": "Collection",
+  "stac_version": "1.1.0",
+  "stac_extensions": [
+    "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
+    "https://stac-extensions.github.io/version/v1.2.0/schema.json"
+  ],
+  "id": "basin-data",
+  "title": "Basin Data",
+  "description": "Basin Data stores all official shared datasets for the project, delivered in the scoping and data preparation phase. A Data Manifest table will be maintained at the basin-data root to list all included data along with key attributes for each dataset. Ad-hoc sharing of unofficial data shall not be posted to basin-data.",
+  "version": "0.1",
+  "experimental": true,
+  "license": "proprietary",
+  "extent": {
+    "spatial": {
+      "bbox": [[-180, 18.9, 180, 71.6]]
+    },
+    "temporal": {
+      "interval": [[null, null]]
+    }
+  },
+  "ffrd": {
+    "catalog_type": "development",
+    "specification_version": "0.1.0",
+    "extent_is_placeholder": true,
+    "decision_status": "proposed"
+  },
+  "links": [
+    {
+      "rel": "root",
+      "href": "../catalog-v1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "parent",
+      "href": "../catalog-v1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "self",
+      "href": "./collection-v.0.1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "child",
+      "href": "./bathymetry/collection-v.0.1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "child",
+      "href": "./coastal/collection-v.0.1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "child",
+      "href": "./dams/collection-v.0.1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "child",
+      "href": "./elevation-derived-hydrography/collection-v.0.1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "child",
+      "href": "./existing-models/collection-v.0.1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "child",
+      "href": "./existing-reports-and-references/collection-v.0.1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "child",
+      "href": "./fema/collection-v.0.1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "child",
+      "href": "./flood-imagery/collection-v.0.1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "child",
+      "href": "./government-boundaries/collection-v.0.1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "child",
+      "href": "./landcover/collection-v.0.1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "child",
+      "href": "./levee-data/collection-v.0.1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "child",
+      "href": "./nhd/collection-v.0.1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "child",
+      "href": "./observed-data/collection-v.0.1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "child",
+      "href": "./other/collection-v.0.1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "child",
+      "href": "./project-scoping/collection-v.0.1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "child",
+      "href": "./risk-data/collection-v.0.1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "child",
+      "href": "./soils/collection-v.0.1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "child",
+      "href": "./storm-catalog/collection-v.0.1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "child",
+      "href": "./stream-gages/collection-v.0.1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "child",
+      "href": "./structure-inventory/collection-v.0.1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "child",
+      "href": "./transportation/collection-v.0.1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "child",
+      "href": "./vertical-datum-conversions/collection-v.0.1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "child",
+      "href": "./wbd/collection-v.0.1.json",
+      "type": "application/json"
+    }
+  ]
+}

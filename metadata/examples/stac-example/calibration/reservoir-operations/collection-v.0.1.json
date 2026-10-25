@@ -1,0 +1,46 @@
+{
+  "type": "Collection",
+  "stac_version": "1.1.0",
+  "stac_extensions": [
+    "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
+    "https://stac-extensions.github.io/version/v1.2.0/schema.json"
+  ],
+  "id": "calibration-reservoir-operations",
+  "title": "Reservoir Operations",
+  "description": "Reservoir Operations includes the reservoir-operations model resulting from the calibration phase. This model is promoted to conformance when review is complete and the calibration phase is closed out. Models should include all relevant files required to simulate the model on desktop, including all model files associated with historic events used for calibration and any referenced external data. The HEC-ResSim model should be placed within a subfolder of its own to ease file management. The archive holds draft and outdated model versions as updates are made. Archived models should be date stamped using basin-name_YYYYMMDD, for example trinity_20250314.",
+  "version": "0.1",
+  "experimental": true,
+  "license": "proprietary",
+  "extent": {
+    "spatial": { "bbox": [[-180, 18.9, 180, 71.6]] },
+    "temporal": { "interval": [[null, null]] }
+  },
+  "ffrd": {
+    "catalog_type": "development",
+    "specification_version": "0.1.0",
+    "extent_is_placeholder": true,
+    "decision_status": "proposed"
+  },
+  "links": [
+    {
+      "rel": "root",
+      "href": "../../catalog-v1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "parent",
+      "href": "../collection-v.0.1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "self",
+      "href": "./collection-v.0.1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "child",
+      "href": "./archive/collection-v.0.1.json",
+      "type": "application/json"
+    }
+  ]
+}

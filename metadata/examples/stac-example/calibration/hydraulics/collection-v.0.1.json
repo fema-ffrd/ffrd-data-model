@@ -1,0 +1,46 @@
+{
+  "type": "Collection",
+  "stac_version": "1.1.0",
+  "stac_extensions": [
+    "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
+    "https://stac-extensions.github.io/version/v1.2.0/schema.json"
+  ],
+  "id": "calibration-hydraulics",
+  "title": "Hydraulics",
+  "description": "Hydraulics includes HEC-RAS models organized by individual model unit for use in the conformance phase of modeling, with current model results from the calibration phase. Models should include all relevant files required to simulate the model on desktop, including all model files associated with historic events used for calibration. Any referenced DSS files, such as observed data used as boundary conditions, should be included. Observed data linked as reference, such as rating curves and flow and stage hydrographs, and associated land-use/cover files should also be included. Terrain files are stored separately in ffrd-basin > terrain-modeling. The archive holds draft and outdated model versions as updates are made. Archived models should be date stamped using model-unit_YYYYMMDD, for example kickapoo_20250314.",
+  "version": "0.1",
+  "experimental": true,
+  "license": "proprietary",
+  "extent": {
+    "spatial": { "bbox": [[-180, 18.9, 180, 71.6]] },
+    "temporal": { "interval": [[null, null]] }
+  },
+  "ffrd": {
+    "catalog_type": "development",
+    "specification_version": "0.1.0",
+    "extent_is_placeholder": true,
+    "decision_status": "proposed"
+  },
+  "links": [
+    {
+      "rel": "root",
+      "href": "../../catalog-v1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "parent",
+      "href": "../collection-v.0.1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "self",
+      "href": "./collection-v.0.1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "child",
+      "href": "./archive/collection-v.0.1.json",
+      "type": "application/json"
+    }
+  ]
+}

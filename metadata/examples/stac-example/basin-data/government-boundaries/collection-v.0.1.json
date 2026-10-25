@@ -1,0 +1,45 @@
+{
+  "type": "Collection",
+  "stac_version": "1.1.0",
+  "stac_extensions": [
+    "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
+    "https://stac-extensions.github.io/version/v1.2.0/schema.json"
+  ],
+  "id": "basin-data-government-boundaries",
+  "title": "Government Boundaries",
+  "description": "Government Boundaries includes geospatial data, such as shapefiles and raster data, of city, county, state, and other government boundaries. U.S. Census Bureau Urban Areas polygons are to be stored separately at basin-data/project-scoping/mesh-refinement-scope, as specified by the source README.",
+  "version": "0.1",
+  "experimental": true,
+  "license": "proprietary",
+  "extent": {
+    "spatial": {
+      "bbox": [[-180, 18.9, 180, 71.6]]
+    },
+    "temporal": {
+      "interval": [[null, null]]
+    }
+  },
+  "ffrd": {
+    "catalog_type": "development",
+    "specification_version": "0.1.0",
+    "extent_is_placeholder": true,
+    "decision_status": "proposed"
+  },
+  "links": [
+    {
+      "rel": "root",
+      "href": "../../catalog-v1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "parent",
+      "href": "../collection-v.0.1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "self",
+      "href": "./collection-v.0.1.json",
+      "type": "application/json"
+    }
+  ]
+}

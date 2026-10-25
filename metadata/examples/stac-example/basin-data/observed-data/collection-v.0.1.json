@@ -1,0 +1,45 @@
+{
+  "type": "Collection",
+  "stac_version": "1.1.0",
+  "stac_extensions": [
+    "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
+    "https://stac-extensions.github.io/version/v1.2.0/schema.json"
+  ],
+  "id": "basin-data-observed-data",
+  "title": "Observed Data",
+  "description": "Observed Data is a centralized compilation of official observed data for project use. Sources and availability vary by project location. This data is collected and curated during the Data Preparation Phase and adjusted based on QC efforts. It may include flow, stage, historic dam operations data, gridded precipitation, gridded SWE, gridded temperature, Annual Maximum Series, Uncertainty Bounds for Annual Maximum Series, and stage-discharge rating curve data. Stream gage location data in a geospatial format is stored separately at basin-data/project-scoping/calibration-metrics, as specified by the source README.",
+  "version": "0.1",
+  "experimental": true,
+  "license": "proprietary",
+  "extent": {
+    "spatial": {
+      "bbox": [[-180, 18.9, 180, 71.6]]
+    },
+    "temporal": {
+      "interval": [[null, null]]
+    }
+  },
+  "ffrd": {
+    "catalog_type": "development",
+    "specification_version": "0.1.0",
+    "extent_is_placeholder": true,
+    "decision_status": "proposed"
+  },
+  "links": [
+    {
+      "rel": "root",
+      "href": "../../catalog-v1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "parent",
+      "href": "../collection-v.0.1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "self",
+      "href": "./collection-v.0.1.json",
+      "type": "application/json"
+    }
+  ]
+}

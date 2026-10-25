@@ -1,0 +1,45 @@
+{
+  "type": "Catalog",
+  "stac_version": "1.1.0",
+  "stac_extensions": [],
+  "id": "south-platte-validation-study",
+  "title": "South Platte Validation Study",
+  "description": "South Platte Validation Study organizes Basin Data, Calibration, Conformance, Production, and Terrain collections for the project. This development example contains empty collections with placeholder United States extents.",
+  "links": [
+    {
+      "rel": "self",
+      "href": "./catalog-v1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "child",
+      "href": "./basin-data/collection-v.0.1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "child",
+      "href": "./calibration/collection-v.0.1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "child",
+      "href": "./conformance/collection-v.0.1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "child",
+      "href": "./production/collection-v.0.1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "child",
+      "href": "./terrain/collection-v.0.1.json",
+      "type": "application/json"
+    }
+  ],
+  "ffrd": {
+    "catalog_type": "development",
+    "specification_version": "0.1.0",
+    "item_creation_allowed": false
+  }
+}
