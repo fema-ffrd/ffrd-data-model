@@ -1,0 +1,164 @@
+{
+  "type": "Collection",
+  "id": "structure-inventory",
+  "stac_version": "1.1.0",
+  "stac_extensions": [
+    "https://stac-extensions.github.io/version/v1.2.0/schema.json"
+  ],
+  "version": "1.0",
+  "deprecated": false,
+  "description": "Building inventories including the National Structure Inventory (NSI) and vendor data.",
+  "links": [
+    {
+      "rel": "root",
+      "href": "./collection-v1.0.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "self",
+      "href": "./collection-v1.0.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "predecessor-version",
+      "href": "./collection-v1.0.json",
+      "type": "application/json",
+      "title": "No predecessor version available (initial release)"
+    },
+    {
+      "rel": "latest-version",
+      "href": "./collection-v1.0.json",
+      "type": "application/json",
+      "title": "Latest version (v1.0)"
+    },
+    {
+      "rel": "item",
+      "href": "./nsi/2026/v1.0/nsi_2026_v1.0_stac_item.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "./vendor/v1.0/vendor_v1.0_stac_item.json",
+      "type": "application/json"
+    }
+  ],
+  "extent": {
+    "spatial": {
+      "bbox": [
+        [
+          -176.64,
+          18.92,
+          -66.95,
+          71.36
+        ]
+      ]
+    },
+    "temporal": {
+      "interval": [
+        [
+          "2026-01-01T00:00:00Z",
+          null
+        ]
+      ]
+    }
+  },
+  "providers": [
+    {
+      "name": "USACE",
+      "roles": [
+        "producer",
+        "licensor"
+      ],
+      "url": "https://www.usace.army.mil/"
+    },
+    {
+      "name": "vendor",
+      "roles": [
+        "producer",
+        "licensor"
+      ]
+    }
+  ],
+  "column_mapping": {
+    "description": "Mapping between NSI and vendor column names",
+    "mappings": [
+      {
+        "nsi": "fd_id",
+        "vendor": "accntnum",
+        "description": "Feature/Account identifier"
+      },
+      {
+        "nsi": "bid",
+        "vendor": "location",
+        "description": "Building/Location identifier"
+      },
+      {
+        "nsi": "x",
+        "vendor": "LON",
+        "description": "Longitude (EPSG:4326)"
+      },
+      {
+        "nsi": "y",
+        "vendor": "LAT",
+        "description": "Latitude (EPSG:4326)"
+      },
+      {
+        "nsi": "val_struct",
+        "vendor": "BLDG_VALUE",
+        "description": "Building/structure value"
+      },
+      {
+        "nsi": "val_cont",
+        "vendor": "CNT_VALUE",
+        "description": "Contents value"
+      },
+      {
+        "nsi": "num_story",
+        "vendor": "NUM_STORIES",
+        "description": "Number of stories"
+      },
+      {
+        "nsi": "med_yr_blt",
+        "vendor": "YEAR_BUILT",
+        "description": "Year built"
+      },
+      {
+        "nsi": "found_type",
+        "vendor": "foundationtype",
+        "description": "Foundation type"
+      },
+      {
+        "nsi": "ground_elv",
+        "vendor": "elev_ft",
+        "description": "Ground elevation (feet)"
+      },
+      {
+        "nsi": "static_bfe",
+        "vendor": "BASE_FLOOD_ELEV",
+        "description": "Base flood elevation"
+      },
+      {
+        "nsi": "shape",
+        "vendor": "geometry",
+        "description": "Point geometry (WKB, EPSG:3857)"
+      }
+    ]
+  },
+  "summaries": {
+    "proj:epsg": [
+      3857,
+      4326
+    ]
+  },
+  "assets": {
+    "README.md": {
+      "href": "./README.md",
+      "type": "text/markdown",
+      "title": "README.md",
+      "file:size": 269,
+      "roles": [
+        "metadata"
+      ]
+    }
+  }
+}

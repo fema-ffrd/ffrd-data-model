@@ -1,0 +1,44 @@
+profile:
+  id: basin-data-stream-gages
+  version: 0.1
+  description: Metadata profile for stream gage station inventories.
+
+collection:
+  required:
+    assets:
+      - key: README.md
+        type: text/markdown
+  recommended:
+
+item:
+  required:
+    links:
+      - rel: related
+        href_pattern: .+
+        description: Link to related station context, observations, or companion metadata.
+  recommended:
+    native_properties:
+      - name: site_no
+        description: Station identifier for the gage.
+      - name: station_nm
+        description: Station name.
+      - name: huc_cd
+        description: Hydrologic unit code associated with the gage.
+      - name: drain_area_va
+        description: Drainage area value associated with the station.
+      - name: site_retrieved
+        description: Date/time the station record was retrieved.
+      - name: datetime
+        description: Primary timestamp for the gage metadata record.
+      - name: start_datetime
+        description: Start datetime for observation range.
+      - name: end_datetime
+        description: End datetime for observation range.
+      - name: daily_values
+        description: Daily-value payload or summary associated with the station.
+      - name: observation_variable
+        description: Observation variable represented by gage time-series payload.
+      - name: unit_system
+        description: Unit system used by gage observation values.
+      - name: observation_window
+        description: Observation window summary for gage time-series payload.

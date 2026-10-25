@@ -1,0 +1,43 @@
+profile:
+  id: models-ras
+  version: 0.1
+  description: Metadata profile for HEC-RAS model items and collections.
+
+collection:
+  required:
+    assets:
+      - key: README.md
+        type: text/markdown
+  recommended:
+
+item:
+  required:
+    links: []
+  recommended:
+    native_properties:
+      - name: HEC-RAS:project
+        description: Project identifier from HEC-RAS metadata.
+      - name: HEC-RAS:project_title
+        description: Project title extracted from HEC-RAS files.
+      - name: HEC-RAS:version
+        description: HEC-RAS model version string.
+      - name: HEC-RAS:unit_system
+        description: Unit system reported by the model (US/SI).
+      - name: HEC-RAS:has_1d
+        description: Whether the model includes 1D components.
+      - name: HEC-RAS:has_2d
+        description: Whether the model includes 2D components.
+      - name: HEC-RAS:status
+        description: Model status as represented in source metadata.
+      - name: HEC-RAS:description
+        description: Model description text.
+      - name: HEC-RAS:datetime_source
+        description: Source timestamp context for the item datetime.
+      - name: hecstac:asset_scope
+        description: Scope of represented assets (active inputs or all assets).
+      - name: hecstac:asset_count
+        description: Number of assets attached to the item.
+      - name: hecstac:projection_source
+        description: Source of projection metadata used in item generation.
+      - name: datetime
+        description: Item timestamp.

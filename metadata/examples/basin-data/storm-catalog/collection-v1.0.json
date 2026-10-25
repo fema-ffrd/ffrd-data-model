@@ -1,0 +1,146 @@
+{
+  "type": "Collection",
+  "id": "storm-catalog-72hr-events",
+  "stac_version": "1.0.0",
+  "stac_extensions": [
+    "https://stac-extensions.github.io/version/v1.2.0/schema.json"
+  ],
+  "version": "1.0",
+  "deprecated": false,
+  "description": "Top 72 hour storm events from 1979 to present",
+  "links": [
+    {
+      "rel": "Processing",
+      "href": "https://github.com/Dewberry/stormhub",
+      "type": "text/html",
+      "title": "Source Code",
+      "Description": "Source code used to generate STAC objects"
+    },
+    {
+      "rel": "root",
+      "href": "../catalog.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "parent",
+      "href": "../catalog.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "self",
+      "href": "./collection-v1.0.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "predecessor-version",
+      "href": "./collection-v1.0.json",
+      "type": "application/json",
+      "title": "No predecessor version available (initial release)"
+    },
+    {
+      "rel": "latest-version",
+      "href": "./collection-v1.0.json",
+      "type": "application/json",
+      "title": "Latest version (v1.0)"
+    },
+    {
+      "rel": "item",
+      "href": "./1/1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "predecessor-version",
+      "href": "./collection.json",
+      "type": "application/json",
+      "title": "No predecessor version available (initial release)"
+    },
+    {
+      "rel": "latest-version",
+      "href": "./collection.json",
+      "type": "application/json",
+      "title": "Latest version (v1.0)"
+    }
+  ],
+  "summaries": {
+    "aorc:statistics precip (inches)": {
+      "minimum": 1.13,
+      "maximum": 3.9
+    }
+  },
+  "extent": {
+    "spatial": {
+      "bbox": [
+        [
+          -114.5464515000125,
+          37.1201485,
+          -98.47209450002549,
+          48.936342499999995
+        ]
+      ]
+    },
+    "temporal": {
+      "interval": [
+        [
+          "1980-03-27T00:00:00Z",
+          "2025-12-20T00:00:00Z"
+        ]
+      ]
+    }
+  },
+  "assets": {
+    "valid-transposition-region": {
+      "href": "../SP_SLAM-SIG_TranspositionDomain_valid.json",
+      "type": "application/geo+json",
+      "title": "Valid Transposition Region",
+      "description": "Valid transposition region for SouthPlatte watershed",
+      "roles": [
+        "valid_transposition_region"
+      ]
+    },
+    "watershed": {
+      "href": "../SouthPlatte.json",
+      "type": "application/geo+json",
+      "title": "Watershed",
+      "description": "SouthPlatte watershed",
+      "roles": [
+        "watershed"
+      ]
+    },
+    "ranked_storms": {
+      "href": "./ranked-storms.csv",
+      "type": "text/csv",
+      "title": "ranked_storms",
+      "description": "CSV file containing ranked storm events.",
+      "roles": [
+        "storm_summary"
+      ]
+    },
+    "transposed_watershed_centroids": {
+      "href": "./transposed_watershed_centroids.geojson",
+      "type": "application/geo+json",
+      "title": "Transposed Watershed Centroids",
+      "description": "Feature collection of Transposed Watershed Centroids from each storm event.",
+      "roles": [
+        "storm_summary"
+      ]
+    },
+    "max_precip_locations": {
+      "href": "./max_precip_locations.geojson",
+      "type": "application/geo+json",
+      "title": "Max Precipitation Locations",
+      "description": "Feature collection of max precipitation locations within transposed watershed from each storm event.",
+      "roles": [
+        "storm_summary"
+      ]
+    },
+    "README.md": {
+      "href": "./72hr-events/README.md",
+      "type": "text/markdown",
+      "title": "README.md",
+      "file:size": 281,
+      "roles": [
+        "metadata"
+      ]
+    }
+  }
+}

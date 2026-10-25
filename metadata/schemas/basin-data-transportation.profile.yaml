@@ -1,0 +1,26 @@
+profile:
+  id: basin-data-transportation
+  version: 0.1
+  description: FFRD profile for transportation basin-data.
+
+collection:
+  required:
+    assets:
+      - key: README.md
+        type: text/markdown
+  recommended:
+    native_properties:
+      - name: source_prefix
+        description: S3 prefix for transportation source data.
+
+item:
+  required:
+    links: []
+  recommended:
+    native_properties:
+      - name: title
+        description: Source archive name for the item.
+      - name: source_prefix
+        description: S3 prefix used for ingestion.
+      - name: datetime
+        description: Item timestamp.

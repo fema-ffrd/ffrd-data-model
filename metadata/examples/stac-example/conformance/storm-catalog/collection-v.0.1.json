@@ -1,0 +1,29 @@
+{
+  "type": "Collection",
+  "stac_version": "1.1.0",
+  "stac_extensions": [
+    "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
+    "https://stac-extensions.github.io/version/v1.2.0/schema.json"
+  ],
+  "id": "conformance-storm-catalog",
+  "title": "Storm Catalog",
+  "description": "Storm Catalog includes the basin storm catalog, with catalog.grid files containing pointers to all storms, the transposition domain, and the watershed boundary. Storm data include precipitation and temperature in DSS format. Fishnets define points that are valid placements for each storm. Storm-type seasonality distributions govern when storms of a given type can occur within the calendar year.",
+  "version": "0.1",
+  "experimental": true,
+  "license": "proprietary",
+  "extent": {
+    "spatial": { "bbox": [[-180, 18.9, 180, 71.6]] },
+    "temporal": { "interval": [[null, null]] }
+  },
+  "ffrd": {
+    "catalog_type": "development",
+    "specification_version": "0.1.0",
+    "extent_is_placeholder": true,
+    "decision_status": "proposed"
+  },
+  "links": [
+    { "rel": "root", "href": "../../catalog-v1.json", "type": "application/json" },
+    { "rel": "parent", "href": "../collection-v.0.1.json", "type": "application/json" },
+    { "rel": "self", "href": "./collection-v.0.1.json", "type": "application/json" }
+  ]
+}

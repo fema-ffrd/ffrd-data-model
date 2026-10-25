@@ -1,0 +1,9 @@
+# Top-level project dependencies
+# Runtime
+boto3
+rasterio
+
+# Validation/tooling used in this repo workflow
+stac-check
+stac-validator
+stac-valid

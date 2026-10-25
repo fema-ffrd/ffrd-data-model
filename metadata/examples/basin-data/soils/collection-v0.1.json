@@ -1,0 +1,34 @@
+{
+  "type": "Collection",
+  "id": "soils",
+  "stac_version": "1.1.0",
+  "description": "Version 1.0 not available.",
+  "links": [
+    {
+      "rel": "self",
+      "href": "collection-v0.1.json",
+      "type": "application/json"
+    }
+  ],
+  "stac_extensions": [
+    "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
+    "https://stac-extensions.github.io/version/v1.2.0/schema.json"
+  ],
+  "extent": {
+    "spatial": {
+      "bbox": [
+        [
+          -106.19777,
+          38.784549,
+          -100.678642,
+          41.474195
+        ]
+      ]
+    },
+    "temporal": {
+      "interval": [
+        []
+      ]
+    }
+  }
+}

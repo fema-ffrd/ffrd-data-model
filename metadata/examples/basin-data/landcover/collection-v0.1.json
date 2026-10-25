@@ -1,0 +1,54 @@
+{
+  "type": "Collection",
+  "stac_version": "1.1.0",
+  "stac_extensions": [
+    "https://stac-extensions.github.io/version/v1.2.0/schema.json"
+  ],
+  "id": "landcover",
+  "description": "Version 1.0 not available.",
+  "version": "0.1",
+  "deprecated": false,
+  "extent": {
+    "spatial": {
+      "bbox": [
+        [
+          -106.19777,
+          38.784549,
+          -100.678642,
+          41.474195
+        ]
+      ]
+    },
+    "temporal": {
+      "interval": [
+        [
+          null,
+          null
+        ]
+      ]
+    }
+  },
+  "links": [
+    {
+      "rel": "root",
+      "href": "./collection-v1.0.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "self",
+      "href": "collection-v0.1.json",
+      "type": "application/json"
+    }
+  ],
+  "assets": {
+    "README.md": {
+      "href": "./.init",
+      "type": "text",
+      "title": "init",
+      "file:size": 0,
+      "roles": [
+        "placeholder"
+      ]
+    }
+  }
+}

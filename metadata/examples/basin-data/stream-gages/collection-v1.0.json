@@ -1,0 +1,92 @@
+{
+  "type": "Collection",
+  "id": "stream-gages",
+  "stac_version": "1.0.0",
+  "stac_extensions": [
+    "https://stac-extensions.github.io/version/v1.2.0/schema.json"
+  ],
+  "version": "1.0",
+  "deprecated": false,
+  "description": "Stream Gages from USGS and other sources",
+  "links": [
+    {
+      "rel": "self",
+      "href": "./collection-v1.0.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "root",
+      "href": "../catalog.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "predecessor-version",
+      "href": "./collection-v1.0.json",
+      "type": "application/json",
+      "title": "No predecessor version available (initial release)"
+    },
+    {
+      "rel": "latest-version",
+      "href": "./collection-v1.0.json",
+      "type": "application/json",
+      "title": "Latest version (v1.0)"
+    },
+    {
+      "rel": "item",
+      "href": "./06765500/06765500.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "parent",
+      "href": "../catalog.json",
+      "type": "application/json"
+    }
+  ],
+  "extent": {
+    "spatial": {
+      "bbox": [
+        [
+          -106.0636293,
+          38.90526996,
+          -100.7732011,
+          41.31109088
+        ]
+      ]
+    },
+    "temporal": {
+      "interval": [
+        [
+          "2026-01-07T13:30:30.829747Z",
+          "2026-01-07T13:37:25.536852Z"
+        ]
+      ]
+    }
+  },
+  "assets": {
+    "calibration_candidate_01_1949_map": {
+      "href": "calibration_candidates/01_1949_map.png",
+      "type": "image/png",
+      "description": "Calibration candidate visualization: 01_1949_map.png",
+      "roles": [
+        "visualization"
+      ]
+    },
+    "calibration_candidate_01_1949_stats": {
+      "href": "calibration_candidates/01_1949_stats.png",
+      "type": "image/png",
+      "description": "Calibration candidate visualization: 01_1949_stats.png",
+      "roles": [
+        "visualization"
+      ]
+    }
+  },
+  "README.md": {
+    "href": "./README.md",
+    "type": "text/markdown",
+    "title": "README.md",
+    "file:size": 281,
+    "roles": [
+      "metadata"
+    ]
+  }
+}

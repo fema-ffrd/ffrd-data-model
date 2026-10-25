@@ -1,0 +1,49 @@
+profile:
+  id: basin-data-structure-inventory
+  version: 0.1
+  description: FFRD profile for structure inventory basin-data.
+
+collection:
+  required:
+    assets:
+      - key: README.md
+        type: text/markdown
+  recommended:
+    native_properties:
+      - name: source_prefix
+        description: S3 prefix for structure-inventory source data.
+
+item:
+  required:
+    links: []
+  recommended:
+    native_properties:
+      - name: title
+        description: Human-readable item title.
+      - name: description
+        description: Item description.
+      - name: created
+        description: Item metadata creation timestamp.
+      - name: updated
+        description: Item metadata update timestamp.
+      - name: datetime
+        description: Item timestamp.
+    native_asset_properties:
+      - name: parquet:num_rows
+        description: Number of rows in the parquet data asset.
+      - name: parquet:num_columns
+        description: Number of columns in the parquet data asset.
+      - name: parquet:num_row_groups
+        description: Number of row groups in parquet files.
+      - name: parquet:compression
+        description: Compression algorithm used in parquet files.
+      - name: table:columns
+        description: Column-level schema and statistics for tabular assets.
+      - name: storage:platform
+        description: Storage platform for data access (for example s3).
+      - name: storage:region
+        description: Storage region where the asset resides.
+      - name: access:endpoint
+        description: Access endpoint for the asset.
+      - name: access:public
+        description: Whether the asset is publicly accessible.

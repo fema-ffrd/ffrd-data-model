@@ -1,0 +1,458 @@
+{
+  "type": "Feature",
+  "stac_version": "1.1.0",
+  "stac_extensions": [
+    "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
+    "https://stac-extensions.github.io/version/v1.2.0/schema.json",
+    "https://stac-extensions.github.io/table/v1.2.0/schema.json"
+  ],
+  "id": "nsi-2026-v1.0-public-wkb",
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          -66.950609996984,
+          18.921737404051992
+        ],
+        [
+          -66.950609996984,
+          71.355773819091
+        ],
+        [
+          -176.640263875848,
+          71.355773819091
+        ],
+        [
+          -176.640263875848,
+          18.921737404051992
+        ],
+        [
+          -66.950609996984,
+          18.921737404051992
+        ]
+      ]
+    ]
+  },
+  "bbox": [
+    -176.640263875848,
+    18.921737404051992,
+    -66.950609996984,
+    71.355773819091
+  ],
+  "properties": {
+    "title": "NSI 2026 v1.0 Public Dataset",
+    "description": "National Structure Inventory 2026 version 1.0 public dataset in WKB format",
+    "created": "2026-08-25T12:59:14.795159Z",
+    "updated": "2026-08-25T12:59:15.232967Z",
+    "proj:code": "EPSG:3857",
+    "proj:geometry": {
+      "type": "Polygon",
+      "coordinates": [
+        [
+          [
+            -7452907.813163309,
+            2145723.925912313
+          ],
+          [
+            -7452907.813163309,
+            11525030.716358192
+          ],
+          [
+            -19663504.228248876,
+            11525030.716358192
+          ],
+          [
+            -19663504.228248876,
+            2145723.925912313
+          ],
+          [
+            -7452907.813163309,
+            2145723.925912313
+          ]
+        ]
+      ]
+    },
+    "proj:bbox": [
+      -19663504.228248876,
+      2145723.925912313,
+      -7452907.813163309,
+      11525030.716358192
+    ],
+    "version": "1.0",
+    "deprecated": false,
+    "datetime": "2026-08-25T12:59:15.232956Z"
+  },
+  "links": [
+    {
+      "rel": "collection",
+      "href": "../../../collection.json",
+      "type": "application/json"
+    }
+  ],
+  "assets": {
+    "data": {
+      "href": "s3://south-platte/basin-data/structure-inventory/nsi/2026/v1.0/nsi2026_public_wkb.parquet",
+      "type": "application/vnd.apache.parquet",
+      "title": "NSI 2026 v1.0 Parquet File",
+      "description": "GeoParquet file containing NSI 2026 public structure inventory with WKB geometry",
+      "storage:platform": "s3",
+      "storage:region": "us-east-1",
+      "storage:requester_pays": false,
+      "storage:tier": "STANDARD",
+      "file:size": 13873670521,
+      "file:values": [
+        {
+          "values": 134088590
+        }
+      ],
+      "parquet:num_rows": 134088590,
+      "parquet:num_columns": 50,
+      "parquet:num_row_groups": 1342,
+      "parquet:compression": "snappy",
+      "table:columns": [
+        {
+          "name": "fd_id",
+          "type": "int64",
+          "min": "126676457",
+          "max": "129436396",
+          "null_count": 0
+        },
+        {
+          "name": "bid",
+          "type": "string",
+          "min": "",
+          "max": "8626RX67+6G9-3-3-3-3",
+          "null_count": 0
+        },
+        {
+          "name": "usastrucid",
+          "type": "string",
+          "min": "",
+          "max": "35248031",
+          "null_count": 0
+        },
+        {
+          "name": "occtype",
+          "type": "string",
+          "min": "AGR1",
+          "max": "RES6",
+          "null_count": 0
+        },
+        {
+          "name": "st_damcat",
+          "type": "string",
+          "min": "COM",
+          "max": "RES",
+          "null_count": 0
+        },
+        {
+          "name": "resunits",
+          "type": "int64",
+          "min": "0",
+          "max": "1301",
+          "null_count": 0
+        },
+        {
+          "name": "cbfips",
+          "type": "string",
+          "min": "",
+          "max": "484717908005008",
+          "null_count": 0
+        },
+        {
+          "name": "pop2amu65",
+          "type": "int64",
+          "min": "0",
+          "max": "2414",
+          "null_count": 0
+        },
+        {
+          "name": "pop2amo65",
+          "type": "int64",
+          "min": "0",
+          "max": "316",
+          "null_count": 0
+        },
+        {
+          "name": "pop2pmu65",
+          "type": "int64",
+          "min": "0",
+          "max": "6245",
+          "null_count": 0
+        },
+        {
+          "name": "pop2pmo65",
+          "type": "int64",
+          "min": "0",
+          "max": "287",
+          "null_count": 0
+        },
+        {
+          "name": "u65disable",
+          "type": "double",
+          "min": "-0.0",
+          "max": "0.19",
+          "null_count": 0
+        },
+        {
+          "name": "o65disable",
+          "type": "double",
+          "min": "-0.0",
+          "max": "0.53",
+          "null_count": 0
+        },
+        {
+          "name": "sqft",
+          "type": "double",
+          "min": "39.55",
+          "max": "1734680.0",
+          "null_count": 0
+        },
+        {
+          "name": "ftprntsqft",
+          "type": "double",
+          "min": "345.0",
+          "max": "867340.0",
+          "null_count": 0
+        },
+        {
+          "name": "num_story",
+          "type": "double",
+          "min": "1.0",
+          "max": "25.0",
+          "null_count": 0
+        },
+        {
+          "name": "bldheight",
+          "type": "double",
+          "min": "-1.0",
+          "max": "27.96",
+          "null_count": 0
+        },
+        {
+          "name": "x",
+          "type": "double",
+          "min": "-95.744276845038",
+          "max": "-95.009865220163",
+          "null_count": 0
+        },
+        {
+          "name": "y",
+          "type": "double",
+          "min": "30.29269745475",
+          "max": "30.812047694879",
+          "null_count": 0
+        },
+        {
+          "name": "ftprntid",
+          "type": "string",
+          "min": "48339_103403",
+          "max": "none_9994",
+          "null_count": 0
+        },
+        {
+          "name": "ftprntsrc",
+          "type": "string",
+          "min": "Bing",
+          "max": "P",
+          "null_count": 0
+        },
+        {
+          "name": "students",
+          "type": "int64",
+          "min": "0",
+          "max": "5906",
+          "null_count": 0
+        },
+        {
+          "name": "found_ht",
+          "type": "double",
+          "min": "0.25",
+          "max": "6.25",
+          "null_count": 0
+        },
+        {
+          "name": "found_type",
+          "type": "string",
+          "min": "B",
+          "max": "S",
+          "null_count": 0
+        },
+        {
+          "name": "bldgtype",
+          "type": "string",
+          "min": "C",
+          "max": "W",
+          "null_count": 0
+        },
+        {
+          "name": "novehprob",
+          "type": "double",
+          "min": "-0.0",
+          "max": "0.19",
+          "null_count": 0
+        },
+        {
+          "name": "vehperunit",
+          "type": "double",
+          "min": "-0.0",
+          "max": "2.7",
+          "null_count": 0
+        },
+        {
+          "name": "pctlowclr",
+          "type": "double",
+          "min": "-0.0",
+          "max": "0.37",
+          "null_count": 0
+        },
+        {
+          "name": "fullrep",
+          "type": "double",
+          "min": "8724.67",
+          "max": "276459272.64",
+          "null_count": 0
+        },
+        {
+          "name": "depindex",
+          "type": "double",
+          "min": "0.01",
+          "max": "0.96",
+          "null_count": 0
+        },
+        {
+          "name": "val_struct",
+          "type": "double",
+          "min": "4735.874741534518",
+          "max": "244053219.80172354",
+          "null_count": 0
+        },
+        {
+          "name": "val_cont",
+          "type": "double",
+          "min": "3566.5587638422635",
+          "max": "305066524.7521544",
+          "null_count": 0
+        },
+        {
+          "name": "val_vehic",
+          "type": "double",
+          "min": "-0.0",
+          "max": "49625218.69",
+          "null_count": 0
+        },
+        {
+          "name": "source",
+          "type": "string",
+          "min": "H",
+          "max": "P",
+          "null_count": 0
+        },
+        {
+          "name": "med_yr_blt",
+          "type": "int64",
+          "min": "0",
+          "max": "2015",
+          "null_count": 0
+        },
+        {
+          "name": "ornl_low",
+          "type": "double",
+          "min": "-0.0",
+          "max": "7.0",
+          "null_count": 0
+        },
+        {
+          "name": "ornl_med",
+          "type": "double",
+          "min": "-0.0",
+          "max": "22.0",
+          "null_count": 0
+        },
+        {
+          "name": "ornl_hgh",
+          "type": "double",
+          "min": "-0.0",
+          "max": "65.0",
+          "null_count": 0
+        },
+        {
+          "name": "creprcnt",
+          "type": "double",
+          "min": "-0.0",
+          "max": "0.43",
+          "null_count": 0
+        },
+        {
+          "name": "crerank",
+          "type": "double",
+          "min": "-0.0",
+          "max": "0.97",
+          "null_count": 0
+        },
+        {
+          "name": "firmzone",
+          "type": "string",
+          "min": "",
+          "max": "X",
+          "null_count": 0
+        },
+        {
+          "name": "zone_sub",
+          "type": "string",
+          "min": "",
+          "max": "FLOODWAY",
+          "null_count": 0
+        },
+        {
+          "name": "static_bfe",
+          "type": "double",
+          "min": "-9999.0",
+          "max": "203.0",
+          "null_count": 0
+        },
+        {
+          "name": "ground_elv",
+          "type": "double",
+          "min": "64.57859802246094",
+          "max": "504.47808837890625",
+          "null_count": 0
+        },
+        {
+          "name": "grnd_elv_m",
+          "type": "double",
+          "min": "19.683557510375977",
+          "max": "153.76492309570312",
+          "null_count": 0
+        },
+        {
+          "name": "shape",
+          "type": "binary",
+          "min": "b'\\x01\\xe9\\x03\\x00\\x00\\x00\\x00J\\x7fEId\\xc1\\xae\\xe5)\\xbdC0KA\\x00\\x00\\x00\\xa0\\x91\\xe0n@'",
+          "max": "b'\\x01\\xe9\\x03\\x00\\x00\\xff\\xfd\\xd2\\xa6qId\\xc1k\\xde\\xbbc\\xf7\\x04KA\\x00\\x00\\x00\\x00\\x16\\xa8h@'",
+          "null_count": 0
+        },
+        {
+          "name": "shape_bbox",
+          "type": "struct<xmin: float not null, ymin: float not null, xmax: float not null, ymax: float not null>"
+        }
+      ],
+      "parquet:created_by": "GDAL 3.13.0, using parquet-cpp-arrow version 24.0.0",
+      "parquet:version": "2.6",
+      "readme": "This file was shared with Seth Lawler on the STARRII from Zachary Herbert on the ARC team on 8/11/2026.",
+      "access:endpoint": "https://s3.amazonaws.com",
+      "access:public": false,
+      "alternate": {
+        "https": {
+          "href": "https://s3.amazonaws.com/south-platte/basin-data/structure-inventory/nsi/2026/v1.0/nsi2026_public_wkb.parquet",
+          "title": "HTTPS download URL"
+        }
+      },
+      "roles": [
+        "data"
+      ]
+    }
+  },
+  "collection": "structure-inventory"
+}

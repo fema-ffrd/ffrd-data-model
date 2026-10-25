@@ -1,0 +1,124 @@
+{
+  "type": "Feature",
+  "stac_version": "1.1.0",
+  "stac_extensions": [
+    "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
+    "https://stac-extensions.github.io/raster/v1.1.0/schema.json",
+    "https://stac-extensions.github.io/version/v1.2.0/schema.json"
+  ],
+  "id": "196608ft_96ft_Res_Tilesdem_south-platte_96ft1",
+  "etag": "5b73596e162c4ad5998ffe83638dd182",
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          -105.77087115053382,
+          38.57639644694919
+        ],
+        [
+          -105.04712640212719,
+          38.57639644694919
+        ],
+        [
+          -105.04712640212719,
+          38.871873040784784
+        ],
+        [
+          -105.77087115053382,
+          38.871873040784784
+        ],
+        [
+          -105.77087115053382,
+          38.57639644694919
+        ]
+      ]
+    ]
+  },
+  "bbox": [
+    -105.77087115053382,
+    38.57639644694919,
+    -105.04712640212719,
+    38.871873040784784
+  ],
+  "properties": {
+    "datetime": "2026-09-16T12:44:00Z",
+    "created": "2026-09-16T12:44:00Z",
+    "updated": "2026-09-16T12:44:00Z",
+    "version": "1.0",
+    "deprecated": false,
+    "proj:shape": [
+      934,
+      2048
+    ],
+    "proj:transform": [
+      96.0,
+      0.0,
+      -2752511.9999999935,
+      0.0,
+      -96.0,
+      5898240.000000002,
+      0.0,
+      0.0,
+      1.0
+    ],
+    "proj:wkt2": "COMPD_CS[\"USA_Contiguous_Albers_Equal_Area_Conic_FFRD_+_NAVD88_height(ftUS) + NAVD88 height (ftUS)\",PROJCS[\"USA_Contiguous_Albers_Equal_Area_Conic_FFRD_+_NAVD88_height(ftUS) + NAVD88 height (ftUS)\",GEOGCS[\"NAD83\",DATUM[\"North_American_Datum_1983\",SPHEROID[\"GRS 1980\",6378137,298.257222101004,AUTHORITY[\"EPSG\",\"7019\"]],AUTHORITY[\"EPSG\",\"6269\"]],PRIMEM[\"Greenwich\",0],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9122\"]],AUTHORITY[\"EPSG\",\"4269\"]],PROJECTION[\"Albers_Conic_Equal_Area\"],PARAMETER[\"latitude_of_center\",23],PARAMETER[\"longitude_of_center\",-96],PARAMETER[\"standard_parallel_1\",29.5],PARAMETER[\"standard_parallel_2\",45.5],PARAMETER[\"false_easting\",0],PARAMETER[\"false_northing\",0],UNIT[\"foot\",0.3048,AUTHORITY[\"EPSG\",\"9002\"]],AXIS[\"Easting\",EAST],AXIS[\"Northing\",NORTH]],VERT_CS[\"NAVD88 height (ftUS)\",VERT_DATUM[\"North American Vertical Datum 1988\",2005,AUTHORITY[\"EPSG\",\"5103\"]],UNIT[\"US survey foot\",0.304800609601219,AUTHORITY[\"EPSG\",\"9003\"]],AXIS[\"Gravity-related height\",UP],AUTHORITY[\"EPSG\",\"6360\"]]]",
+    "proj:bbox": [
+      -2752511.9999999935,
+      5808576.000000002,
+      -2555903.9999999935,
+      5898240.000000002
+    ]
+  },
+  "assets": {
+    "data": {
+      "href": "s3://south-platte/test-terrain-base/test-south-platte-96ft/196608ft_96ft_Res_Tilesdem_south-platte_96ft1.tif",
+      "type": "image/tiff; application=geotiff",
+      "roles": [
+        "data"
+      ],
+      "title": "196608ft_96ft_Res_Tilesdem_south-platte_96ft1.tif",
+      "raster:bands": [
+        {
+          "band": 1,
+          "data_type": "float32",
+          "nodata": -999999.0,
+          "unit": "US survey foot",
+          "spatial_resolution": 96.0
+        }
+      ],
+      "proj:shape": [
+        934,
+        2048
+      ]
+    }
+  },
+  "links": [
+    {
+      "rel": "self",
+      "href": "./196608ft_96ft_Res_Tilesdem_south-platte_96ft1.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "collection",
+      "href": "./collection.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "parent",
+      "href": "./collection.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "root",
+      "href": "../../catalog.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "latest-version",
+      "href": "./196608ft_96ft_Res_Tilesdem_south-platte_96ft1.json",
+      "type": "application/geo+json"
+    }
+  ],
+  "collection": "test-south-platte-terrain-base-96ft"
+}

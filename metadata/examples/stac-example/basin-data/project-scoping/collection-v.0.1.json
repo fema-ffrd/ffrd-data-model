@@ -1,0 +1,95 @@
+{
+  "type": "Collection",
+  "stac_version": "1.1.0",
+  "stac_extensions": [
+    "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
+    "https://stac-extensions.github.io/version/v1.2.0/schema.json"
+  ],
+  "id": "basin-data-project-scoping",
+  "title": "Project Scoping",
+  "description": "Project Scoping includes key inputs defining the scope of the study, created during the Scoping and Data Preparation Phase. Refer to the FFRD Scope of Work (SOP) document for official guidance on project scoping. Name Table provides tables that pre-define key model element names for the study during this phase. Model Linking Register clearly shows the source of all required inputs for each model, with versions for calibration, when observed flows for historic events are commonly used as inputs, and conformance, when all inputs are based on modeled outputs. Calibration Scope includes a geospatial file of primary, secondary, and tertiary stream gage locations and a Calibration Event Table tabulating historic events selected for calibration. Dam Scoping Table specifies inclusion for operations modeling, inclusion for fragility, and criteria for how a dam is modeled. Uncalibrated Hydrologic Model includes all planned HMS model elements, including subbasins established during scoping and data preparation. Levee Modeling Scope provides a levee breach location geospatial file, progressing from draft during scoping and data preparation to final during subsequent phases. Hydraulic Model Units provides polygons defining the scoped boundaries of individual hydraulic models. Mesh Development Criteria designates key streams, other streams, and urban areas defining the scope for mesh development according to the hydraulics section of FFRD SOP. Study Area Polygon defines the study area for the project. Observed Data Linking Table relates each observed data location to its corresponding scoped model element name.",
+  "version": "0.1",
+  "experimental": true,
+  "license": "proprietary",
+  "extent": {
+    "spatial": {
+      "bbox": [[-180, 18.9, 180, 71.6]]
+    },
+    "temporal": {
+      "interval": [[null, null]]
+    }
+  },
+  "ffrd": {
+    "catalog_type": "development",
+    "specification_version": "0.1.0",
+    "extent_is_placeholder": true,
+    "decision_status": "proposed"
+  },
+  "links": [
+    {
+      "rel": "root",
+      "href": "../../catalog-v1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "parent",
+      "href": "../collection-v.0.1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "self",
+      "href": "./collection-v.0.1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "child",
+      "href": "./calibration-scope/collection-v.0.1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "child",
+      "href": "./dam-scoping-table/collection-v.0.1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "child",
+      "href": "./hydraulic-model-units/collection-v.0.1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "child",
+      "href": "./levee-modeling-scope/collection-v.0.1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "child",
+      "href": "./mesh-development-criteria/collection-v.0.1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "child",
+      "href": "./model-linking-register/collection-v.0.1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "child",
+      "href": "./name-table/collection-v.0.1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "child",
+      "href": "./observed-data-linking-table/collection-v.0.1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "child",
+      "href": "./study-area-polygon/collection-v.0.1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "child",
+      "href": "./uncalibrated-hydrologic-model/collection-v.0.1.json",
+      "type": "application/json"
+    }
+  ]
+}

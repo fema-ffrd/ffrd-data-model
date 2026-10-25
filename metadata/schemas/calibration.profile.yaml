@@ -1,0 +1,48 @@
+profile:
+  id: calibration
+  version: 0.1
+  description: FFRD profile for calibration collection and model items.
+
+collection:
+  required:
+    assets:
+      - key: README.md
+        type: text/markdown
+  recommended:
+    native_lineage_links:
+      - name: predecessor-version
+        description: Link to previous collection version when available.
+      - name: latest-version
+        description: Link to current latest collection version.
+
+item:
+  required:
+    links: []
+  recommended:
+    native_properties:
+      - name: datetime
+        description: Item timestamp.
+      - name: hecstac:asset_scope
+        description: Scope of model assets represented in the item.
+      - name: hecstac:asset_count
+        description: Number of model assets captured in the item.
+      - name: hecstac:projection_source
+        description: Source of projection metadata used during item creation.
+      - name: hecstac:source_prefix
+        description: Source prefix used for model asset discovery.
+      - name: hms:project
+        description: HMS project identifier when HMS item.
+      - name: hms:project_title
+        description: HMS project title when HMS item.
+      - name: hms:summary
+        description: HMS component summary metadata when HMS item.
+      - name: HEC-RAS:project
+        description: HEC-RAS project identifier when RAS item.
+      - name: HEC-RAS:project_title
+        description: HEC-RAS project title when RAS item.
+      - name: HEC-RAS:unit_system
+        description: Unit system reported by HEC-RAS when RAS item.
+      - name: HEC-RAS:has_1d
+        description: Indicates presence of 1D model components when RAS item.
+      - name: HEC-RAS:has_2d
+        description: Indicates presence of 2D model components when RAS item.

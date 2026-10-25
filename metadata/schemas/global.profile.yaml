@@ -1,0 +1,28 @@
+profile:
+  id: global-shared-properties
+  version: 0.1
+  description: Shared metadata properties that apply across FFRD datasets.
+
+collection:
+  required:
+    assets: []
+  recommended:
+    native_properties:
+      - name: version
+        description: Dataset or metadata version identifier.
+      - name: deprecated
+        description: Indicates whether the record is deprecated.
+
+item:
+  required:
+    links: []
+  recommended:
+    native_properties:
+      - name: version
+        description: Dataset or metadata version identifier.
+      - name: deprecated
+        description: Indicates whether the record is deprecated.
+      - name: zip:*
+        description: ZIP-specific metadata namespace for source archive analysis.
+      - name: zip_member_count
+        description: Number of members discovered in the source archive.

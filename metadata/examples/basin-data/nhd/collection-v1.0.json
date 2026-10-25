@@ -1,0 +1,81 @@
+{
+  "type": "Collection",
+  "id": "nhd",
+  "stac_version": "1.1.0",
+  "description": "National Hydrography Dataset (NHD) data from USGS",
+  "links": [
+    {
+      "rel": "root",
+      "href": "./collection.json",
+      "type": "application/json",
+      "title": "nhd"
+    },
+    {
+      "rel": "self",
+      "href": "collection.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "predecessor-version",
+      "href": "./collection.json",
+      "type": "application/json",
+      "title": "No predecessor version available (initial release)"
+    },
+    {
+      "rel": "latest-version",
+      "href": "./collection.json",
+      "type": "application/json",
+      "title": "Latest version (v1.0)"
+    },
+    {
+      "rel": "item",
+      "href": "items/nhd_h_1019_hu4_gdb.json",
+      "type": "application/geo+json"
+    }
+  ],
+  "stac_extensions": [
+    "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
+    "https://stac-extensions.github.io/version/v1.2.0/schema.json"
+  ],
+  "version": "1.0",
+  "deprecated": false,
+  "source_prefix": "s3://south-platte/basin-data/nhd/",
+  "created": "2026-09-28T18:55:28.207519Z",
+  "title": "nhd",
+  "extent": {
+    "spatial": {
+      "bbox": [
+        [
+          -106.19777,
+          38.784549,
+          -100.678642,
+          41.474195
+        ]
+      ]
+    },
+    "temporal": {
+      "interval": [
+        [
+          "2026-09-24T14:28:49Z",
+          null
+        ]
+      ]
+    }
+  },
+  "summaries": {
+    "proj:epsg": [
+      4326
+    ]
+  },
+  "assets": {
+    "README.md": {
+      "href": "./README.md",
+      "type": "text/markdown",
+      "title": "README.md",
+      "file:size": 281,
+      "roles": [
+        "metadata"
+      ]
+    }
+  }
+}
