@@ -5,7 +5,7 @@
     "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
     "https://stac-extensions.github.io/version/v1.2.0/schema.json"
   ],
-  "id": "conformance-event-validation",
+  "id": "conformance_event-validation",
   "title": "Event Validation",
   "description": "Event Validation includes the complete model and final results of replicating each historic event through the full model suite prepared for cloud compute. These simulations provide a QC step to ensure the fully linked system still reproduces historic event results. Runs should validate that linked models sufficiently reproduce observed calibration events on desktop and prepare the model for reproduction in a cloud environment. One person should be responsible for these scenarios, including desktop simulation. Observed data should be used only as reference data for comparison with modeled results. Naming conventions and links should be SST-ready, and the entire set of HMS, ResSim, and RAS models should be uploaded after desktop validation. This validation step does not involve cloud compute.",
   "version": "0.1",

@@ -5,7 +5,7 @@
     "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
     "https://stac-extensions.github.io/version/v1.2.0/schema.json"
   ],
-  "id": "calibration-breach-data",
+  "id": "calibration_breach-data",
   "title": "Breach Data",
   "description": "Breach Data includes information required to implement breaching within the hydraulic model, including breach locations and system response data. Information regarding breach parameters may also be included.",
   "version": "0.1",

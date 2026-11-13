@@ -5,7 +5,7 @@
     "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
     "https://stac-extensions.github.io/version/v1.2.0/schema.json"
   ],
-  "id": "conformance-simulations-event-validation",
+  "id": "conformance_simulations_event-validation",
   "title": "Event Validation",
   "description": "Event Validation provides final cloud-computed results of replicating historic events through the full hydrologic and hydraulic (H&H) model suite prepared for cloud compute. These simulations act as a QC step to ensure the fully linked system of models still reproduces historic event results.",
   "version": "0.1",

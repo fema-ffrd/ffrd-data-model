@@ -5,7 +5,7 @@
     "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
     "https://stac-extensions.github.io/version/v1.2.0/schema.json"
   ],
-  "id": "basin-data-stream-gages",
+  "id": "basin-data_stream-gages",
   "title": "Stream Gages",
   "description": "Stream Gages includes an attributed geospatial point file of all stream gages in the basin for reference. A separate curated stream gage file is posted to scoping-data and identifies the scope for use of data at each gage in model calibration.",
   "version": "0.1",

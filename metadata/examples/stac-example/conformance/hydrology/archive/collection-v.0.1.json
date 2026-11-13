@@ -5,7 +5,7 @@
     "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
     "https://stac-extensions.github.io/version/v1.2.0/schema.json"
   ],
-  "id": "conformance-hydrology-archive",
+  "id": "conformance_hydrology_archive",
   "title": "Archive",
   "description": "Archive preserves draft and outdated conformance hydrologic model versions as updates are made. Archived model units should be date stamped; the parent README gives model-unit-YYYYMMDD and trinity_20250314 as examples.",
   "version": "0.1",

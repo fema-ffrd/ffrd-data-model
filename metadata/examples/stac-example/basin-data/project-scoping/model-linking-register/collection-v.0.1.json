@@ -5,7 +5,7 @@
     "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
     "https://stac-extensions.github.io/version/v1.2.0/schema.json"
   ],
-  "id": "basin-data-project-scoping-model-linking-register",
+  "id": "basin-data_project-scoping_model-linking-register",
   "title": "Model Linking Register",
   "description": "Model Linking Register clearly shows the source of all required inputs for each model in the project. It includes a version for the calibration phase, when observed flows for historic events are commonly used as inputs, and for the conformance phase, when all inputs are based on modeled outputs.",
   "version": "0.1",

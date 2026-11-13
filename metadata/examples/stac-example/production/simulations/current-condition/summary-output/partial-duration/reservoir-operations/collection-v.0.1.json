@@ -5,7 +5,7 @@
     "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
     "https://stac-extensions.github.io/version/v1.2.0/schema.json"
   ],
-  "id": "production-simulations-current-condition-summary-output-partial-duration-reservoir-operations",
+  "id": "production_simulations_current-condition_summary-output_partial-duration_reservoir-operations",
   "title": "Reservoir Operations",
   "description": "Reservoir Operations organizes reservoir-operations partial-duration summary results from production current-condition simulations.",
   "version": "0.1",

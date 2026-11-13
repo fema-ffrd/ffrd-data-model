@@ -5,7 +5,7 @@
     "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
     "https://stac-extensions.github.io/version/v1.2.0/schema.json"
   ],
-  "id": "terrain-terrain-modeling-archive",
+  "id": "terrain_terrain-modeling_archive",
   "title": "Terrain Modeling Archive",
   "description": "Terrain Modeling Archive is reserved for earlier versions of terrain used for HEC-RAS model development.",
   "version": "0.1",

@@ -5,7 +5,7 @@
     "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
     "https://stac-extensions.github.io/version/v1.2.0/schema.json"
   ],
-  "id": "basin-data-project-scoping-hydraulic-model-units",
+  "id": "basin-data_project-scoping_hydraulic-model-units",
   "title": "Hydraulic Model Units",
   "description": "Hydraulic Model Units includes polygons defining the scoped boundaries of individual hydraulic models.",
   "version": "0.1",

@@ -5,7 +5,7 @@
     "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
     "https://stac-extensions.github.io/version/v1.2.0/schema.json"
   ],
-  "id": "basin-data-structure-inventory",
+  "id": "basin-data_structure-inventory",
   "title": "Structure Inventory",
   "description": "Structure Inventory includes structure inventory data prepared during the scoping and data preparation phase at the full basin level and at the individual model unit level. These datasets remain static throughout the project and are used as a reference. Any adjustments to the datasets will be captured separately within the calibration, conformance, and production phases.",
   "version": "0.1",

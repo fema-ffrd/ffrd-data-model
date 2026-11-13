@@ -5,7 +5,7 @@
     "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
     "https://stac-extensions.github.io/version/v1.2.0/schema.json"
   ],
-  "id": "conformance-simulations-frequency-calibration-events",
+  "id": "conformance_simulations_frequency-calibration_events",
   "title": "Events",
   "description": "Events organizes individual simulation-event results for conformance frequency calibration.",
   "version": "0.1",

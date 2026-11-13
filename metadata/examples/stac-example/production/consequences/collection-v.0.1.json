@@ -5,7 +5,7 @@
     "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
     "https://stac-extensions.github.io/version/v1.2.0/schema.json"
   ],
-  "id": "production-consequences",
+  "id": "production_consequences",
   "title": "Consequences",
   "description": "Consequences structure inventories are used during production and promoted from conformance. The NSI year should reflect the year or version of the NSI, and the price-level year should reflect the price year if prices are indexed. The naming convention is <modeling-unit>-nsiyyyy-pricelevelyyyy.gpkg. Hot-fix data address issues that do not merit rerunning all production runs. A hot fix is an alternate version of the input models addressing a specific accuracy or stability issue arising in one or more production events and is applied only to the events where it is deemed necessary.",
   "version": "0.1",

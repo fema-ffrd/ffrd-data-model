@@ -5,7 +5,7 @@
     "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
     "https://stac-extensions.github.io/version/v1.2.0/schema.json"
   ],
-  "id": "basin-data-project-scoping-mesh-development-criteria",
+  "id": "basin-data_project-scoping_mesh-development-criteria",
   "title": "Mesh Development Criteria",
   "description": "Mesh Development Criteria includes designated key streams, other streams, and urban areas that define the scope for mesh development according to the hydraulics section of FFRD SOP.",
   "version": "0.1",

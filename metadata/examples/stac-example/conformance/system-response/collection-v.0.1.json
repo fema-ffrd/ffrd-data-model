@@ -5,7 +5,7 @@
     "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
     "https://stac-extensions.github.io/version/v1.2.0/schema.json"
   ],
-  "id": "conformance-system-response",
+  "id": "conformance_system-response",
   "title": "System Response",
   "description": "System Response includes tabular dam and levee system response curves describing breach probability for individual structures and breach locations. Fragility curves are stored as comma-separated-value (CSV) files according to the template provided in the SOP. Geospatial and tabular breach-location information is maintained in basin-data throughout the project and should not be duplicated here.",
   "version": "0.1",

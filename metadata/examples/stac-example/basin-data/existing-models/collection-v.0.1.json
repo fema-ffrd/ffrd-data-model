@@ -5,7 +5,7 @@
     "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
     "https://stac-extensions.github.io/version/v1.2.0/schema.json"
   ],
-  "id": "basin-data-existing-models",
+  "id": "basin-data_existing-models",
   "title": "Existing Models",
   "description": "Existing Models includes existing H&H models, such as hydraulic, hydrologic, and reservoir-operations models, to be used as reference during FFRD model development. Sources may include the Corps Water Management System (CWMS) modeling effort, USACE District Models, High-Level Risk Assessments, FEMA models, and other local and Federal agencies; additional model sources beyond these are likely. All models should include associated documentation, reporting, and metadata. Non-model FEMA data and reports are saved separately in FEMA.",
   "version": "0.1",

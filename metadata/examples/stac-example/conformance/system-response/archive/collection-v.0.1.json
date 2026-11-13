@@ -5,7 +5,7 @@
     "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
     "https://stac-extensions.github.io/version/v1.2.0/schema.json"
   ],
-  "id": "conformance-system-response-archive",
+  "id": "conformance_system-response_archive",
   "title": "Archive",
   "description": "Archive preserves superseded dam and levee system-response inputs when conformance models are updated.",
   "version": "0.1",

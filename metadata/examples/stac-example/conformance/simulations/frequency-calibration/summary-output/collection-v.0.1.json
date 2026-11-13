@@ -5,7 +5,7 @@
     "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
     "https://stac-extensions.github.io/version/v1.2.0/schema.json"
   ],
-  "id": "conformance-simulations-frequency-calibration-summary-output",
+  "id": "conformance_simulations_frequency-calibration_summary-output",
   "title": "Summary Output",
   "description": "Summary Output organizes annual maximums, consequences, grids, partial-duration results, and plots for conformance frequency-calibration simulations.",
   "version": "0.1",

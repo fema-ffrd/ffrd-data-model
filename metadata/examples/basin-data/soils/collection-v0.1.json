@@ -1,6 +1,6 @@
 {
   "type": "Collection",
-  "id": "soils",
+  "id": "basin-data_soils",
   "stac_version": "1.1.0",
   "description": "Version 1.0 not available.",
   "links": [

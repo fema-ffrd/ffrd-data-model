@@ -5,7 +5,7 @@
     "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
     "https://stac-extensions.github.io/version/v1.2.0/schema.json"
   ],
-  "id": "basin-data-coastal",
+  "id": "basin-data_coastal",
   "title": "Coastal",
   "description": "Coastal includes information related to coastal boundaries and nodal data, including simulated storm peak hydrographs and frequency data (CHS data).",
   "version": "0.1",

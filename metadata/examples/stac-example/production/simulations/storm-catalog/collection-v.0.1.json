@@ -5,7 +5,7 @@
     "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
     "https://stac-extensions.github.io/version/v1.2.0/schema.json"
   ],
-  "id": "production-simulations-storm-catalog",
+  "id": "production_simulations_storm-catalog",
   "title": "Storm Catalog",
   "description": "Storm Catalog provides the storms.csv index of storm event numbers, DSS file paths, x and y coordinates, storm-type classification, and a basin path for production simulations.",
   "version": "0.1",

@@ -1,6 +1,6 @@
 {
   "type": "Collection",
-  "id": "FEMA-NFHL",
+  "id": "basin-data_fema",
   "stac_version": "1.1.0",
   "description": "National Flood Hazard Layer (NFHL) data from FEMA",
   "links": [

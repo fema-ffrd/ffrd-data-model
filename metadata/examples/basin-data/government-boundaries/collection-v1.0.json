@@ -1,6 +1,6 @@
 {
   "type": "Collection",
-  "id": "government-boundaries",
+  "id": "basin-data_government-boundaries",
   "stac_version": "1.1.0",
   "description": "Census Bureau TIGER/Line shapefiles for US government boundaries",
   "links": [

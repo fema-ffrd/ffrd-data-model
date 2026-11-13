@@ -5,7 +5,7 @@
     "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
     "https://stac-extensions.github.io/version/v1.2.0/schema.json"
   ],
-  "id": "calibration-hydrology-continuous-simulation-two-year-simulation",
+  "id": "calibration_hydrology_continuous-simulation_two-year-simulation",
   "title": "Two-Year Simulation",
   "description": "Two-Year Simulation is reserved for two-year continuous hydrologic simulation during calibration.",
   "version": "0.1",

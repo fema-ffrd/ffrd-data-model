@@ -5,7 +5,7 @@
     "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
     "https://stac-extensions.github.io/version/v1.2.0/schema.json"
   ],
-  "id": "calibration-storm-catalog",
+  "id": "calibration_storm-catalog",
   "title": "Storm Catalog",
   "description": "Storm Catalog includes individual .dss files representing precipitation events which form the basis of the calibration precipitation-frequency.",
   "version": "0.1",

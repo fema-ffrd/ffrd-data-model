@@ -5,7 +5,7 @@
     "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
     "https://stac-extensions.github.io/version/v1.2.0/schema.json"
   ],
-  "id": "basin-data-nhd",
+  "id": "basin-data_nhd",
   "title": "NHD (National Hydrography Dataset)",
   "description": "NHD (National Hydrography Dataset) includes a static version of the National Hydrography Dataset waterway information collected during the Data Preparation Phase. NHD data includes several geospatial datasets of interest, including stream centerlines and waterway types.",
   "version": "0.1",

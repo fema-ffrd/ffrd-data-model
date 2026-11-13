@@ -5,7 +5,7 @@
     "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
     "https://stac-extensions.github.io/version/v1.2.0/schema.json"
   ],
-  "id": "basin-data-dams",
+  "id": "basin-data_dams",
   "title": "Dams",
   "description": "Dams includes information regarding dams in the study area, such as risk assessment data, WCMs, O&M manuals, survey data, as-built drawings, dam watch data, major reservoirs' operational guidance, and NRCS data. Reporting of efforts to refine the NID data for the purposes of the FFRD study is also included. System-response curves generated during the data preparation phase may be included here and should be promoted to the later calibration or conformance phase once reviewed and meeting the criteria for those phases. NID (National Inventory of Dams) includes a static version of the National Inventory of Dams dataset collected during the Data Preparation Phase, including geospatial information.",
   "version": "0.1",

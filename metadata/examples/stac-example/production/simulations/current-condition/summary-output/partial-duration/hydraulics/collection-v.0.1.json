@@ -5,7 +5,7 @@
     "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
     "https://stac-extensions.github.io/version/v1.2.0/schema.json"
   ],
-  "id": "production-simulations-current-condition-summary-output-partial-duration-hydraulics",
+  "id": "production_simulations_current-condition_summary-output_partial-duration_hydraulics",
   "title": "Hydraulics",
   "description": "Hydraulics organizes hydraulic partial-duration summary results from production current-condition simulations.",
   "version": "0.1",

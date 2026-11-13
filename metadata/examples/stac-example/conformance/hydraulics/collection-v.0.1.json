@@ -5,7 +5,7 @@
     "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
     "https://stac-extensions.github.io/version/v1.2.0/schema.json"
   ],
-  "id": "conformance-hydraulics",
+  "id": "conformance_hydraulics",
   "title": "Hydraulics",
   "description": "Hydraulics includes the HEC-RAS model for each individual model unit used in conformance, with current model results improved from calibration. Models should include all relevant files required for desktop simulation, including model files with .X01 extensions such as .p01, .p01.hdf, .g01, and .u01, and associated land-use and land-cover files. Terrain files are maintained separately in ffrd-basin/terrain-modeling and should not be stored here. Draft and outdated model versions are archived as updates are made. Archived model units should be date stamped using model-unit-YYYYMMDD, for example kickapoo-20250314.",
   "version": "0.1",

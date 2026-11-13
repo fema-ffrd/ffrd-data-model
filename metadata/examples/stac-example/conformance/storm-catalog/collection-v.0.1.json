@@ -5,7 +5,7 @@
     "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
     "https://stac-extensions.github.io/version/v1.2.0/schema.json"
   ],
-  "id": "conformance-storm-catalog",
+  "id": "conformance_storm-catalog",
   "title": "Storm Catalog",
   "description": "Storm Catalog includes the basin storm catalog, with catalog.grid files containing pointers to all storms, the transposition domain, and the watershed boundary. Storm data include precipitation and temperature in DSS format. Fishnets define points that are valid placements for each storm. Storm-type seasonality distributions govern when storms of a given type can occur within the calendar year.",
   "version": "0.1",

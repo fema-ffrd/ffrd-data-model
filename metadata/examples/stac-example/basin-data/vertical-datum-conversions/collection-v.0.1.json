@@ -5,7 +5,7 @@
     "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
     "https://stac-extensions.github.io/version/v1.2.0/schema.json"
   ],
-  "id": "basin-data-vertical-datum-conversions",
+  "id": "basin-data_vertical-datum-conversions",
   "title": "Vertical Datum Conversions",
   "description": "Vertical Datum Conversions stores a table of official vertical datums and conversions for the FFRD project. The table includes adopted conversions for stream gages, dams, and other points of interest.",
   "version": "0.1",

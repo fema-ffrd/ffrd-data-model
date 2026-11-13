@@ -5,7 +5,7 @@
     "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
     "https://stac-extensions.github.io/version/v1.2.0/schema.json"
   ],
-  "id": "production-simulations-summary-data",
+  "id": "production_simulations_summary-data",
   "title": "Summary Data",
   "description": "Summary Data includes summarized production event results divided by model type: hydraulics, hydrology, and reservoir operations. Hydraulic summaries are provided for individual model units and include maximum and minimum flows and water surface elevations (WSEL) for boundary-condition lines, reference lines, and reference points. Overall hydraulic model information includes computation time, simulation status, the time a solution may have gone unstable, cumulative net precipitation, and volume accounting error. Hydrologic summaries cover 1-, 24-, 48-, and 72-hour output periods for HMS elements; reservoir-operations summaries cover the same periods for ResSim elements. Plots show flow and stage frequency, stage-discharge rating curves, volume accounting error versus precipitation, and precipitation frequency. Their interactive interface supports zooming and querying events by plotting position, with several plot types also displaying observed or published data for comparison. Breach plots summarize individual dams and levees and all structures across many simulated events.",
   "version": "0.1",

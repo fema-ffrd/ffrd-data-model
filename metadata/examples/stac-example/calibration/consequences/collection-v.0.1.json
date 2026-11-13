@@ -5,7 +5,7 @@
     "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
     "https://stac-extensions.github.io/version/v1.2.0/schema.json"
   ],
-  "id": "calibration-consequences",
+  "id": "calibration_consequences",
   "title": "Consequences",
   "description": "Consequences includes the current set of structure inventories during the calibration phase; ultimately these inventories will be promoted to the conformance phase. The NSI year should reflect the year (version) of the NSI, and the price level year should reflect the price level year if prices are indexed. The naming convention is <modeling-unit>-nsiyyyy-pricelevelyyyy.gpkg.",
   "version": "0.1",

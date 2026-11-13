@@ -5,7 +5,7 @@
     "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
     "https://stac-extensions.github.io/version/v1.2.0/schema.json"
   ],
-  "id": "basin-data-soils",
+  "id": "basin-data_soils",
   "title": "Soils",
   "description": "Soils includes information on soils throughout the model area, such as gSURGGO and STATSGO data.",
   "version": "0.1",

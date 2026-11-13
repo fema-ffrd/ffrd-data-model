@@ -1,6 +1,6 @@
 {
   "type": "Collection",
-  "id": "structure-inventory",
+  "id": "basin-data_structure-inventory",
   "stac_version": "1.1.0",
   "stac_extensions": [
     "https://stac-extensions.github.io/version/v1.2.0/schema.json"

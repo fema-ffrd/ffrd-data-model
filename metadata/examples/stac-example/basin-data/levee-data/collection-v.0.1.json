@@ -5,7 +5,7 @@
     "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
     "https://stac-extensions.github.io/version/v1.2.0/schema.json"
   ],
-  "id": "basin-data-levee-data",
+  "id": "basin-data_levee-data",
   "title": "Levee Data",
   "description": "Levee Data includes information regarding levees in the study area, such as risk assessment reports, water control manuals (WCMs), survey data, as-built drawings, and local and Federal information. Levee data may be geospatial or not. The Levee Data Tracking Table tracks data completion of refinement efforts prior to the FFRD study. NLD (National Levee Database) includes a static version of the National Levee Database dataset collected during the Data Preparation Phase.",
   "version": "0.1",

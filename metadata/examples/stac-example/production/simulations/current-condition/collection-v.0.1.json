@@ -5,7 +5,7 @@
     "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
     "https://stac-extensions.github.io/version/v1.2.0/schema.json"
   ],
-  "id": "production-simulations-current-condition",
+  "id": "production_simulations_current-condition",
   "title": "Current Condition",
   "description": "Current Condition organizes production simulation events and summary outputs for current-condition modeling.",
   "version": "0.1",

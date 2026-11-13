@@ -5,7 +5,7 @@
     "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
     "https://stac-extensions.github.io/version/v1.2.0/schema.json"
   ],
-  "id": "conformance-simulations-logs",
+  "id": "conformance_simulations_logs",
   "title": "Logs",
   "description": "Logs records HMS simulation information for conformance, including simulation times and information on simulation failures.",
   "version": "0.1",

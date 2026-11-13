@@ -4,7 +4,7 @@
   "stac_extensions": [
     "https://stac-extensions.github.io/version/v1.2.0/schema.json"
   ],
-  "id": "landcover",
+  "id": "basin-data_landcover",
   "description": "Version 1.0 not available.",
   "version": "0.1",
   "deprecated": false,

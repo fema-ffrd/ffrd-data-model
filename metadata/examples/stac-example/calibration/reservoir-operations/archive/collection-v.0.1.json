@@ -5,7 +5,7 @@
     "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
     "https://stac-extensions.github.io/version/v1.2.0/schema.json"
   ],
-  "id": "calibration-reservoir-operations-archive",
+  "id": "calibration_reservoir-operations_archive",
   "title": "Reservoir Operations Archive",
   "description": "Reservoir Operations Archive holds draft and outdated reservoir-operations model versions as updates are made during calibration. Archived models should be date stamped using basin-name_YYYYMMDD, for example trinity_20250314.",
   "version": "0.1",

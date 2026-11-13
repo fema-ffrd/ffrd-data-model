@@ -5,7 +5,7 @@
     "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
     "https://stac-extensions.github.io/version/v1.2.0/schema.json"
   ],
-  "id": "basin-data-project-scoping-dam-scoping-table",
+  "id": "basin-data_project-scoping_dam-scoping-table",
   "title": "Dam Scoping Table",
   "description": "Dam Scoping Table specifies inclusion for operations modeling, inclusion for fragility, and criteria for how a dam is modeled.",
   "version": "0.1",

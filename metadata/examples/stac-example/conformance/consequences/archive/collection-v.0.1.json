@@ -5,7 +5,7 @@
     "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
     "https://stac-extensions.github.io/version/v1.2.0/schema.json"
   ],
-  "id": "conformance-consequences-archive",
+  "id": "conformance_consequences_archive",
   "title": "Archive",
   "description": "Archive structure inventories represent earlier versions of the inventory in conformance. The NSI year should reflect the year or version of the NSI, and the price-level year should reflect the price year if prices are indexed. The archive date is represented by yyyymmdd. The README gives the naming convention as <modeling-unit>-nsiyyyy-pricelevelyyyy-yyyymmmdd.gpkg, with an extra m in the date pattern compared with its date explanation.",
   "version": "0.1",

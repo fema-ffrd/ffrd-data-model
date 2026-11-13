@@ -5,7 +5,7 @@
     "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
     "https://stac-extensions.github.io/version/v1.2.0/schema.json"
   ],
-  "id": "production-simulations-current-condition-summary-output",
+  "id": "production_simulations_current-condition_summary-output",
   "title": "Summary Output",
   "description": "Summary Output organizes annual maxima, consequences, grids, partial-duration results, and plots from production current-condition simulations.",
   "version": "0.1",

@@ -5,7 +5,7 @@
     "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
     "https://stac-extensions.github.io/version/v1.2.0/schema.json"
   ],
-  "id": "basin-data-fema",
+  "id": "basin-data_fema",
   "title": "FEMA",
   "description": "FEMA includes a static version of the existing FEMA National Flood Hazard Layer, including effective flood zone polygons collected during the Data Preparation Phase, and FIS reports. FEMA models are stored separately in existing-models.",
   "version": "0.1",

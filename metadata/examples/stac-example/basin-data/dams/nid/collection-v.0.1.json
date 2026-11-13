@@ -5,7 +5,7 @@
     "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
     "https://stac-extensions.github.io/version/v1.2.0/schema.json"
   ],
-  "id": "basin-data-dams-nid",
+  "id": "basin-data_dams_nid",
   "title": "NID (National Inventory of Dams)",
   "description": "NID (National Inventory of Dams) includes a static version of the National Inventory of Dams dataset collected during the Data Preparation Phase. This NID data includes geospatial information.",
   "version": "0.1",

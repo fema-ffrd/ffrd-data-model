@@ -5,7 +5,7 @@
     "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
     "https://stac-extensions.github.io/version/v1.2.0/schema.json"
   ],
-  "id": "basin-data-wbd",
+  "id": "basin-data_wbd",
   "title": "WBD (Watershed Boundary Dataset)",
   "description": "WBD (Watershed Boundary Dataset) includes a static version of USGS Watershed Boundary Datasets (WBD, i.e. HUC boundaries) collected during the data preparation phase. These data may be provided at various HUC resolutions, such as HUC12 and HUC08.",
   "version": "0.1",

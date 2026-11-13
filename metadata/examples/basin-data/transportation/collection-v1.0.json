@@ -1,6 +1,6 @@
 {
   "type": "Collection",
-  "id": "transportation",
+  "id": "basin-data_transportation",
   "stac_version": "1.1.0",
   "description": "Transportation data from Census and other sources",
   "links": [

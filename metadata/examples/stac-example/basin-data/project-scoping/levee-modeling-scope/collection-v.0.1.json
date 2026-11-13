@@ -5,7 +5,7 @@
     "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
     "https://stac-extensions.github.io/version/v1.2.0/schema.json"
   ],
-  "id": "basin-data-project-scoping-levee-modeling-scope",
+  "id": "basin-data_project-scoping_levee-modeling-scope",
   "title": "Levee Modeling Scope",
   "description": "Levee Modeling Scope includes a levee breach location geospatial file that progresses from draft during the scoping and data preparation phase to final during subsequent phases.",
   "version": "0.1",

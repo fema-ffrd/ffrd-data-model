@@ -5,7 +5,7 @@
     "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
     "https://stac-extensions.github.io/version/v1.2.0/schema.json"
   ],
-  "id": "conformance-consequences",
+  "id": "conformance_consequences",
   "title": "Consequences",
   "description": "Consequences structure inventories are used during conformance and ultimately promoted to production. The NSI year should reflect the year or version of the NSI, and the price-level year should reflect the price year if prices are indexed. The naming convention is <modeling-unit>-nsiyyyy-pricelevelyyyy.gpkg.",
   "version": "0.1",

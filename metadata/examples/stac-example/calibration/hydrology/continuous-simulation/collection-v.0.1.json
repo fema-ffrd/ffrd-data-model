@@ -5,7 +5,7 @@
     "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
     "https://stac-extensions.github.io/version/v1.2.0/schema.json"
   ],
-  "id": "calibration-hydrology-continuous-simulation",
+  "id": "calibration_hydrology_continuous-simulation",
   "title": "Continuous Simulation",
   "description": "Continuous Simulation includes the period-of-record (POR) simulation hydrologic model for calibration, with separate period-of-record and two-year simulation groupings.",
   "version": "0.1",

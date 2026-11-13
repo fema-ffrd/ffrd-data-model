@@ -8,7 +8,7 @@
   ],
   "version": "1.0",
   "deprecated": false,
-  "id": "terrain-base-96ft",
+  "id": "terrain-base_test-96ft",
   "description": "Terrain base GeoTIFF tiles for the South Platte project.",
   "links": [
     {

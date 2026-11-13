@@ -1,6 +1,6 @@
 {
   "type": "Collection",
-  "id": "nhd",
+  "id": "basin-data_nhd",
   "stac_version": "1.1.0",
   "description": "National Hydrography Dataset (NHD) data from USGS",
   "links": [

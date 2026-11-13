@@ -5,7 +5,7 @@
     "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
     "https://stac-extensions.github.io/version/v1.2.0/schema.json"
   ],
-  "id": "conformance-simulations-event-validation-summary-outputs",
+  "id": "conformance_simulations_event-validation_summary-outputs",
   "title": "Summary Outputs",
   "description": "Summary Outputs organizes summarized results and plots from cloud-computed conformance event validation of historic events.",
   "version": "0.1",

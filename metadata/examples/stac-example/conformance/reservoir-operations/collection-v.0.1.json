@@ -5,7 +5,7 @@
     "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
     "https://stac-extensions.github.io/version/v1.2.0/schema.json"
   ],
-  "id": "conformance-reservoir-operations",
+  "id": "conformance_reservoir-operations",
   "title": "Reservoir Operations",
   "description": "Reservoir Operations includes the HEC-ResSim model used for conformance. Draft and outdated model versions are archived as updates are made. Archived model units should be date stamped; the README gives model-unit-YYYYMMDD and trinity_20250314 as examples.",
   "version": "0.1",

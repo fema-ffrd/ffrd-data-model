@@ -5,7 +5,7 @@
     "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
     "https://stac-extensions.github.io/version/v1.2.0/schema.json"
   ],
-  "id": "conformance-simulations-event-validation-summary-outputs-plots",
+  "id": "conformance_simulations_event-validation_summary-outputs_plots",
   "title": "Plots",
   "description": "Plots provides graphical summaries of historic-event replication results for conformance event validation.",
   "version": "0.1",

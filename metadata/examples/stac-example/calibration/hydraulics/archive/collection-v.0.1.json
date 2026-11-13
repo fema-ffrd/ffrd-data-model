@@ -5,7 +5,7 @@
     "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
     "https://stac-extensions.github.io/version/v1.2.0/schema.json"
   ],
-  "id": "calibration-hydraulics-archive",
+  "id": "calibration_hydraulics_archive",
   "title": "Hydraulics Archive",
   "description": "Hydraulics Archive holds draft and outdated hydraulic model versions as updates are made during calibration. Archived models should be date stamped using model-unit_YYYYMMDD, for example kickapoo_20250314.",
   "version": "0.1",

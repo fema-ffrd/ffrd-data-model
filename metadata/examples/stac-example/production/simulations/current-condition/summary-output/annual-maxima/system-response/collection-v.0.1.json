@@ -5,7 +5,7 @@
     "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
     "https://stac-extensions.github.io/version/v1.2.0/schema.json"
   ],
-  "id": "production-simulations-current-condition-summary-output-annual-maxima-system-response",
+  "id": "production_simulations_current-condition_summary-output_annual-maxima_system-response",
   "title": "System Response",
   "description": "System Response organizes system-response summary results associated with annual maxima from production current-condition simulations.",
   "version": "0.1",

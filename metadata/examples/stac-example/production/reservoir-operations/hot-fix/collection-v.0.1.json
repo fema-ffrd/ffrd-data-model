@@ -5,7 +5,7 @@
     "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
     "https://stac-extensions.github.io/version/v1.2.0/schema.json"
   ],
-  "id": "production-reservoir-operations-hot-fix",
+  "id": "production_reservoir-operations_hot-fix",
   "title": "Hot Fix",
   "description": "Hot Fix provides alternate reservoir-operations model input versions addressing specific accuracy or stability issues arising in one or more production events that do not merit rerunning all production runs. Hot-fix versions are applied only to the specific events where they are deemed necessary.",
   "version": "0.1",

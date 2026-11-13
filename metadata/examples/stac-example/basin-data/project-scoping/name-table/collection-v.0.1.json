@@ -5,7 +5,7 @@
     "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
     "https://stac-extensions.github.io/version/v1.2.0/schema.json"
   ],
-  "id": "basin-data-project-scoping-name-table",
+  "id": "basin-data_project-scoping_name-table",
   "title": "Name Table",
   "description": "Name Table includes tables that pre-define key model element names for the study, developed during the Scoping and Data Preparation Phase.",
   "version": "0.1",

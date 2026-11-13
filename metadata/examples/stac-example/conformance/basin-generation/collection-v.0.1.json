@@ -5,7 +5,7 @@
     "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
     "https://stac-extensions.github.io/version/v1.2.0/schema.json"
   ],
-  "id": "conformance-basin-generation",
+  "id": "conformance_basin-generation",
   "title": "Basin Generation",
   "description": "Basin Generation uses a copy of the DSS output file from the HMS period-of-record (PoR) run from calibration, together with the .basin and .control files from each calibration event, typically six events. The basin-record-gen-plugin cloud compute actions use these files to build combinations representing variation in antecedent conditions for stochastic simulations.",
   "version": "0.1",

@@ -5,7 +5,7 @@
     "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
     "https://stac-extensions.github.io/version/v1.2.0/schema.json"
   ],
-  "id": "production-manifests",
+  "id": "production_manifests",
   "title": "Manifests",
   "description": "Manifests define how each cloud process links to other processes, allowing users to reproduce all details of data flow from seeds to consequences and everything in between.",
   "version": "0.1",

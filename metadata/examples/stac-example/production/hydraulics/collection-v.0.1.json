@@ -5,7 +5,7 @@
     "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
     "https://stac-extensions.github.io/version/v1.2.0/schema.json"
   ],
-  "id": "production-hydraulics",
+  "id": "production_hydraulics",
   "title": "Hydraulics",
   "description": "Hydraulics includes the HEC-RAS model for each individual model unit promoted from conformance after meeting review requirements, for use in production runs. Models should include all relevant files required for desktop simulation, including model files with .X01 extensions such as .p01, .p01.hdf, .g01, and .u01, and associated land-use and land-cover files. Hot-fix data address issues that do not merit rerunning all production runs. A hot fix is an alternate version of the input models addressing a specific accuracy or stability issue arising in one or more production events and is applied only to the events where it is deemed necessary.",
   "version": "0.1",
