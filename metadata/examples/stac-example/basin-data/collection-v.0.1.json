@@ -13,10 +13,22 @@
   "license": "proprietary",
   "extent": {
     "spatial": {
-      "bbox": [[-180, 18.9, 180, 71.6]]
+      "bbox": [
+        [
+          -180,
+          18.9,
+          180,
+          71.6
+        ]
+      ]
     },
     "temporal": {
-      "interval": [[null, null]]
+      "interval": [
+        [
+          null,
+          null
+        ]
+      ]
     }
   },
   "ffrd": {
@@ -44,6 +56,11 @@
     {
       "rel": "child",
       "href": "./bathymetry/collection-v.0.1.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "child",
+      "href": "./census/collection-v.0.1.json",
       "type": "application/json"
     },
     {
