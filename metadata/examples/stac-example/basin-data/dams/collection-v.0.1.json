@@ -40,11 +40,6 @@
       "rel": "self",
       "href": "./collection-v.0.1.json",
       "type": "application/json"
-    },
-    {
-      "rel": "child",
-      "href": "./nid/collection-v.0.1.json",
-      "type": "application/json"
     }
   ]
 }
