@@ -1,0 +1,81 @@
+{
+    "stac_version": "1.1.0",
+    "type": "Catalog",
+    "id": "south-platte-dev",
+    "title": "South Platte Data Catalog",
+    "description": "Authoritative data and metadata catalog for the South Platte validation study, structured to mirror data storage prescribed in the Standard Operating Procedure (SOP) dated 3/2026.",
+    "links": [
+        {
+            "rel": "root",
+            "href": "./catalog.json",
+            "type": "application/json",
+            "title": "South Platte Development Catalog"
+        },
+        {
+            "rel": "self",
+            "href": "./catalog.json",
+            "type": "application/json",
+            "title": "South Platte Development Catalog"
+        },
+        {
+            "rel": "child",
+            "href": "./terrain-base/test-96ft-v1.0/collection-v1.0.json",
+            "type": "application/json"
+        },
+        {
+            "rel": "child",
+            "href": "./calibration/collection-v1.0.json",
+            "type": "application/json"
+        },
+        {
+            "rel": "child",
+            "href": "./conformance/collection-v0.1.json",
+            "type": "application/json"
+        },
+        {
+            "rel": "child",
+            "href": "./basin-data/fema/collection-v1.0.json",
+            "type": "application/json"
+        },
+        {
+            "rel": "child",
+            "href": "./basin-data/government-boundaries/collection-v1.0.json",
+            "type": "application/json"
+        },
+        {
+            "rel": "child",
+            "href": "./basin-data/nhd/collection-v1.0.json",
+            "type": "application/json"
+        },
+        {
+            "rel": "child",
+            "href": "./basin-data/storm-catalog/collection-v1.0.json",
+            "type": "application/json"
+        },
+        {
+            "rel": "child",
+            "href": "./basin-data/stream-gages/collection-v1.0.json",
+            "type": "application/json"
+        },
+        {
+            "rel": "child",
+            "href": "./basin-data/structure-inventory/collection-v1.0.json",
+            "type": "application/json"
+        },
+        {
+            "rel": "child",
+            "href": "./basin-data/transportation/collection-v1.0.json",
+            "type": "application/json"
+        },
+        {
+            "rel": "child",
+            "href": "./basin-data/landcover/collection-v0.1.json",
+            "type": "application/json"
+        },
+        {
+            "rel": "child",
+            "href": "./basin-data/soils/collection-v0.1.json",
+            "type": "application/json"
+        }
+    ]
+}

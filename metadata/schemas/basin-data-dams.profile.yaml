@@ -1,0 +1,36 @@
+profile:
+  id: basin-data-dams
+  version: 0.1
+  description: Metadata profile for dam inventory datasets.
+
+collection:
+  required:
+    assets:
+      - key: README.md
+        type: text/markdown
+  recommended:
+    native_properties:
+      - name: source_retrieved_on
+        description: Source retrieval date summary for inventory snapshot.
+
+item:
+  required:
+    links: []
+  recommended:
+    native_properties:
+      - name: nid_id
+        description: National Inventory of Dams identifier.
+      - name: hazard_potential_classification
+        description: Hazard class from source inventory.
+      - name: primary_purpose
+        description: Primary purpose designation for the dam.
+      - name: dam:dam_height_ft
+        description: Dam height in feet.
+      - name: dam:max_storage_acre_ft
+        description: Maximum storage in acre-feet.
+      - name: ffrd:breach_structure_class
+        description: Derived breach structure classification.
+      - name: ffrd:recommended_breach_method
+        description: Derived recommended breach method.
+      - name: ffrd_screening:modeling_priority
+        description: Derived modeling priority category.

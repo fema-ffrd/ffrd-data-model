@@ -1,0 +1,28 @@
+profile:
+  id: basin-data-levees
+  version: 0.1
+  description: Metadata profile for levee inventory datasets.
+
+collection:
+  required:
+    assets:
+      - key: README.md
+        type: text/markdown
+  recommended:
+    native_properties:
+      - name: source_retrieved_on
+        description: Source retrieval date summary for levee inventory snapshot.
+
+item:
+  required:
+    links: []
+  recommended:
+    native_properties:
+      - name: nld_system_id
+        description: National Levee Database system identifier.
+      - name: nld_segment_id
+        description: National Levee Database segment identifier.
+      - name: top_elev
+        description: Top elevation of levee feature.
+      - name: toe_elev
+        description: Toe elevation of levee feature.

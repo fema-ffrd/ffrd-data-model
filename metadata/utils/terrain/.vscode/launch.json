@@ -1,0 +1,259 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "STAC: Item from local TIFF (minimal)",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/stac/stac_item_from_tiff.py",
+      "cwd": "${workspaceFolder}/stac",
+      "console": "integratedTerminal",
+      "args": [
+        "${workspaceFolder}/stac/south-platte/terrain-base/v1/196608ft_96ft_Res_Tilesdem_south-platte_96ft0.tif",
+        "--output=${workspaceFolder}/stac/south-platte/terrain-base/v1/196608ft_96ft_Res_Tilesdem_south-platte_96ft0.json",
+        "--item-version=1.0",
+        "--deprecated=false",
+        "--latest-href=196608ft_96ft_Res_Tilesdem_south-platte_96ft0.json"
+      ]
+    },
+    {
+      "name": "STAC: Item from local TIFF (full)",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/stac/stac_item_from_tiff.py",
+      "cwd": "${workspaceFolder}/stac",
+      "console": "integratedTerminal",
+      "args": [
+        "${workspaceFolder}/stac/south-platte/terrain-base/v1/196608ft_96ft_Res_Tilesdem_south-platte_96ft0.tif",
+        "--output=${workspaceFolder}/stac/south-platte/terrain-base/v1/196608ft_96ft_Res_Tilesdem_south-platte_96ft0.json",
+        "--item-version=1.1",
+        "--deprecated=true",
+        "--predecessor-href=../v1.0/196608ft_96ft_Res_Tilesdem_south-platte_96ft0.json",
+        "--successor-href=../v1.2/196608ft_96ft_Res_Tilesdem_south-platte_96ft0.json",
+        "--latest-href=../v1.2/196608ft_96ft_Res_Tilesdem_south-platte_96ft0.json"
+      ]
+    },
+    {
+      "name": "STAC: Build local collection (minimal)",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/stac/build_collection_from_item.py",
+      "cwd": "${workspaceFolder}/stac",
+      "console": "integratedTerminal",
+      "args": [
+        "./south-platte/terrain-base/v1",
+        "--output=./south-platte/terrain-base/v1/collection.json",
+        "--collection-id=south-platte-terrain-base-96ft-v1",
+        "--title=South Platte Terrain Base 96ft v1",
+        "--description=Terrain base GeoTIFF tiles for the South Platte area (v1).",
+        "--root-href=../catalog.json",
+        "--recursive",
+        "--item-version=1.0",
+        "--deprecated=false",
+        "--latest-template={item_json}"
+      ]
+    },
+    {
+      "name": "STAC: Build local collection (full)",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/stac/build_collection_from_item.py",
+      "cwd": "${workspaceFolder}/stac",
+      "console": "integratedTerminal",
+      "args": [
+        "./south-platte/terrain-base/v1",
+        "--output=./south-platte/terrain-base/v1/collection.json",
+        "--collection-id=south-platte-terrain-base-96ft-v1",
+        "--title=South Platte Terrain Base 96ft v1",
+        "--description=Terrain base GeoTIFF tiles for the South Platte area (v1).",
+        "--license=proprietary",
+        "--root-href=../catalog.json",
+        "--recursive",
+        "--item-version=1.1",
+        "--deprecated=true",
+        "--predecessor-template=../v1.0/{item_json}",
+        "--successor-template=../v1.2/{item_json}",
+        "--latest-template=../v1.2/{item_json}",
+        "--providers-json=[{\"name\":\"FEMA\",\"roles\":[\"producer\"],\"url\":\"https://www.fema.gov\"}]",
+        "--keywords=terrain,dem,elevation,south platte",
+        "--summaries-json={\"gsd\":[96]}"
+      ]
+    },
+    {
+      "name": "STAC: Build local catalog (minimal)",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/stac/build_catalog_from_collection.py",
+      "cwd": "${workspaceFolder}/stac",
+      "console": "integratedTerminal",
+      "args": [
+        "./south-platte/terrain-base/v1/collection.json",
+        "--output=./south-platte/terrain-base/catalog.json",
+        "--catalog-id=south-platte",
+        "--title=South Platte STAC Catalog",
+        "--description=Top-level STAC Catalog for South Platte terrain datasets.",
+        "--update-collection-links"
+      ]
+    },
+    {
+      "name": "STAC: Build local catalog (full)",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/stac/build_catalog_from_collection.py",
+      "cwd": "${workspaceFolder}/stac",
+      "console": "integratedTerminal",
+      "args": [
+        "./south-platte/terrain-base/v1/collection.json",
+        "--output=./south-platte/terrain-base/catalog.json",
+        "--catalog-id=south-platte",
+        "--title=South Platte STAC Catalog",
+        "--description=Top-level STAC Catalog for South Platte terrain datasets.",
+        "--update-collection-links"
+      ]
+    },
+    {
+      "name": "STAC: Item from S3 TIFF (minimal)",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/stac/s3-stac_item_from_tiff.py",
+      "cwd": "${workspaceFolder}/stac",
+      "console": "integratedTerminal",
+      "args": [
+        "--s3-bucket=south-platte",
+        "--s3-key=terrain-base/96ft-v1.0/196608ft_96ft_Res_Tilesdem_south-platte_96ft0.tif",
+        "--s3-profile=fema",
+        "--collection-id=south-platte-terrain-base-96ft-v1.0",
+        "--collection-href=s3://south-platte/terrain-base/96ft-v1.0/collection.json",
+        "--root-href=s3://south-platte/terrain-base/96ft-v1.0/catalog.json",
+        "--item-version=1.0",
+        "--deprecated=false",
+        "--latest-href=s3://south-platte/terrain-base/96ft-v1.0/196608ft_96ft_Res_Tilesdem_south-platte_96ft0.json"
+      ]
+    },
+    {
+      "name": "STAC: Item from S3 TIFF (full)",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/stac/s3-stac_item_from_tiff.py",
+      "cwd": "${workspaceFolder}/stac",
+      "console": "integratedTerminal",
+      "args": [
+        "--s3-bucket=south-platte",
+        "--s3-key=terrain-base/96ft-v1.1/196608ft_96ft_Res_Tilesdem_south-platte_96ft0.tif",
+        "--s3-profile=fema",
+        "--collection-id=south-platte-terrain-base-96ft-v1.1",
+        "--collection-href=s3://south-platte/terrain-base/96ft-v1.1/collection.json",
+        "--root-href=s3://south-platte/terrain-base/96ft-v1.1/catalog.json",
+        "--item-version=1.1",
+        "--deprecated=true",
+        "--predecessor-href=s3://south-platte/terrain-base/96ft-v1.0/196608ft_96ft_Res_Tilesdem_south-platte_96ft0.json",
+        "--successor-href=s3://south-platte/terrain-base/96ft-v1.2/196608ft_96ft_Res_Tilesdem_south-platte_96ft0.json",
+        "--latest-href=s3://south-platte/terrain-base/96ft-v1.2/196608ft_96ft_Res_Tilesdem_south-platte_96ft0.json"
+      ]
+    },
+    {
+      "name": "STAC: Build S3 collection (minimal)",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/stac/s3-build_collection_from_item.py",
+      "cwd": "${workspaceFolder}/stac",
+      "console": "integratedTerminal",
+      "args": [
+        "--s3-bucket=south-platte",
+        "--s3-prefix=terrain-base/96ft-v1.0",
+        "--s3-profile=fema",
+        "--collection-id=south-platte-terrain-base-96ft-v1.0",
+        "--title=South Platte Terrain Base 96ft v1.0",
+        "--description=Terrain base GeoTIFF tiles for the South Platte area (v1.0).",
+        "--root-href=s3://south-platte/terrain-base/96ft-v1.0/catalog.json",
+        "--recursive",
+        "--item-version=1.0",
+        "--deprecated=false",
+        "--latest-template=s3://south-platte/terrain-base/96ft-v1.0/{item_json}"
+      ]
+    },
+    {
+      "name": "STAC: Build S3 collection (full)",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/stac/s3-build_collection_from_item.py",
+      "cwd": "${workspaceFolder}/stac",
+      "console": "integratedTerminal",
+      "args": [
+        "--s3-bucket=south-platte",
+        "--s3-prefix=terrain-base/96ft-v1.1",
+        "--s3-profile=fema",
+        "--s3-output-key=terrain-base/96ft-v1.1/collection.json",
+        "--collection-id=south-platte-terrain-base-96ft-v1.1",
+        "--title=South Platte Terrain Base 96ft v1.1",
+        "--description=Terrain base GeoTIFF tiles for the South Platte area (v1.1).",
+        "--license=proprietary",
+        "--root-href=s3://south-platte/terrain-base/96ft-v1.1/catalog.json",
+        "--recursive",
+        "--item-version=1.1",
+        "--deprecated=true",
+        "--predecessor-template=s3://south-platte/terrain-base/96ft-v1.0/{item_json}",
+        "--successor-template=s3://south-platte/terrain-base/96ft-v1.2/{item_json}",
+        "--latest-template=s3://south-platte/terrain-base/96ft-v1.2/{item_json}",
+        "--providers-json=[{\"name\":\"FEMA\",\"roles\":[\"producer\"],\"url\":\"https://www.fema.gov\"}]",
+        "--keywords=terrain,dem,elevation,south platte",
+        "--summaries-json={\"gsd\":[96]}"
+      ]
+    },
+    {
+      "name": "STAC: Build S3 catalog (minimal)",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/stac/s3-build_catalog_from_collection.py",
+      "cwd": "${workspaceFolder}/stac",
+      "console": "integratedTerminal",
+      "args": [
+        "--s3-bucket=south-platte",
+        "--s3-collection-key=terrain-base/96ft-v1.0/collection.json",
+        "--s3-output-key=terrain-base/96ft-v1.0/catalog.json",
+        "--s3-profile=fema",
+        "--catalog-id=south-platte",
+        "--title=South Platte STAC Catalog",
+        "--description=Top-level STAC Catalog for South Platte terrain datasets.",
+        "--update-collection-links"
+      ]
+    },
+    {
+      "name": "STAC: Build S3 catalog (full)",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/stac/s3-build_catalog_from_collection.py",
+      "cwd": "${workspaceFolder}/stac",
+      "console": "integratedTerminal",
+      "args": [
+        "--s3-bucket=south-platte",
+        "--s3-collection-key=terrain-base/96ft-v1.1/collection.json",
+        "--s3-output-key=terrain-base/96ft-v1.1/catalog.json",
+        "--s3-profile=fema",
+        "--catalog-id=south-platte",
+        "--title=South Platte STAC Catalog",
+        "--description=Top-level STAC Catalog for South Platte terrain datasets.",
+        "--update-collection-links"
+      ]
+    },
+    {
+      "name": "STAC: Incremental Version (FULL)",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/stac/s3_incremental_release_builder.py",
+      "cwd": "${workspaceFolder}/stac",
+      "console": "integratedTerminal",
+      "args": [
+        "--source-bucket=south-platte",
+        "--source-prefix=terrain-base/test-south-platte-96ft",
+        "--stac-bucket=south-platte",
+        "--current-collection-key=stac-metadata/terrain-base/96ft-v1.0/collection.json",
+        "--current-manifest-key=stac-metadata/terrain-base/96ft-v1.0/manifest.json",
+        "--new-collection-key=stac-metadata/terrain-base/96ft-v1.1/collection.json",
+        "--recursive",
+        "--dry-run",
+        "--s3-profile=fema"
+      ]
+    }
+  ]
+}

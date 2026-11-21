@@ -1,0 +1,130 @@
+{
+  "type": "Feature",
+  "stac_version": "1.0.0",
+  "id": "06765500",
+  "properties": {
+    "site_no": "06765500",
+    "station_nm": "SOUTH PLATTE RIVER AT NORTH PLATTE, NEBR.",
+    "huc_cd": "10190018",
+    "drain_area_va": 24300.0,
+    "daily_values": {
+      "begin_date": "1931-10-01",
+      "end_date": "1994-09-29"
+    },
+    "site_retrieved": "2026-01-07T13:37:24.865974",
+    "start_datetime": "1931-10-01T00:00:00Z",
+    "end_datetime": "1994-09-29T00:00:00Z",
+    "datetime": "2026-01-07T13:37:25.536852Z"
+  },
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      -100.7732011,
+      41.11805396
+    ]
+  },
+  "links": [
+    {
+      "rel": "via",
+      "href": "https://waterdata.usgs.gov/nwis/inventory/?site_no=06765500",
+      "title": "USGS NWIS Site Information"
+    },
+    {
+      "rel": "root",
+      "href": "../../catalog.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "collection",
+      "href": "../collection.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "parent",
+      "href": "../collection.json",
+      "type": "application/json"
+    }
+  ],
+  "assets": {
+    "flow_stats": {
+      "href": "./06765500-flow-stats.pq",
+      "type": "application/x-parquet",
+      "roles": [
+        "data"
+      ]
+    },
+    "flow_statistics_plot": {
+      "href": "./06765500-flow-stats.png",
+      "type": "image/png",
+      "roles": [
+        "thumbnail"
+      ]
+    },
+    "annual_maxima_series": {
+      "href": "./06765500-ams.pq",
+      "type": "application/x-parquet",
+      "file:values": [
+        {
+          "return_period": "2",
+          "discharge_CFS_(Approximate)": 2371
+        },
+        {
+          "return_period": "5",
+          "discharge_CFS_(Approximate)": 6999
+        },
+        {
+          "return_period": "10",
+          "discharge_CFS_(Approximate)": 12550
+        },
+        {
+          "return_period": "25",
+          "discharge_CFS_(Approximate)": 23718
+        },
+        {
+          "return_period": "50",
+          "discharge_CFS_(Approximate)": 36056
+        },
+        {
+          "return_period": "100",
+          "discharge_CFS_(Approximate)": 52825
+        },
+        {
+          "return_period": "500",
+          "discharge_CFS_(Approximate)": 116184
+        }
+      ],
+      "roles": [
+        "data"
+      ]
+    },
+    "ams_plot": {
+      "href": "./06765500-ams.png",
+      "type": "image/png",
+      "roles": [
+        "thumbnail"
+      ]
+    },
+    "ams_seasons_plot": {
+      "href": "./06765500-ams-seasonal.png",
+      "type": "image/png",
+      "roles": [
+        "thumbnail"
+      ]
+    },
+    "ams_LPIII_plot": {
+      "href": "./06765500-ams-lpiii.png",
+      "type": "image/png",
+      "roles": [
+        "thumbnail"
+      ]
+    }
+  },
+  "bbox": [
+    -100.7732011,
+    41.11805396,
+    -100.7732011,
+    41.11805396
+  ],
+  "stac_extensions": [],
+  "collection": "gages"
+}

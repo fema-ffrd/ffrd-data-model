@@ -1,0 +1,19 @@
+profile:
+  id: conformance
+  version: 0.1
+  description: FFRD profile for conformance datasets.
+
+collection:
+  required:
+    assets:
+      - key: README.md
+        type: text/markdown
+  recommended:
+
+item:
+  required:
+    links: []
+  recommended:
+    native_properties:
+      - name: datetime
+        description: Item timestamp.

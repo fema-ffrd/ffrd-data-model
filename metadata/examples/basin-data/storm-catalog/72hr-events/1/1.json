@@ -1,0 +1,90 @@
+{
+  "type": "Feature",
+  "stac_version": "1.0.0",
+  "id": "1",
+  "properties": {
+    "start_datetime": "2014-08-22T00:00:00Z",
+    "end_datetime": "2014-08-25T00:00:00Z",
+    "aorc:statistics": {
+      "min": 1.21,
+      "mean": 3.9,
+      "max": 10.46,
+      "units": "inches"
+    },
+    "aorc:transform": {
+      "a": 1.0,
+      "b": 0.0,
+      "c": -4.066503999996712,
+      "d": 0.0,
+      "e": 1.0,
+      "f": 7.1747130000000015
+    },
+    "aorc:max_precip_location": {
+      "latitude": 47.2322,
+      "longitude": -109.0592
+    },
+    "datetime": "2014-08-22T00:00:00Z"
+  },
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      -108.38089072158081,
+      47.48241839227591
+    ]
+  },
+  "links": [
+    {
+      "rel": "root",
+      "href": "../../catalog.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "collection",
+      "href": "../collection.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "parent",
+      "href": "../collection.json",
+      "type": "application/json"
+    }
+  ],
+  "assets": {
+    "AORC": {
+      "href": "s3://noaa-nws-aorc-v1-1-1km/2014.zarr",
+      "type": "application/vnd+zarr",
+      "start_datetime": "2014-01-01T00:00:00+00:00",
+      "end_datetime": "2015-01-01T00:00:00+00:00",
+      "storage:platform": "AWS",
+      "roles": [
+        "application/vnd+zarr"
+      ]
+    },
+    "thumbnail": {
+      "href": "1.thumbnail.png",
+      "type": "image/png",
+      "roles": [
+        "thumbnail"
+      ]
+    },
+    "mass_curve": {
+      "href": "1.mass_curve.png",
+      "type": "image/png",
+      "title": "Mass Curve",
+      "roles": [
+        "thumbnail"
+      ]
+    }
+  },
+  "bbox": [
+    -114.5464515000125,
+    37.1201485,
+    -98.47209450002549,
+    48.936342499999995
+  ],
+  "stac_extensions": [
+    "https://stac-extensions.github.io/projection/v1.1.0/schema.json",
+    "https://stac-extensions.github.io/storage/v1.0.0/schema.json"
+  ],
+  "collection": "72hr-events"
+}

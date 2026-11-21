@@ -1,0 +1,40 @@
+profile:
+  id: basin-data-storm-catalog
+  version: 0.1
+  description: Metadata profile for storm catalog events and derivatives.
+
+collection:
+  required:
+    assets:
+      - key: README.md
+        type: text/markdown
+  recommended:
+    native_summaries:
+      - name: aorc:statistics precip (inches)
+        description: Distribution summary of precipitation statistics in the catalog.
+
+item:
+  required:
+    links: []
+  recommended:
+    native_properties:
+      - name: title
+        description: Event or domain title.
+      - name: description
+        description: Narrative description of event or domain metadata.
+      - name: datetime
+        description: Primary timestamp associated with the record.
+      - name: start_datetime
+        description: Start time of event window when applicable.
+      - name: end_datetime
+        description: End time of event window when applicable.
+      - name: datetime_info
+        description: Additional datetime context for storm-catalog records.
+      - name: hydro_domain:type
+        description: Domain classification for hydro event metadata.
+      - name: aorc:statistics
+        description: Aggregate precipitation statistics for the event.
+      - name: aorc:transform
+        description: Transform metadata used for precipitation grids.
+      - name: aorc:max_precip_location
+        description: Location of maximum precipitation value.

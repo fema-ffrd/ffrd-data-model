@@ -1,0 +1,43 @@
+profile:
+  id: basin-data-terrain
+  version: 0.2
+  description: Metadata profile for terrain datasets used by Cloud Compute teams.
+
+collection:
+  required:
+    assets:
+      - key: README.md
+        type: text/markdown
+        description: Human-readable collection context.
+      - key: vrt
+        type: application/xml
+        description: Single VRT that references all terrain tiles.
+      - key: metadata_geopackage
+        type: application/geopackage+sqlite3
+        description: Collection-level metadata GeoPackage.
+  recommended:
+    native_summaries:
+      - name: gsd
+        description: Ground sample distance summary for terrain products.
+    native_asset_aliases:
+      - canonical: vrt
+        aliases:
+          - Tiles_196608ft_96ft_Res
+      - canonical: metadata_geopackage
+        aliases:
+          - SouthPlatte_FFRD_Metadata
+
+item:
+  required:
+    links:
+      - rel: provenance
+        href_pattern: \.gpkg($|[#?])
+        description: Link to collection-level metadata GeoPackage.
+  recommended:
+    native_properties:
+      - name: datetime
+        description: Item timestamp for the raster tile metadata snapshot.
+      - name: created
+        description: Creation timestamp of the item metadata record.
+      - name: updated
+        description: Last update timestamp of the item metadata record.
